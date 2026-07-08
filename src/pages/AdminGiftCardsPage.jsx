@@ -164,7 +164,7 @@ export default function AdminGiftCardsPage() {
       </AnimatePresence>
 
       {/* Header */}
-      <div style={{ background: '#1a1a1a', borderBottom: '1px solid #222', padding: '20px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: '#1a1a1a', borderBottom: '1px solid #222', padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2px' }}>Panel Admin</p>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white' }}>
@@ -180,7 +180,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ padding: '32px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: 'clamp(16px, 3vw, 32px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', maxWidth: '1200px', margin: '0 auto' }}>
         {[
           { label: 'Total vendidas', value: total, sub: 'tarjetas' },
           { label: 'Canjeadas', value: used, sub: `${total ? Math.round(used / total * 100) : 0}% del total` },
@@ -196,7 +196,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Controles */}
-      <div style={{ padding: '0 32px 24px', maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ padding: '0 clamp(16px, 4vw, 32px) 24px', maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -238,8 +238,17 @@ export default function AdminGiftCardsPage() {
         </button>
       </div>
 
-      {/* Tabla */}
-      <div style={{ padding: '0 32px 48px', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Tabla / Cards */}
+      <div style={{ padding: '0 clamp(16px, 4vw, 32px) 48px', maxWidth: '1200px', margin: '0 auto' }}>
+        <style>{`
+          .admin-table-header { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }
+          .admin-table-row { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }
+          @media (max-width: 900px) {
+            .admin-table-header { display: none; }
+            .admin-table-row { display: flex !important; flex-direction: column; gap: 12px !important; }
+            .admin-row-action { text-align: left !important; }
+          }
+        `}</style>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '48px', color: '#555' }}>Cargando...</div>
         ) : cards.length === 0 ? (
@@ -248,10 +257,8 @@ export default function AdminGiftCardsPage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {/* Cabecera */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 140px 120px 180px 120px 120px',
+            {/* Cabecera — solo visible en desktop */}
+            <div className="admin-table-header" style={{
               gap: '16px', padding: '12px 20px',
               fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: '#555',
             }}>
@@ -269,9 +276,8 @@ export default function AdminGiftCardsPage() {
                 layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
+                className="admin-table-row"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 140px 120px 180px 120px 120px',
                   gap: '16px', padding: '16px 20px',
                   background: '#1a1a1a', border: `1px solid ${card.is_used ? '#2a2a2a' : '#2d2d20'}`,
                   borderRadius: '6px', alignItems: 'center',
@@ -280,8 +286,8 @@ export default function AdminGiftCardsPage() {
               >
                 <div>
                   <p style={{
-                    fontFamily: 'monospace', fontSize: '15px', letterSpacing: '3px',
-                    color: card.is_used ? '#555' : '#c9a882', fontWeight: 700, marginBottom: '4px',
+                    fontFamily: 'monospace', fontSize: '15px', letterSpacing: '2px',
+                    color: card.is_used ? '#555' : '#c9a882', fontWeight: 700, marginBottom: '4px', wordBreak: 'break-all',
                   }}>
                     {card.code}
                   </p>
@@ -289,7 +295,8 @@ export default function AdminGiftCardsPage() {
                   <p style={{ color: '#555', fontSize: '11px' }}>{card.buyer_email}</p>
                 </div>
 
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ color: '#888', fontSize: '11px', display: 'none' }} className="admin-mobile-label">Importe:</span>
                   <span style={{
                     fontFamily: 'Georgia, serif', fontSize: '1.25rem',
                     color: card.is_used ? '#555' : 'white', fontWeight: 700,
@@ -327,7 +334,7 @@ export default function AdminGiftCardsPage() {
                   </p>
                 </div>
 
-                <div style={{ textAlign: 'center' }}>
+                <div className="admin-row-action" style={{ textAlign: 'center' }}>
                   <button
                     onClick={() => toggleUsed(card)}
                     disabled={updating === card.code}
@@ -337,7 +344,7 @@ export default function AdminGiftCardsPage() {
                       color: card.is_used ? '#888' : '#c9a882',
                       border: `1px solid ${card.is_used ? '#333' : 'rgba(201,168,130,0.4)'}`,
                       cursor: updating === card.code ? 'wait' : 'pointer',
-                      letterSpacing: '1px', fontWeight: 600, whiteSpace: 'nowrap',
+                      letterSpacing: '1px', fontWeight: 600,
                     }}
                   >
                     {updating === card.code ? '...' : card.is_used ? '↩ Reactivar' : '✓ Marcar usada'}

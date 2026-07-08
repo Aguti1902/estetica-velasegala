@@ -86,9 +86,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
           <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.04em' }}>{t.footer.copyright}</p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             {Object.entries(t.footer.links).map(([key, label]) => {
               const routes = { legalNotice: '/aviso-legal', privacy: '/politica-privacidad', cookies: '/politica-cookies' }
               return (
@@ -104,8 +104,8 @@ export default function Footer() {
 
       <style>{`
         .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-        @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr !important; } }
-        @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; } }
+        @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; } }
       `}</style>
     </footer>
   )

@@ -65,7 +65,7 @@ export default function GalleryPage() {
         <AnimatePresence>
           {lightbox && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+              style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(1rem, 4vw, 2rem)' }}
               onClick={() => setLightbox(null)}>
               <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
                 style={{ position: 'relative', maxWidth: '900px', width: '100%', maxHeight: '90vh' }}
@@ -79,10 +79,11 @@ export default function GalleryPage() {
         </AnimatePresence>
       </section>
 
-      <style>{`
+        <style>{`
         .gallery-full-grid { grid-template-columns: repeat(4, 1fr); }
         @media (max-width: 1024px) { .gallery-full-grid { grid-template-columns: repeat(3, 1fr) !important; } }
-        @media (max-width: 640px) { .gallery-full-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 767px) { .gallery-full-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 400px) { .gallery-full-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </>
   )

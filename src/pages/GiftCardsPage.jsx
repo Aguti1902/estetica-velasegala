@@ -136,7 +136,7 @@ export default function GiftCardsPage() {
     <div style={{ background: 'var(--cream)', minHeight: '100vh' }}>
 
       {/* Hero — imagen de fondo con overlay */}
-      <section style={{ position: 'relative', overflow: 'hidden', minHeight: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <section style={{ position: 'relative', overflow: 'hidden', minHeight: 'clamp(280px, 50vw, 420px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {/* Imagen de fondo */}
         <div style={{
           position: 'absolute', inset: 0,
@@ -153,7 +153,7 @@ export default function GiftCardsPage() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          style={{ position: 'relative', textAlign: 'center', padding: '100px 24px 80px', color: 'white' }}
+          style={{ position: 'relative', textAlign: 'center', padding: 'clamp(60px, 10vw, 100px) 20px clamp(40px, 8vw, 80px)', color: 'white' }}
         >
           <p style={{ letterSpacing: '6px', fontSize: '11px', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '16px' }}>
             Vela Segalà · Viladecans
@@ -305,6 +305,9 @@ export default function GiftCardsPage() {
   .trust-grid { grid-template-columns: repeat(4, 1fr); }
   @media(max-width:900px){ .trust-grid { grid-template-columns: repeat(2, 1fr); } }
   @media(max-width:500px){ .trust-grid { grid-template-columns: 1fr 1fr; } }
+  .gift-step2-grid { grid-template-columns: 1fr 340px; }
+  @media(max-width:900px){ .gift-step2-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
+  @media(max-width:900px){ .gift-step2-grid .gift-summary-box { position: static !important; order: -1; } }
 `}</style>
 
             <div style={{ textAlign: 'center' }}>
@@ -342,7 +345,7 @@ export default function GiftCardsPage() {
               Volver y cambiar importe
             </button>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }} className="gift-step2-grid">
 
               {/* Formulario */}
               <form onSubmit={handleSubmit}>
@@ -405,7 +408,7 @@ export default function GiftCardsPage() {
               </form>
 
               {/* Resumen */}
-              <div style={{
+              <div className="gift-summary-box" style={{
                 background: 'white',
                 border: '1px solid var(--warm-200)',
                 borderRadius: '4px',

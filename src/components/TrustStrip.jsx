@@ -10,13 +10,13 @@ export default function TrustStrip() {
   const list = items[lang]
 
   return (
-    <div style={{ background: '#0d0d0d', padding: '1.1rem 0', overflow: 'hidden' }}>
+    <div style={{ background: '#0d0d0d', padding: '0.9rem 0', overflow: 'hidden' }}>
       <div className="container">
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem 1.4rem' }}>
           {list.map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '4px', height: '4px', background: 'rgba(255,255,255,0.3)', display: 'inline-block' }} />
-              <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap' }}>
+              <span style={{ width: '4px', height: '4px', background: 'rgba(255,255,255,0.3)', display: 'inline-block', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>
                 {item}
               </span>
             </div>

@@ -157,7 +157,8 @@ export default function ContactPage() {
           .contact-page-grid { grid-template-columns: 3fr 2fr; }
           .form-row-cp { grid-template-columns: repeat(2, 1fr); }
           @media (max-width: 900px) { .contact-page-grid { grid-template-columns: 1fr !important; } }
-          @media (max-width: 480px) { .form-row-cp { grid-template-columns: 1fr !important; } }
+          @media (max-width: 767px) { .form-row-cp { grid-template-columns: 1fr !important; } }
+          @media (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }
         `}</style>
       </section>
     </>

@@ -181,5 +181,29 @@ body {
 /* =============================
    LAYOUT HELPERS
    ============================= */
-.section-pad { padding: clamp(5rem, 10vw, 8rem) 0; }
-.container { max-width: 1280px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); }
+.section-pad { padding: clamp(3rem, 8vw, 8rem) 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 4rem); }
+
+/* =============================
+   RESPONSIVE MÓVIL GLOBAL
+   ============================= */
+html, body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 767px) {
+  /* Botones: permite wrap de texto y reduce padding */
+  .btn-dark, .btn-ghost, .btn-light, .btn-primary, .btn-outline, .btn-accent {
+    white-space: normal;
+    text-align: center;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.7rem;
+  }
+
+  /* Sección pad más compacta */
+  .section-pad { padding: clamp(2.5rem, 6vw, 4rem) 0; }
+
+  /* Títulos de sección más compactos */
+  .section-title { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; }
+}

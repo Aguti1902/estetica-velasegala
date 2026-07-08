@@ -68,7 +68,7 @@ export default function ServicesPage() {
         <style>{`
           .services-page-grid { grid-template-columns: repeat(3, 1fr); }
           @media (max-width: 900px) { .services-page-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-          @media (max-width: 540px) { .services-page-grid { grid-template-columns: 1fr !important; } }
+          @media (max-width: 767px) { .services-page-grid { grid-template-columns: 1fr !important; } }
         `}</style>
       </section>
     </>

@@ -114,7 +114,7 @@ export default function GiftCardSuccessPage() {
           <div style={{
             background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
             borderRadius: '16px',
-            padding: '48px',
+            padding: 'clamp(24px, 5vw, 48px)',
             marginBottom: '32px',
             position: 'relative',
             overflow: 'hidden',
@@ -153,8 +153,8 @@ export default function GiftCardSuccessPage() {
                   Código de canje
                 </p>
                 <p style={{
-                  fontFamily: 'monospace', fontSize: '1.5rem', color: '#c9a882',
-                  letterSpacing: '4px', fontWeight: 700,
+                  fontFamily: 'monospace', fontSize: 'clamp(1rem, 4vw, 1.5rem)', color: '#c9a882',
+                  letterSpacing: 'clamp(2px, 1vw, 4px)', fontWeight: 700, wordBreak: 'break-all',
                 }}>
                   {card?.code}
                 </p>
@@ -182,7 +182,7 @@ export default function GiftCardSuccessPage() {
           )}
 
           {/* Acciones */}
-          <div style={{ display: 'flex', gap: '16px', marginBottom: '48px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '48px', flexWrap: 'wrap' }}>
             <motion.button
               onClick={downloadPDF}
               whileHover={{ scale: 1.02 }}

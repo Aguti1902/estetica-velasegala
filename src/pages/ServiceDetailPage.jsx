@@ -183,9 +183,11 @@ export default function ServiceDetailPage() {
           .benefits-grid { grid-template-columns: repeat(2, 1fr); }
           @media (max-width: 900px) {
             .detail-grid { grid-template-columns: 1fr !important; }
-            .detail-sidebar { order: -1; }
+            .detail-sidebar { order: -1; position: static !important; }
           }
-          @media (max-width: 480px) { .benefits-grid { grid-template-columns: 1fr !important; } }
+          @media (max-width: 767px) {
+            .benefits-grid { grid-template-columns: 1fr !important; }
+          }
         `}</style>
       </section>
 
@@ -193,7 +195,7 @@ export default function ServiceDetailPage() {
       {service.image && (
         <div style={{ background: '#f5f5f5', padding: '0' }}>
           <div style={{ maxHeight: '500px', overflow: 'hidden' }}>
-            <img src={service.image} alt={service.name} style={{ width: '100%', height: '500px', objectFit: 'cover', display: 'block' }} />
+            <img src={service.image} alt={service.name} style={{ width: '100%', height: 'clamp(220px, 50vw, 500px)', objectFit: 'cover', display: 'block' }} />
           </div>
         </div>
       )}
@@ -214,7 +216,14 @@ export default function ServiceDetailPage() {
           </div>
           <style>{`
             .related-grid { grid-template-columns: repeat(3, 1fr); }
-            @media (max-width: 768px) { .related-grid { grid-template-columns: 1fr !important; } }
+            .service-gallery-grid { grid-template-columns: repeat(3, 1fr); }
+            @media (max-width: 768px) {
+              .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
+              .service-gallery-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            }
+            @media (max-width: 480px) {
+              .related-grid { grid-template-columns: 1fr !important; }
+            }
           `}</style>
         </section>
       )}
@@ -247,7 +256,7 @@ function ServiceGallery({ images, name }) {
 
   return (
     <>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px' }} className="service-gallery-grid">
         {images.map((src, i) => (
           <button key={i} onClick={() => setSelected(i)}
             style={{ padding: 0, border: 'none', cursor: 'pointer', overflow: 'hidden', aspectRatio: '4/3', background: '#f0f0f0', position: 'relative' }}>

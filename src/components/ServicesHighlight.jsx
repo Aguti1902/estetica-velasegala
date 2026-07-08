@@ -47,7 +47,7 @@ export default function ServicesHighlight() {
       <style>{`
         .services-highlight-grid { grid-template-columns: repeat(3, 1fr); }
         @media (max-width: 900px) { .services-highlight-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 560px) { .services-highlight-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 767px) { .services-highlight-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </section>
   )

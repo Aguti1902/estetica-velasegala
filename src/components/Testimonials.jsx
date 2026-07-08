@@ -6,7 +6,7 @@ export default function Testimonials() {
   const { t } = useLang()
   const [current, setCurrent] = useState(0)
   const items = t.testimonials.items
-  const perPage = 3
+  const perPage = typeof window !== 'undefined' && window.innerWidth < 768 ? 1 : 3
   const totalPages = Math.ceil(items.length / perPage)
   const visible = items.slice(current * perPage, current * perPage + perPage)
 
