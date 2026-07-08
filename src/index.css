@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+/* =============================
+   DESIGN TOKENS — Viladecans
+   ============================= */
+:root {
+  --black: #1a1a1a;
+  --white: #ffffff;
+  --cream: #f9f6f1;
+  --warm-50: #fdf8f3;
+  --warm-100: #f5ede2;
+  --warm-200: #e8d9c8;
+  --warm-400: #b89e87;
+  --warm-600: #7a6352;
+  --accent: #c9a882;
+  --gray-50: #f9f6f1;
+  --gray-100: #f5ede2;
+  --gray-200: #e8d9c8;
+  --gray-400: #b89e87;
+  --gray-600: #7a6352;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--white);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =============================
+   TIPOGRAFÍA
+   ============================= */
+.display-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--black);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+.section-title-white {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+
+.label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+.label-white {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+/* =============================
+   BOTONES — estilo cálido redondeado
+   ============================= */
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--black);
+  color: var(--white);
+  padding: 14px 32px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--black);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.2s, box-shadow 0.25s;
+  white-space: nowrap;
+}
+.btn-dark:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201,168,130,0.35);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--black);
+  padding: 13px 32px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--black);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.btn-ghost:hover {
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.btn-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  color: var(--black);
+  padding: 14px 32px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--white);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.btn-light:hover {
+  background: transparent;
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+/* Mantener compatibilidad con clases usadas */
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--black); color: var(--white); padding: 14px 32px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--black); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.btn-primary:hover { background: transparent; color: var(--black); transform: translateY(-1px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--black); padding: 13px 32px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--black); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.btn-outline:hover { background: var(--black); color: var(--white); transform: translateY(-1px); }
+.btn-accent { display: inline-flex; align-items: center; gap: 10px; background: var(--white); color: var(--black); padding: 14px 32px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--white); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.btn-accent:hover { background: transparent; color: var(--white); transform: translateY(-1px); }
+
+/* =============================
+   DIVISORES
+   ============================= */
+.divider {
+  width: 40px;
+  height: 1.5px;
+  background: var(--black);
+  display: block;
+}
+.divider-white {
+  width: 40px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.4);
+  display: block;
+}
+
+/* =============================
+   LAYOUT HELPERS
+   ============================= */
+.section-pad { padding: clamp(5rem, 10vw, 8rem) 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); }
