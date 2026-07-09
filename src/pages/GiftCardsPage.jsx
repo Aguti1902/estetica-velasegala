@@ -302,9 +302,6 @@ export default function GiftCardsPage() {
             <style>{`
   .gift-preview-grid { grid-template-columns: 1fr 1fr; }
   @media(max-width:600px){ .gift-preview-grid { grid-template-columns: 1fr; } }
-  .trust-grid { grid-template-columns: repeat(4, 1fr); }
-  @media(max-width:900px){ .trust-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media(max-width:500px){ .trust-grid { grid-template-columns: 1fr 1fr; } }
   .gift-step2-grid { grid-template-columns: 1fr 340px; }
   @media(max-width:900px){ .gift-step2-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
   @media(max-width:900px){ .gift-step2-grid .gift-summary-box { position: static !important; order: -1; } }
@@ -463,12 +460,19 @@ export default function GiftCardsPage() {
 
       {/* Sección de confianza */}
       <section style={{ background: 'white', borderTop: '1px solid var(--warm-200)', padding: '72px 24px' }}>
+        <style>{`
+  .trust-grid { grid-template-columns: repeat(4, 1fr); }
+  @media(max-width:768px){
+    .trust-grid { grid-template-columns: repeat(3, 1fr); gap: 32px 16px; }
+    .trust-grid > .trust-item:nth-child(n+7) { display: none; }
+  }
+`}</style>
         <p style={{ textAlign: 'center', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '48px' }}>
           Por qué elegir Vela Segalà
         </p>
         <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 32px', textAlign: 'center' }} className="trust-grid">
           {TRUST_ITEMS.map(item => (
-            <div key={item.title}>
+            <div key={item.title} className="trust-item">
               <div style={{
                 width: '52px', height: '52px', borderRadius: '50%',
                 background: 'var(--warm-50)', border: '1px solid var(--warm-200)',
