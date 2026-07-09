@@ -461,16 +461,24 @@ export default function GiftCardsPage() {
       {/* Sección de confianza */}
       <section style={{ background: 'white', borderTop: '1px solid var(--warm-200)', padding: '72px 24px' }}>
         <style>{`
-  .trust-grid { grid-template-columns: repeat(4, 1fr); }
-  @media(max-width:768px){
-    .trust-grid { grid-template-columns: repeat(3, 1fr); gap: 32px 16px; }
-    .trust-grid > .trust-item:nth-child(n+7) { display: none; }
+  .trust-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 32px;
+  }
+  @media (max-width: 768px) {
+    .trust-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px 16px;
+    }
+    .trust-grid > .trust-item:nth-child(n+7) {
+      display: none;
+    }
   }
 `}</style>
         <p style={{ textAlign: 'center', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '48px' }}>
           Por qué elegir Vela Segalà
         </p>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '40px 32px', textAlign: 'center' }} className="trust-grid">
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', textAlign: 'center' }} className="trust-grid">
           {TRUST_ITEMS.map(item => (
             <div key={item.title} className="trust-item">
               <div style={{
