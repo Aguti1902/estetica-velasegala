@@ -53,6 +53,38 @@ async function saveGiftCard(data) {
   return Array.isArray(result) ? result[0] : result;
 }
 
+async function getGiftCardBySessionId(sessionId) {
+  const url = `${process.env.SUPABASE_URL}/rest/v1/gift_cards?stripe_session_id=eq.${encodeURIComponent(sessionId)}&select=*&limit=1`;
+  const response = await fetch(url, {
+    headers: {
+      'apikey': process.env.SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+    },
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(JSON.stringify(data));
+  return data[0] || null;
+}
+
+function isDuplicateError(err) {
+  const message = String(err.message || err);
+  return message.includes('duplicate') || message.includes('23505') || message.includes('unique');
+}
+
+function assertEnv() {
+  const required = [
+    'STRIPE_WEBHOOK_SECRET',
+    'SUPABASE_URL',
+    'SUPABASE_ANON_KEY',
+    'SUPABASE_SERVICE_ROLE_KEY',
+    'RESEND_API_KEY',
+  ];
+  const missing = required.filter((key) => !process.env[key]);
+  if (missing.length) {
+    throw new Error(`Faltan variables de entorno: ${missing.join(', ')}`);
+  }
+}
+
 // Envía el email con los datos de la tarjeta
 async function sendGiftCardEmail(card) {
   const emailHTML = `
@@ -134,11 +166,19 @@ async function sendGiftCardEmail(card) {
   if (!response.ok) {
     const err = await response.text();
     console.error('Email error:', err);
+    throw new Error(`Error enviando email: ${err}`);
   }
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
+
+  try {
+    assertEnv();
+  } catch (err) {
+    console.error('Webhook config error:', err.message);
+    return res.status(500).json({ error: err.message });
+  }
 
   const sig = req.headers['stripe-signature'];
   if (!sig) return res.status(400).json({ error: 'Sin firma' });
@@ -157,18 +197,39 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'JSON inválido' });
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const meta = session.metadata || {};
+  if (event.type !== 'checkout.session.completed') {
+    return res.status(200).json({ received: true, ignored: true });
+  }
 
-    // Generar código único con reintentos
-    let code, saved;
+  try {
+    const session = event.data.object;
+
+    if (session.payment_status !== 'paid') {
+      return res.status(200).json({ received: true, ignored: true, reason: 'not_paid' });
+    }
+
+    const existing = await getGiftCardBySessionId(session.id);
+    if (existing) {
+      return res.status(200).json({ received: true, duplicate: true, code: existing.code });
+    }
+
+    const meta = session.metadata || {};
+    const amount = Number(meta.amount);
+
+    if (![50, 100, 200].includes(amount)) {
+      throw new Error(`Importe inválido en metadata: ${meta.amount}`);
+    }
+    if (!meta.buyerEmail || !meta.buyerName) {
+      throw new Error('Faltan buyerEmail o buyerName en metadata');
+    }
+
+    let saved;
     for (let i = 0; i < 5; i++) {
-      code = generateCode();
+      const code = generateCode();
       try {
         saved = await saveGiftCard({
           code,
-          amount: Number(meta.amount),
+          amount,
           stripe_session_id: session.id,
           buyer_name: meta.buyerName,
           buyer_email: meta.buyerEmail,
@@ -178,14 +239,18 @@ export default async function handler(req, res) {
         });
         break;
       } catch (err) {
-        if (!err.message?.includes('duplicate')) throw err;
+        if (!isDuplicateError(err)) throw err;
       }
     }
 
-    if (saved) {
-      await sendGiftCardEmail(saved);
+    if (!saved) {
+      throw new Error('No se pudo generar un código único tras varios intentos');
     }
-  }
 
-  return res.status(200).json({ received: true });
+    await sendGiftCardEmail(saved);
+    return res.status(200).json({ received: true, code: saved.code });
+  } catch (err) {
+    console.error('Webhook processing error:', err);
+    return res.status(500).json({ error: 'Error procesando webhook' });
+  }
 }
