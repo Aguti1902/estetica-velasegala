@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import GiftCardEmbeddedCheckout from '../components/GiftCardEmbeddedCheckout';
 
 const AMOUNTS = [50, 100, 200];
 
@@ -88,48 +89,40 @@ const AMOUNT_PERKS = {
 
 export default function GiftCardsPage() {
   const [selected, setSelected] = useState(100);
-  const [step, setStep] = useState(1); // 1: elegir importe, 2: rellenar datos
+  const [step, setStep] = useState(1); // 1: importe, 2: datos, 3: pago embebido
   const [form, setForm] = useState({
     buyerName: '',
     buyerEmail: '',
     recipientName: '',
     message: '',
   });
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleContinue = () => {
     setStep(2);
+    setError('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubmit = async (e) => {
+  const handleContinueToPayment = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const res = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: selected,
-          buyerName: form.buyerName,
-          buyerEmail: form.buyerEmail,
-          recipientName: form.recipientName,
-          message: form.message,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al procesar');
-      if (data.url) window.location.href = data.url;
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
+    if (!form.buyerName.trim() || !form.buyerEmail.trim()) {
+      setError('Completa tu nombre y email para continuar');
+      return;
     }
+    setError('');
+    setStep(3);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const checkoutData = {
+    amount: selected,
+    buyerName: form.buyerName.trim(),
+    buyerEmail: form.buyerEmail.trim(),
+    recipientName: form.recipientName.trim(),
+    message: form.message.trim(),
   };
 
   return (
@@ -176,7 +169,7 @@ export default function GiftCardsPage() {
         </motion.div>
       </section>
 
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '60px 24px' }}>
+      <div style={{ maxWidth: step === 3 ? '960px' : '800px', margin: '0 auto', padding: '60px 24px' }}>
 
         {step === 1 ? (
           <motion.div
@@ -319,7 +312,7 @@ export default function GiftCardsPage() {
               </motion.button>
             </div>
           </motion.div>
-        ) : (
+        ) : step === 2 ? (
           <motion.div
             key="step2"
             initial={{ opacity: 0, y: 20 }}
@@ -345,7 +338,7 @@ export default function GiftCardsPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }} className="gift-step2-grid">
 
               {/* Formulario */}
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleContinueToPayment}>
                 <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '32px', color: '#1a1a1a' }}>
                   Datos del comprador
                 </h2>
@@ -387,20 +380,19 @@ export default function GiftCardsPage() {
 
                 <motion.button
                   type="submit"
-                  disabled={loading}
-                  whileHover={!loading ? { scale: 1.02 } : {}}
-                  whileTap={!loading ? { scale: 0.98 } : {}}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className="btn-primary"
-                  style={{ width: '100%', padding: '16px', fontSize: '14px', letterSpacing: '2px', opacity: loading ? 0.7 : 1 }}
+                  style={{ width: '100%', padding: '16px', fontSize: '14px', letterSpacing: '2px' }}
                 >
-                  {loading ? 'REDIRIGIENDO A STRIPE...' : `PAGAR ${selected}€ CON TARJETA`}
+                  CONTINUAR AL PAGO — {selected}€
                 </motion.button>
 
                 <p style={{ textAlign: 'center', color: '#b89e87', fontSize: '12px', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
-                  Pago 100% seguro con Stripe
+                  Pago embebido y seguro con Stripe
                 </p>
               </form>
 
@@ -454,6 +446,97 @@ export default function GiftCardsPage() {
                 </div>
               </div>
             </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="step3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <button
+              onClick={() => { setStep(2); setError(''); }}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '8px',
+                color: '#7a6352', fontSize: '14px', marginBottom: '32px',
+                padding: 0,
+              }}
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+              Volver y editar datos
+            </button>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '40px', alignItems: 'start' }} className="gift-step3-grid">
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '8px', color: '#1a1a1a' }}>
+                  Completa el pago
+                </h2>
+                <p style={{ color: '#7a6352', marginBottom: '28px', fontSize: '15px' }}>
+                  Tarjeta regalo de {selected}€ · {form.buyerEmail}
+                </p>
+
+                {error && (
+                  <div style={{ background: '#fff0f0', border: '1px solid #fcc', borderRadius: '4px', padding: '12px 16px', marginBottom: '20px', color: '#c00', fontSize: '14px' }}>
+                    {error}
+                  </div>
+                )}
+
+                <div style={{
+                  background: 'white',
+                  border: '1px solid var(--warm-200)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  padding: '8px',
+                }}>
+                  <GiftCardEmbeddedCheckout
+                    key={`${selected}-${form.buyerEmail}`}
+                    checkoutData={checkoutData}
+                    onError={setError}
+                  />
+                </div>
+              </div>
+
+              <div className="gift-summary-box" style={{
+                background: 'white',
+                border: '1px solid var(--warm-200)',
+                borderRadius: '4px',
+                padding: '28px',
+                position: 'sticky',
+                top: '100px',
+              }}>
+                <p style={{ fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '16px' }}>
+                  Resumen
+                </p>
+                <div style={{
+                  background: '#1a1a1a', borderRadius: '8px', padding: '24px', marginBottom: '20px',
+                }}>
+                  <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '6px' }}>
+                    Tarjeta Regalo
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: 'white', fontWeight: 700, margin: 0 }}>
+                    {selected}€
+                  </p>
+                </div>
+                <p style={{ fontSize: '13px', color: '#7a6352', marginBottom: '6px' }}><strong>Comprador:</strong> {form.buyerName}</p>
+                {form.recipientName && (
+                  <p style={{ fontSize: '13px', color: '#7a6352', marginBottom: '6px' }}><strong>Para:</strong> {form.recipientName}</p>
+                )}
+                {form.message && (
+                  <p style={{ fontSize: '13px', color: '#7a6352', fontStyle: 'italic', lineHeight: 1.5 }}>"{form.message}"</p>
+                )}
+              </div>
+            </div>
+
+            <style>{`
+  .gift-step3-grid { grid-template-columns: 1fr 300px; }
+  @media(max-width:900px){
+    .gift-step3-grid { grid-template-columns: 1fr !important; }
+    .gift-step3-grid .gift-summary-box { position: static !important; order: -1; }
+  }
+`}</style>
           </motion.div>
         )}
       </div>

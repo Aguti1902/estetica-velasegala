@@ -1,4 +1,4 @@
-// Crea una sesión de pago Stripe Checkout (sin SDK, usando REST API)
+// Crea una sesión de Stripe Checkout embebido (sin SDK, usando REST API)
 export default async function handler(req, res) {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,13 +33,13 @@ export default async function handler(req, res) {
 
   try {
     const params = new URLSearchParams({
+      'ui_mode': 'embedded',
       'payment_method_types[]': 'card',
       'line_items[0][price]': priceId,
       'line_items[0][quantity]': '1',
       'mode': 'payment',
       'customer_email': buyerEmail,
-      'success_url': `${origin}/tarjetas-regalo/confirmacion?session_id={CHECKOUT_SESSION_ID}`,
-      'cancel_url': `${origin}/tarjetas-regalo`,
+      'return_url': `${origin}/tarjetas-regalo/confirmacion?session_id={CHECKOUT_SESSION_ID}`,
       'metadata[amount]': String(amount),
       'metadata[buyerName]': buyerName,
       'metadata[buyerEmail]': buyerEmail,
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: session.error?.message || 'Error de Stripe' });
     }
 
-    return res.status(200).json({ url: session.url, sessionId: session.id });
+    return res.status(200).json({ clientSecret: session.client_secret, sessionId: session.id });
   } catch (err) {
     console.error('create-checkout error:', err);
     return res.status(500).json({ error: 'Error interno del servidor' });
