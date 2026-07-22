@@ -19,13 +19,22 @@ export default async function handler(req, res) {
 
   const origin = req.headers.origin || process.env.SITE_URL || 'https://esteticavelasegala.com';
 
+  const PRICE_IDS = {
+    50: process.env.STRIPE_PRICE_50,
+    100: process.env.STRIPE_PRICE_100,
+    200: process.env.STRIPE_PRICE_200,
+  };
+
+  const priceId = PRICE_IDS[Number(amount)];
+  if (!priceId) {
+    console.error('Missing Stripe price ID for amount:', amount);
+    return res.status(500).json({ error: 'Producto de tarjeta regalo no configurado' });
+  }
+
   try {
     const params = new URLSearchParams({
       'payment_method_types[]': 'card',
-      'line_items[0][price_data][currency]': 'eur',
-      'line_items[0][price_data][product_data][name]': `Tarjeta Regalo Vela Segalà ${amount}€`,
-      'line_items[0][price_data][product_data][description]': 'Tarjeta de regalo para tratamientos estéticos',
-      'line_items[0][price_data][unit_amount]': String(Number(amount) * 100),
+      'line_items[0][price]': priceId,
       'line_items[0][quantity]': '1',
       'mode': 'payment',
       'customer_email': buyerEmail,
