@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
@@ -6,30 +6,35 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export default function GiftCardEmbeddedCheckout({ checkoutData, onError }) {
   const [ready, setReady] = useState(false);
+  const checkoutDataRef = useRef(checkoutData);
+  const onErrorRef = useRef(onError);
+
+  checkoutDataRef.current = checkoutData;
+  onErrorRef.current = onError;
 
   const fetchClientSecret = useCallback(async () => {
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(checkoutData),
+      body: JSON.stringify(checkoutDataRef.current),
     });
 
     const data = await res.json();
     if (!res.ok) {
       const message = data.error || 'Error al iniciar el pago';
-      onError?.(message);
+      onErrorRef.current?.(message);
       throw new Error(message);
     }
 
     if (!data.clientSecret) {
       const message = 'No se recibió la sesión de pago';
-      onError?.(message);
+      onErrorRef.current?.(message);
       throw new Error(message);
     }
 
     setReady(true);
     return data.clientSecret;
-  }, [checkoutData, onError]);
+  }, []);
 
   if (!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) {
     return (
@@ -49,14 +54,12 @@ export default function GiftCardEmbeddedCheckout({ checkoutData, onError }) {
           Cargando formulario de pago seguro...
         </div>
       )}
-      <div style={{ minHeight: ready ? 'auto' : 0 }}>
-        <EmbeddedCheckoutProvider
-          stripe={stripePromise}
-          options={{ fetchClientSecret }}
-        >
-          <EmbeddedCheckout />
-        </EmbeddedCheckoutProvider>
-      </div>
+      <EmbeddedCheckoutProvider
+        stripe={stripePromise}
+        options={{ fetchClientSecret }}
+      >
+        <EmbeddedCheckout />
+      </EmbeddedCheckoutProvider>
     </div>
   );
 }

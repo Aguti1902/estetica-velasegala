@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   try {
     const params = new URLSearchParams({
-      'ui_mode': 'embedded',
+      'ui_mode': 'embedded_page',
       'payment_method_types[]': 'card',
       'line_items[0][price]': priceId,
       'line_items[0][quantity]': '1',
