@@ -361,34 +361,36 @@ export default function Chatbot() {
           style={{
             width: '52px',
             height: '52px',
+            minWidth: '52px',
+            minHeight: '52px',
             borderRadius: '50%',
             background: '#0d0d0d',
             border: 'none',
             cursor: 'pointer',
             boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-            position: 'relative',
             flexShrink: 0,
             padding: 0,
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            lineHeight: 0,
+            boxSizing: 'border-box',
           }}
           aria-label={open ? (es ? 'Cerrar asistente' : 'Tancar assistent') : (es ? 'Abrir asistente virtual' : 'Obrir assistent virtual')}
         >
-          <span
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'grid',
-              placeItems: 'center',
-              pointerEvents: 'none',
-            }}
-          >
-            {open ? (
-              <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24" style={{ display: 'block' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            ) : (
-              <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24" strokeWidth="1.8" style={{ display: 'block' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-              </svg>
-            )}
-          </span>
+          {open ? (
+            <svg width="22" height="22" fill="none" stroke="#fff" viewBox="0 0 24 24" strokeWidth="2" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                fill="#fff"
+                d="M12 4.5 13.85 10.15 19.5 12 13.85 13.85 12 19.5 10.15 13.85 4.5 12 10.15 10.15 12 4.5z"
+              />
+            </svg>
+          )}
         </motion.button>
       </div>
 
