@@ -12,8 +12,8 @@ export const translations = {
     topbar: {
       phone: '93 658 84 06',
       whatsapp: '644104257',
-      email: 'info@esteticavelasegala.com',
-      schedule: 'Lun–Vie 9:00–20:30 · C/ Mare de Déu de Sales, 67C · Viladecans',
+      email: 'estetica.segala@velasegala.com',
+      schedule: 'Lun–Jue 9–20h · Vie 9–15h · Viladecans',
     },
     hero: {
       badge: 'Clínica de Medicina Estética en Viladecans',
@@ -108,8 +108,8 @@ export const translations = {
           address: 'C/ Mare de Déu de Sales, 67C\n08840 Viladecans, Barcelona',
           phone: '93 658 84 06',
           phone2: '644 10 42 57',
-          schedule: 'Lunes a Viernes: 9:00 – 20:30',
-          email: 'info@esteticavelasegala.com',
+          schedule: 'Lunes a jueves: 9:00 – 20:00\nViernes: 9:00 – 15:00',
+          email: 'estetica.segala@velasegala.com',
         },
       ],
       info: {
@@ -118,7 +118,7 @@ export const translations = {
         phoneLabel: 'Teléfono',
         emailLabel: 'Email',
         scheduleLabel: 'Horario',
-        schedule: 'Lunes a Viernes: 9:00 – 20:30\nDomingos: Cerrado',
+        schedule: 'De lunes a jueves: 9:00 – 20:00\nViernes: 9:00 – 15:00',
       },
     },
     whatsapp: {
@@ -153,8 +153,8 @@ export const translations = {
     topbar: {
       phone: '93 658 84 06',
       whatsapp: '644104257',
-      email: 'info@esteticavelasegala.com',
-      schedule: 'Dl–Dv 9:00–20:30 · C/ Mare de Déu de Sales, 67C · Viladecans',
+      email: 'estetica.segala@velasegala.com',
+      schedule: 'Dl–Dj 9–20h · Dv 9–15h · Viladecans',
     },
     hero: {
       badge: 'Clínica de Medicina Estètica a Viladecans',
@@ -251,8 +251,8 @@ export const translations = {
           address: 'C/ Mare de Déu de Sales, 67C\n08840 Viladecans, Barcelona',
           phone: '93 658 84 06',
           phone2: '644 10 42 57',
-          schedule: 'Dilluns a Divendres: 9:00 – 20:30',
-          email: 'info@esteticavelasegala.com',
+          schedule: 'Dilluns a dijous: 9:00 – 20:00\nDivendres: 9:00 – 15:00',
+          email: 'estetica.segala@velasegala.com',
         },
       ],
       info: {
@@ -261,7 +261,7 @@ export const translations = {
         phoneLabel: 'Telèfon',
         emailLabel: 'Email',
         scheduleLabel: 'Horari',
-        schedule: 'Dilluns a Divendres: 9:00 – 20:30\nDiumenges: Tancat',
+        schedule: 'De dilluns a dijous: 9:00 – 20:00\nDivendres: 9:00 – 15:00',
       },
     },
     whatsapp: {

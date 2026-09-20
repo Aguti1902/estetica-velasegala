@@ -4,7 +4,6 @@ import { LanguageProvider } from './context/LanguageContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
-import WhatsAppButton from './components/WhatsAppButton'
 import Chatbot from './components/Chatbot'
 import CookieBanner from './components/CookieBanner'
 
@@ -45,7 +44,6 @@ function Layout() {
         <Outlet />
       </main>
       <Footer />
-      <WhatsAppButton />
       <Chatbot />
       <CookieBanner />
     </>

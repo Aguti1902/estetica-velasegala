@@ -137,11 +137,11 @@ export default function ContactPage() {
                   </div>
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.5)" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                    <a href="mailto:info@esteticavelasegala.com" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', textDecoration: 'none' }}>info@esteticavelasegala.com</a>
+                    <a href={`mailto:${t.topbar.email}`} style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', textDecoration: 'none' }}>{t.topbar.email}</a>
                   </div>
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.5)" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)' }}>Lun–Vie: 9:00 – 20:30</span>
+                    <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.85)', whiteSpace: 'pre-line', lineHeight: 1.5 }}>{t.contact.info.schedule}</span>
                   </div>
                 </div>
               </div>
