@@ -365,24 +365,44 @@ export default function Chatbot() {
             background: '#0d0d0d',
             border: 'none',
             cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
             position: 'relative',
             flexShrink: 0,
+            padding: 0,
           }}
           aria-label={open ? (es ? 'Cerrar asistente' : 'Tancar assistent') : (es ? 'Abrir asistente virtual' : 'Obrir assistent virtual')}
         >
-          {open ? (
-            <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          ) : (
-            <>
-              <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24" strokeWidth="1.8">
+          <span
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'grid',
+              placeItems: 'center',
+              pointerEvents: 'none',
+            }}
+          >
+            {open ? (
+              <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24" style={{ display: 'block' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            ) : (
+              <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24" strokeWidth="1.8" style={{ display: 'block' }}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
               </svg>
-              <span style={{ position: 'absolute', top: '10px', right: '10px', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', border: '1.5px solid #0d0d0d' }} />
-            </>
+            )}
+          </span>
+          {!open && (
+            <span
+              style={{
+                position: 'absolute',
+                top: '9px',
+                right: '9px',
+                width: '8px',
+                height: '8px',
+                background: '#4ade80',
+                borderRadius: '50%',
+                border: '1.5px solid #0d0d0d',
+                pointerEvents: 'none',
+              }}
+            />
           )}
         </motion.button>
       </div>
