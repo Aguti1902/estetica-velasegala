@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { adminFetch } from '../../admin/useAdminAuth'
+import { adminTheme as t } from '../../admin/adminTheme'
 
 const STATUS_LABEL = { new: 'Nuevo', read: 'Leído', archived: 'Archivado' }
 
@@ -38,42 +39,40 @@ export default function AdminContactPage() {
 
   const unread = items.filter((m) => m.status === 'new').length
 
+  const filterBtn = (active) => ({
+    padding: '8px 14px', fontSize: '12px', cursor: 'pointer', borderRadius: '4px',
+    background: active ? t.text : t.pageBg,
+    color: active ? '#fff' : t.textMuted,
+    border: `1px solid ${t.border}`,
+  })
+
   return (
     <div>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: 0 }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: 0, color: t.text }}>
             Contacto
           </h2>
-          <p style={{ color: '#888', marginTop: '8px' }}>
+          <p style={{ color: t.textMuted, marginTop: '8px' }}>
             {unread > 0 ? `${unread} mensaje(s) sin leer` : 'Bandeja al día'}
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {[['all', 'Todos'], ['new', 'Nuevos'], ['read', 'Leídos'], ['archived', 'Archivados']].map(([v, label]) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => setFilter(v)}
-              style={{
-                padding: '8px 14px', fontSize: '11px', cursor: 'pointer',
-                background: filter === v ? '#c9a882' : '#222', color: filter === v ? '#141414' : '#aaa',
-                border: '1px solid #333',
-              }}
-            >
+            <button key={v} type="button" onClick={() => setFilter(v)} style={filterBtn(filter === v)}>
               {label}
             </button>
           ))}
-          <button type="button" onClick={load} style={{ padding: '8px 14px', background: '#222', border: '1px solid #333', color: '#ccc', cursor: 'pointer' }}>
+          <button type="button" onClick={load} style={{ ...filterBtn(false), padding: '8px 12px' }}>
             ↻
           </button>
         </div>
       </div>
 
       {loading ? (
-        <p style={{ color: '#666' }}>Cargando…</p>
+        <p style={{ color: t.textMuted }}>Cargando…</p>
       ) : items.length === 0 ? (
-        <p style={{ color: '#666', padding: '32px', border: '1px solid #333', textAlign: 'center' }}>
+        <p style={{ color: t.textMuted, padding: '32px', border: `1px solid ${t.border}`, textAlign: 'center', borderRadius: '6px' }}>
           No hay mensajes{filter !== 'all' ? ' con este filtro' : ''}.
         </p>
       ) : (
@@ -89,17 +88,17 @@ export default function AdminContactPage() {
                   }}
                   style={{
                     width: '100%', textAlign: 'left', padding: '14px 16px', cursor: 'pointer',
-                    background: selected?.id === m.id ? '#2a2520' : '#1e1e1e',
-                    border: `1px solid ${m.status === 'new' ? '#c9a88255' : '#333'}`,
-                    color: '#eee',
+                    background: selected?.id === m.id ? t.subtleBg : t.pageBg,
+                    border: `1px solid ${m.status === 'new' ? t.accent : t.border}`,
+                    color: t.text, borderRadius: '4px',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                     <strong style={{ fontSize: '0.95rem' }}>{m.name}</strong>
-                    <span style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase' }}>{STATUS_LABEL[m.status]}</span>
+                    <span style={{ fontSize: '10px', color: t.textMuted, textTransform: 'uppercase' }}>{STATUS_LABEL[m.status]}</span>
                   </div>
-                  <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#888' }}>{m.email}</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>
+                  <p style={{ margin: '4px 0 0', fontSize: '12px', color: t.textMuted }}>{m.email}</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: t.textMuted }}>
                     {new Date(m.created_at).toLocaleString('es-ES')}
                   </p>
                 </button>
@@ -107,28 +106,32 @@ export default function AdminContactPage() {
             ))}
           </ul>
 
-          <div style={{ background: '#1e1e1e', border: '1px solid #333', padding: '24px', minHeight: '320px' }}>
+          <div style={{ background: t.cardBg, border: `1px solid ${t.border}`, padding: '24px', minHeight: '320px', borderRadius: '6px' }}>
             {!selected ? (
-              <p style={{ color: '#666', textAlign: 'center', marginTop: '80px' }}>Selecciona un mensaje</p>
+              <p style={{ color: t.textMuted, textAlign: 'center', marginTop: '80px' }}>Selecciona un mensaje</p>
             ) : (
               <>
-                <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia, serif', fontWeight: 400 }}>{selected.name}</h3>
-                <p style={{ margin: 0, color: '#c9a882', fontSize: '0.875rem' }}>
-                  <a href={`mailto:${selected.email}`} style={{ color: '#c9a882' }}>{selected.email}</a>
-                  {selected.phone && ` · ${selected.phone}`}
+                <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia, serif', fontWeight: 400, color: t.text }}>{selected.name}</h3>
+                <p style={{ margin: 0, fontSize: '0.875rem' }}>
+                  <a href={`mailto:${selected.email}`} style={{ color: t.text, fontWeight: 600 }}>{selected.email}</a>
+                  {selected.phone && <span style={{ color: t.textMuted }}>{` · ${selected.phone}`}</span>}
                 </p>
-                <p style={{ fontSize: '12px', color: '#666', margin: '12px 0 20px' }}>
+                <p style={{ fontSize: '12px', color: t.textMuted, margin: '12px 0 20px' }}>
                   {new Date(selected.created_at).toLocaleString('es-ES')}
                   {selected.source && ` · ${selected.source}`}
                 </p>
                 {selected.service && (
-                  <p style={{ fontSize: '0.875rem' }}><strong>Tratamiento:</strong> {selected.service}</p>
+                  <p style={{ fontSize: '0.875rem', color: t.text }}><strong>Tratamiento:</strong> {selected.service}</p>
                 )}
                 {selected.clinic && (
-                  <p style={{ fontSize: '0.875rem' }}><strong>Clínica:</strong> {selected.clinic}</p>
+                  <p style={{ fontSize: '0.875rem', color: t.text }}><strong>Clínica:</strong> {selected.clinic}</p>
                 )}
                 {selected.message && (
-                  <div style={{ marginTop: '16px', padding: '16px', background: '#141414', lineHeight: 1.6, whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
+                  <div style={{
+                    marginTop: '16px', padding: '16px', background: t.subtleBg, lineHeight: 1.6,
+                    whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: t.text, borderRadius: '4px',
+                  }}
+                  >
                     {selected.message}
                   </div>
                 )}
@@ -153,5 +156,6 @@ export default function AdminContactPage() {
 }
 
 const actionBtn = {
-  padding: '8px 14px', background: '#222', border: '1px solid #444', color: '#ccc', cursor: 'pointer', fontSize: '12px',
+  padding: '8px 14px', background: t.pageBg, border: `1px solid ${t.borderStrong}`, color: t.text,
+  cursor: 'pointer', fontSize: '12px', borderRadius: '4px',
 }

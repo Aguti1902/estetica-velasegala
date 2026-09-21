@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { adminTheme as t } from '../../admin/adminTheme'
 
 const cards = [
   {
@@ -27,32 +28,33 @@ const cards = [
 export default function AdminDashboardPage() {
   return (
     <div>
-      <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '8px' }}>
+      <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '8px', color: t.text }}>
         Bienvenido
       </h2>
-      <p style={{ color: '#888', marginBottom: '32px', maxWidth: '560px', lineHeight: 1.6 }}>
+      <p style={{ color: t.textMuted, marginBottom: '32px', maxWidth: '560px', lineHeight: 1.6 }}>
         Desde aquí puedes gestionar el contenido de la web sin tocar código. Los cambios en tratamientos se publican al guardar (la web los carga automáticamente).
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
         {cards.map((c) => {
           const inner = (
             <div style={{
-              background: '#1e1e1e', border: '1px solid #333', padding: '24px', height: '100%',
-              transition: 'border-color 0.2s',
-            }}>
-              <h3 style={{ margin: '0 0 8px', fontSize: '1.1rem', color: '#c9a882' }}>{c.title}</h3>
-              <p style={{ margin: 0, fontSize: '0.875rem', color: '#aaa', lineHeight: 1.5 }}>{c.desc}</p>
+              background: t.cardBg, border: `1px solid ${t.border}`, padding: '24px', height: '100%',
+              borderRadius: '6px', transition: 'box-shadow 0.2s',
+            }}
+            >
+              <h3 style={{ margin: '0 0 8px', fontSize: '1.1rem', color: t.text, fontFamily: 'Georgia, serif', fontWeight: 400 }}>{c.title}</h3>
+              <p style={{ margin: 0, fontSize: '0.875rem', color: t.textMuted, lineHeight: 1.5 }}>{c.desc}</p>
             </div>
           )
           if (c.external) {
             return (
-              <a key={c.to} href={c.to} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+              <a key={c.to} href={c.to} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
                 {inner}
               </a>
             )
           }
           return (
-            <Link key={c.to} to={c.to} style={{ textDecoration: 'none' }}>
+            <Link key={c.to} to={c.to} style={{ textDecoration: 'none', color: 'inherit' }}>
               {inner}
             </Link>
           )

@@ -4,6 +4,7 @@ import { servicesData as baseServicesData } from '../../data/services'
 import { adminFetch } from '../../admin/useAdminAuth'
 import { useServices } from '../../context/ServicesContext'
 import { uploadTreatmentImage } from '../../admin/uploadTreatmentImage'
+import { adminTheme as t } from '../../admin/adminTheme'
 
 function mergeDraft(base, patch) {
   return {
@@ -127,8 +128,8 @@ export default function AdminServicesPage() {
   }
 
   const inputStyle = {
-    width: '100%', padding: '12px 14px', background: '#141414', border: '1px solid #444',
-    color: '#eee', fontSize: '15px', boxSizing: 'border-box', borderRadius: '4px',
+    width: '100%', padding: '12px 14px', background: t.inputBg, border: `1px solid ${t.border}`,
+    color: t.text, fontSize: '15px', boxSizing: 'border-box', borderRadius: '4px',
   }
 
   const hasOverride = Boolean(overrides[`${slug}:${locale}`])
@@ -139,7 +140,7 @@ export default function AdminServicesPage() {
     <div>
       {toast && (
         <div style={{
-          position: 'fixed', top: '16px', right: '16px', background: '#2a2520', border: '1px solid #c9a882',
+          position: 'fixed', top: '16px', right: '16px', background: t.pageBg, border: `1px solid ${t.text}`,
           padding: '12px 20px', zIndex: 100, fontSize: '14px', maxWidth: '320px',
         }}
         >
@@ -147,15 +148,15 @@ export default function AdminServicesPage() {
         </div>
       )}
 
-      <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: '0 0 8px' }}>
+      <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: '0 0 8px', color: t.text }}>
         Tratamientos
       </h2>
-      <p style={{ color: '#888', marginBottom: '24px', lineHeight: 1.5 }}>
+      <p style={{ color: t.textMuted, marginBottom: '24px', lineHeight: 1.5 }}>
         Elige un tratamiento, edita los textos y sube las fotos. No hace falta saber de informática: solo rellena los campos y pulsa guardar.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 260px) 1fr', gap: '20px', alignItems: 'start' }}>
-        <aside style={{ background: '#1e1e1e', border: '1px solid #333', borderRadius: '6px', padding: '16px', maxHeight: 'calc(100vh - 160px)', overflow: 'auto' }}>
+        <aside style={{ background: t.subtleBg, border: `1px solid ${t.border}`, borderRadius: '6px', padding: '16px', maxHeight: 'calc(100vh - 160px)', overflow: 'auto' }}>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -170,8 +171,8 @@ export default function AdminServicesPage() {
                 onClick={() => setLocale(loc)}
                 style={{
                   flex: 1, padding: '10px 8px', cursor: 'pointer', fontSize: '12px',
-                  background: locale === loc ? '#c9a882' : '#222', color: locale === loc ? '#141414' : '#aaa',
-                  border: '1px solid #333', borderRadius: '4px', fontWeight: locale === loc ? 600 : 400,
+                  background: locale === loc ? t.text : t.pageBg, color: locale === loc ? '#fff' : t.textMuted,
+                  border: `1px solid ${t.border}`, borderRadius: '4px', fontWeight: locale === loc ? 600 : 400,
                 }}
               >
                 {loc === 'es' ? 'Español' : 'Català'}
@@ -186,9 +187,11 @@ export default function AdminServicesPage() {
                   onClick={() => setSlug(s.slug)}
                   style={{
                     width: '100%', textAlign: 'left', padding: '11px 10px', cursor: 'pointer',
-                    background: slug === s.slug ? '#2a2520' : 'transparent',
-                    border: 'none', color: slug === s.slug ? '#c9a882' : '#ccc', fontSize: '14px',
-                    borderBottom: '1px solid #2a2a2a', borderRadius: slug === s.slug ? '4px' : 0,
+                    background: slug === s.slug ? t.pageBg : 'transparent',
+                    border: 'none', color: slug === s.slug ? t.text : t.textMuted, fontSize: '14px',
+                    borderBottom: `1px solid ${t.border}`, borderRadius: slug === s.slug ? '4px' : 0,
+                    fontWeight: slug === s.slug ? 600 : 400,
+                    boxShadow: slug === s.slug ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
                   }}
                 >
                   {s.name}
@@ -198,12 +201,12 @@ export default function AdminServicesPage() {
           </ul>
         </aside>
 
-        <div style={{ background: '#1e1e1e', border: '1px solid #333', borderRadius: '6px', padding: '28px' }}>
+        <div style={{ background: t.cardBg, border: `1px solid ${t.border}`, borderRadius: '6px', padding: '28px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '12px', marginBottom: '28px' }}>
             <div>
-              <p style={{ margin: 0, fontSize: '13px', color: '#c9a882' }}>{baseService?.categoryLabel}</p>
+              <p style={{ margin: 0, fontSize: '13px', color: t.textMuted }}>{baseService?.categoryLabel}</p>
               {hasOverride && (
-                <p style={{ margin: '6px 0 0', fontSize: '12px', color: '#888' }}>Tienes cambios guardados en la web</p>
+                <p style={{ margin: '6px 0 0', fontSize: '12px', color: t.accent }}>Tienes cambios guardados en la web</p>
               )}
             </div>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -237,7 +240,7 @@ export default function AdminServicesPage() {
           </Section>
 
           <Section title="Foto de portada">
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#888', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: t.textMuted, lineHeight: 1.5 }}>
               Es la imagen grande de arriba en la ficha del tratamiento.
             </p>
             <PhotoBlock
@@ -250,7 +253,7 @@ export default function AdminServicesPage() {
           </Section>
 
           <Section title="Fotos del tratamiento">
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#888', lineHeight: 1.5 }}>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: t.textMuted, lineHeight: 1.5 }}>
               Galería que se ve más abajo en la página (puedes añadir varias).
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
@@ -273,9 +276,9 @@ export default function AdminServicesPage() {
 
           <Section title="Pasos del tratamiento">
             {(draft.steps || []).map((step, i) => (
-              <div key={i} style={{ marginBottom: '16px', padding: '16px', background: '#141414', borderRadius: '4px', border: '1px solid #333' }}>
+              <div key={i} style={{ marginBottom: '16px', padding: '16px', background: t.subtleBg, borderRadius: '4px', border: `1px solid ${t.border}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '12px', color: '#888' }}>Paso {i + 1}</span>
+                  <span style={{ fontSize: '12px', color: t.textMuted }}>Paso {i + 1}</span>
                   <button type="button" style={btnTextDanger} onClick={() => setDraft({ ...draft, steps: draft.steps.filter((_, j) => j !== i) })}>
                     Quitar
                   </button>
@@ -343,7 +346,7 @@ export default function AdminServicesPage() {
 
           <Section title="Preguntas frecuentes">
             {(draft.faq || []).map((item, i) => (
-              <div key={i} style={{ marginBottom: '16px', padding: '16px', background: '#141414', borderRadius: '4px', border: '1px solid #333' }}>
+              <div key={i} style={{ marginBottom: '16px', padding: '16px', background: t.subtleBg, borderRadius: '4px', border: `1px solid ${t.border}` }}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
                   <button type="button" style={btnTextDanger} onClick={() => setDraft({ ...draft, faq: draft.faq.filter((_, j) => j !== i) })}>
                     Quitar
@@ -389,8 +392,8 @@ export default function AdminServicesPage() {
 
 function Section({ title, children }) {
   return (
-    <section style={{ marginBottom: '36px', paddingBottom: '28px', borderBottom: '1px solid #2a2a2a' }}>
-      <h3 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.2rem', margin: '0 0 16px', color: '#eee' }}>
+    <section style={{ marginBottom: '36px', paddingBottom: '28px', borderBottom: `1px solid ${t.border}` }}>
+      <h3 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.2rem', margin: '0 0 16px', color: t.text }}>
         {title}
       </h3>
       {children}
@@ -401,7 +404,7 @@ function Section({ title, children }) {
 function Field({ label, children }) {
   return (
     <label style={{ display: 'block', marginBottom: '18px' }}>
-      <span style={{ display: 'block', fontSize: '13px', color: '#aaa', marginBottom: '8px' }}>{label}</span>
+      <span style={{ display: 'block', fontSize: '13px', color: t.textMuted, marginBottom: '8px' }}>{label}</span>
       {children}
     </label>
   )
@@ -414,7 +417,7 @@ function PhotoBlock({ src, compact, uploading, onUpload, onRemove, changeLabel }
     <div style={{ width: compact ? 140 : '100%', maxWidth: compact ? 140 : 360 }}>
       {src ? (
         <div style={{ position: 'relative' }}>
-          <img src={src} alt="" style={{ width: w, height: h, objectFit: 'cover', borderRadius: '4px', border: '1px solid #444', display: 'block' }} />
+          <img src={src} alt="" style={{ width: w, height: h, objectFit: 'cover', borderRadius: '4px', border: `1px solid ${t.border}`, display: 'block' }} />
           <div style={{ marginTop: '8px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {onUpload && (
               <label style={{ ...btnSmall, cursor: uploading ? 'wait' : 'pointer' }}>
@@ -439,7 +442,7 @@ function AddPhotoButton({ label, uploading, onPick }) {
     <label
       style={{
         width: 140, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        border: '2px dashed #444', borderRadius: '4px', color: '#c9a882', fontSize: '13px',
+        border: `2px dashed ${t.borderStrong}`, borderRadius: '4px', color: t.text, fontSize: '13px',
         cursor: uploading ? 'wait' : 'pointer', textAlign: 'center', padding: '8px',
       }}
     >
@@ -450,18 +453,18 @@ function AddPhotoButton({ label, uploading, onPick }) {
 }
 
 const btnPrimary = {
-  padding: '12px 22px', background: '#c9a882', border: 'none', color: '#141414',
+  padding: '12px 22px', background: t.text, border: 'none', color: '#fff',
   cursor: 'pointer', fontSize: '13px', fontWeight: 600, borderRadius: '4px',
 }
 const btnSecondary = {
-  padding: '10px 18px', background: '#222', border: '1px solid #444', color: '#ccc',
+  padding: '10px 18px', background: t.pageBg, border: `1px solid ${t.borderStrong}`, color: t.text,
   cursor: 'pointer', fontSize: '13px', borderRadius: '4px',
 }
 const btnSmall = {
-  padding: '8px 12px', background: '#222', border: '1px solid #555', color: '#c9a882',
+  padding: '8px 12px', background: t.subtleBg, border: `1px solid ${t.border}`, color: t.text,
   fontSize: '12px', borderRadius: '4px', display: 'inline-block',
 }
 const btnTextDanger = {
-  padding: '6px 10px', background: 'transparent', border: 'none', color: '#c77',
+  padding: '6px 10px', background: 'transparent', border: 'none', color: t.danger,
   cursor: 'pointer', fontSize: '12px',
 }

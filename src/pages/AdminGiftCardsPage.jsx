@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOutletContext } from 'react-router-dom';
 import { getStoredAdminPassword, setStoredAdminPassword, adminFetch } from '../admin/useAdminAuth';
+import AdminLogin from '../admin/AdminLogin';
+import { adminTheme as th } from '../admin/adminTheme';
 
 export default function AdminGiftCardsPage() {
   const { pwd: shellPwd } = useOutletContext() || {};
@@ -44,20 +46,6 @@ export default function AdminGiftCardsPage() {
     if (authed) fetchCards();
   }, [authed, fetchCards]);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Verificar contra la API (si responde 401 no es correcta)
-    adminFetch('/api/admin/cards', pwd)
-      .then(r => {
-        if (r.ok || r.status !== 401) {
-          setAuthed(true); setPwdError(false);
-          setStoredAdminPassword(pwd);
-        }
-        else { setPwdError(true); }
-      })
-      .catch(() => setPwdError(true));
-  };
-
   const toggleUsed = async (card) => {
     setUpdating(card.code);
     try {
@@ -88,60 +76,29 @@ export default function AdminGiftCardsPage() {
     }
   }, [shellPwd]);
 
+  const verifyCardsLogin = async (password) => {
+    setPwd(password);
+    const r = await adminFetch('/api/admin/cards', password);
+    if (r.status === 401) {
+      setPwdError(true);
+      setAuthed(false);
+      setStoredAdminPassword('');
+      return false;
+    }
+    setAuthed(true);
+    setPwdError(false);
+    setStoredAdminPassword(password);
+    return true;
+  };
+
   // --- LOGIN SCREEN ---
   if (!embedded && !authed) {
     return (
-      <div style={{
-        minHeight: '100vh', background: '#1a1a1a', display: 'flex',
-        alignItems: 'center', justifyContent: 'center', padding: '24px',
-      }}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{
-            background: '#222', border: '1px solid #333', borderRadius: '8px',
-            padding: '48px', width: '100%', maxWidth: '420px',
-          }}
-        >
-          <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '8px' }}>
-            Estetica Segala
-          </p>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.5rem', fontWeight: 400, color: 'white', textAlign: 'center', marginBottom: '40px' }}>
-            Panel Administración
-          </h1>
-          <form onSubmit={handleLogin}>
-            <label style={{ display: 'block', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#888', marginBottom: '8px' }}>
-              Contraseña
-            </label>
-            <input
-              type="password"
-              value={pwd}
-              onChange={e => { setPwd(e.target.value); setPwdError(false); }}
-              placeholder="••••••••"
-              autoFocus
-              style={{
-                width: '100%', padding: '12px 16px', background: '#2d2d2d',
-                border: `1px solid ${pwdError ? '#c00' : '#444'}`,
-                borderRadius: '4px', color: 'white', fontSize: '16px',
-                outline: 'none', marginBottom: '8px', boxSizing: 'border-box',
-                fontFamily: 'monospace', letterSpacing: '4px',
-              }}
-            />
-            {pwdError && <p style={{ color: '#e57373', fontSize: '13px', marginBottom: '16px' }}>Contraseña incorrecta</p>}
-            <button
-              type="submit"
-              style={{
-                width: '100%', padding: '13px', background: '#c9a882',
-                border: 'none', borderRadius: '4px', color: '#1a1a1a',
-                fontSize: '12px', fontWeight: 600, letterSpacing: '3px',
-                textTransform: 'uppercase', cursor: 'pointer', marginTop: '16px',
-              }}
-            >
-              ACCEDER
-            </button>
-          </form>
-        </motion.div>
-      </div>
+      <AdminLogin
+        onSubmit={verifyCardsLogin}
+        pwdError={pwdError}
+        setPwdError={setPwdError}
+      />
     );
   }
 
@@ -161,9 +118,9 @@ export default function AdminGiftCardsPage() {
             exit={{ opacity: 0 }}
             style={{
               position: 'fixed', top: '24px', left: '50%', transform: 'translateX(-50%)',
-              background: '#1a1a1a', border: '1px solid #c9a882', borderRadius: '4px',
-              padding: '12px 24px', color: '#c9a882', fontSize: '14px', zIndex: 9999,
-              boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+              background: th.pageBg, border: `1px solid ${th.text}`, borderRadius: '4px',
+              padding: '12px 24px', color: th.text, fontSize: '14px', zIndex: 9999,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
             }}
           >
             {toast}
@@ -172,16 +129,11 @@ export default function AdminGiftCardsPage() {
       </AnimatePresence>
 
       {!embedded && (
-        <div style={{ background: '#1a1a1a', borderBottom: '1px solid #222', padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-          <div>
-            <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2px' }}>Panel Admin</p>
-            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white' }}>
-              Tarjetas Regalo · Estetica Segala
-            </h1>
-          </div>
+        <div style={{ background: th.pageBg, borderBottom: `1px solid ${th.border}`, padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <img src="/logo.png" alt="Estetica Segala" style={{ height: '48px', width: 'auto' }} />
           <button
             onClick={() => { setAuthed(false); setStoredAdminPassword(''); }}
-            style={{ background: 'none', border: '1px solid #333', borderRadius: '4px', color: '#888', padding: '8px 16px', cursor: 'pointer', fontSize: '12px' }}
+            style={{ background: th.pageBg, border: `1px solid ${th.border}`, borderRadius: '4px', color: th.textMuted, padding: '8px 16px', cursor: 'pointer', fontSize: '12px' }}
           >
             Cerrar sesión
           </button>
@@ -189,22 +141,22 @@ export default function AdminGiftCardsPage() {
       )}
 
       {embedded && (
-        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '16px', color: 'white' }}>
+        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '16px', color: th.text }}>
           Tarjetas regalo
         </h2>
       )}
 
       <div style={{
-        marginBottom: '24px', padding: '14px 18px', background: '#1e1e1e', border: '1px solid #333',
-        borderRadius: '6px', fontSize: '13px', color: '#aaa', lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
+        marginBottom: '24px', padding: '14px 18px', background: th.subtleBg, border: `1px solid ${th.border}`,
+        borderRadius: '6px', fontSize: '13px', color: th.textMuted, lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
         margin: embedded ? '0 0 24px' : '0 auto 24px', paddingLeft: embedded ? '18px' : undefined,
         paddingRight: embedded ? '18px' : undefined,
         width: embedded ? 'auto' : 'calc(100% - clamp(32px, 8vw, 64px))',
       }}>
-        <strong style={{ color: '#c9a882' }}>Conectado con Stripe.</strong>{' '}
+        <strong style={{ color: th.text }}>Conectado con Stripe.</strong>{' '}
         Cuando un cliente paga en la web, Stripe avisa automáticamente y aquí aparece la tarjeta con su código.
         Solo tienes que marcarla como usada cuando la canjeéis en clínica.{' '}
-        <a href="https://dashboard.stripe.com/payments" target="_blank" rel="noreferrer" style={{ color: '#c9a882' }}>
+        <a href="https://dashboard.stripe.com/payments" target="_blank" rel="noreferrer" style={{ color: th.text, fontWeight: 600 }}>
           Ver pagos en Stripe ↗
         </a>
       </div>
@@ -217,10 +169,10 @@ export default function AdminGiftCardsPage() {
           { label: 'Disponibles', value: total - used, sub: 'sin canjear' },
           { label: 'Ingresos totales', value: `${revenue}€`, sub: 'facturado' },
         ].map(s => (
-          <div key={s.label} style={{ background: '#1a1a1a', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
-            <p style={{ color: '#666', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '8px' }}>{s.label}</p>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: '2rem', fontWeight: 700, color: '#c9a882', marginBottom: '4px' }}>{s.value}</p>
-            <p style={{ color: '#555', fontSize: '12px' }}>{s.sub}</p>
+          <div key={s.label} style={{ background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: '8px', padding: '24px' }}>
+            <p style={{ color: th.textMuted, fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>{s.label}</p>
+            <p style={{ fontFamily: 'Georgia, serif', fontSize: '2rem', fontWeight: 700, color: th.text, marginBottom: '4px' }}>{s.value}</p>
+            <p style={{ color: th.textMuted, fontSize: '12px' }}>{s.sub}</p>
           </div>
         ))}
       </div>
@@ -234,8 +186,8 @@ export default function AdminGiftCardsPage() {
           onKeyDown={e => e.key === 'Enter' && fetchCards()}
           style={{
             flex: 1, minWidth: '240px', padding: '10px 16px',
-            background: '#1a1a1a', border: '1px solid #333',
-            borderRadius: '4px', color: 'white', fontSize: '14px',
+            background: th.inputBg, border: `1px solid ${th.border}`,
+            borderRadius: '4px', color: th.text, fontSize: '14px',
             outline: 'none', fontFamily: 'monospace',
           }}
         />
@@ -246,9 +198,9 @@ export default function AdminGiftCardsPage() {
               onClick={() => setFilter(val)}
               style={{
                 padding: '10px 16px', borderRadius: '4px', fontSize: '12px',
-                background: filter === val ? '#c9a882' : '#1a1a1a',
-                color: filter === val ? '#1a1a1a' : '#888',
-                border: `1px solid ${filter === val ? '#c9a882' : '#333'}`,
+                background: filter === val ? th.text : th.pageBg,
+                color: filter === val ? '#fff' : th.textMuted,
+                border: `1px solid ${th.border}`,
                 cursor: 'pointer', fontWeight: filter === val ? 600 : 400,
                 letterSpacing: '1px',
               }}
@@ -260,8 +212,8 @@ export default function AdminGiftCardsPage() {
         <button
           onClick={() => fetchCards()}
           style={{
-            padding: '10px 20px', background: '#222', border: '1px solid #333',
-            borderRadius: '4px', color: '#ccc', cursor: 'pointer', fontSize: '12px',
+            padding: '10px 20px', background: th.pageBg, border: `1px solid ${th.border}`,
+            borderRadius: '4px', color: th.text, cursor: 'pointer', fontSize: '12px',
           }}
         >
           ↻ Actualizar
@@ -280,9 +232,9 @@ export default function AdminGiftCardsPage() {
           }
         `}</style>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '48px', color: '#555' }}>Cargando...</div>
+          <div style={{ textAlign: 'center', padding: '48px', color: th.textMuted }}>Cargando...</div>
         ) : cards.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '48px', color: '#555', border: '1px solid #222', borderRadius: '8px' }}>
+          <div style={{ textAlign: 'center', padding: '48px', color: th.textMuted, border: `1px solid ${th.border}`, borderRadius: '8px' }}>
             No se encontraron tarjetas
           </div>
         ) : (
@@ -290,7 +242,7 @@ export default function AdminGiftCardsPage() {
             {/* Cabecera — solo visible en desktop */}
             <div className="admin-table-header" style={{
               gap: '16px', padding: '12px 20px',
-              fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: '#555',
+              fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: th.textMuted,
             }}>
               <span>Código / Comprador</span>
               <span>Importe</span>
@@ -309,27 +261,27 @@ export default function AdminGiftCardsPage() {
                 className="admin-table-row"
                 style={{
                   gap: '16px', padding: '16px 20px',
-                  background: '#1a1a1a', border: `1px solid ${card.is_used ? '#2a2a2a' : '#2d2d20'}`,
+                  background: th.cardBg, border: `1px solid ${card.is_used ? th.border : th.accent}`,
                   borderRadius: '6px', alignItems: 'center',
-                  opacity: card.is_used ? 0.6 : 1,
+                  opacity: card.is_used ? 0.65 : 1,
                 }}
               >
                 <div>
                   <p style={{
                     fontFamily: 'monospace', fontSize: '15px', letterSpacing: '2px',
-                    color: card.is_used ? '#555' : '#c9a882', fontWeight: 700, marginBottom: '4px', wordBreak: 'break-all',
+                    color: card.is_used ? th.textMuted : th.text, fontWeight: 700, marginBottom: '4px', wordBreak: 'break-all',
                   }}>
                     {card.code}
                   </p>
-                  <p style={{ color: '#666', fontSize: '12px' }}>{card.buyer_name}</p>
-                  <p style={{ color: '#555', fontSize: '11px' }}>{card.buyer_email}</p>
+                  <p style={{ color: th.textMuted, fontSize: '12px' }}>{card.buyer_name}</p>
+                  <p style={{ color: th.textMuted, fontSize: '11px' }}>{card.buyer_email}</p>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: '#888', fontSize: '11px', display: 'none' }} className="admin-mobile-label">Importe:</span>
+                  <span style={{ color: th.textMuted, fontSize: '11px', display: 'none' }} className="admin-mobile-label">Importe:</span>
                   <span style={{
                     fontFamily: 'Georgia, serif', fontSize: '1.25rem',
-                    color: card.is_used ? '#555' : 'white', fontWeight: 700,
+                    color: card.is_used ? th.textMuted : th.text, fontWeight: 700,
                   }}>
                     {card.amount}€
                   </span>
@@ -339,20 +291,20 @@ export default function AdminGiftCardsPage() {
                   <span style={{
                     display: 'inline-block', padding: '4px 10px', borderRadius: '20px', fontSize: '11px',
                     letterSpacing: '1px', fontWeight: 600,
-                    background: card.is_used ? '#1a1a1a' : 'rgba(201,168,130,0.15)',
-                    color: card.is_used ? '#555' : '#c9a882',
-                    border: `1px solid ${card.is_used ? '#333' : 'rgba(201,168,130,0.3)'}`,
+                    background: card.is_used ? th.subtleBg : 'rgba(201,168,130,0.2)',
+                    color: card.is_used ? th.textMuted : th.text,
+                    border: `1px solid ${card.is_used ? th.border : th.accent}`,
                   }}>
                     {card.is_used ? 'CANJEADA' : 'ACTIVA'}
                   </span>
                 </div>
 
                 <div>
-                  <p style={{ color: '#888', fontSize: '12px' }}>
+                  <p style={{ color: th.textMuted, fontSize: '12px' }}>
                     {new Date(card.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </p>
                   {card.is_used && card.used_at && (
-                    <p style={{ color: '#555', fontSize: '11px' }}>
+                    <p style={{ color: th.textMuted, fontSize: '11px' }}>
                       Usada: {new Date(card.used_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
                     </p>
                   )}
@@ -370,9 +322,9 @@ export default function AdminGiftCardsPage() {
                     disabled={updating === card.code}
                     style={{
                       padding: '8px 14px', borderRadius: '4px', fontSize: '11px',
-                      background: card.is_used ? '#222' : 'rgba(201,168,130,0.2)',
-                      color: card.is_used ? '#888' : '#c9a882',
-                      border: `1px solid ${card.is_used ? '#333' : 'rgba(201,168,130,0.4)'}`,
+                      background: card.is_used ? th.subtleBg : th.text,
+                      color: card.is_used ? th.textMuted : '#fff',
+                      border: `1px solid ${th.border}`,
                       cursor: updating === card.code ? 'wait' : 'pointer',
                       letterSpacing: '1px', fontWeight: 600,
                     }}
@@ -388,6 +340,6 @@ export default function AdminGiftCardsPage() {
     </>
   );
 
-  if (embedded) return <div style={{ color: 'white' }}>{body}</div>;
-  return <div style={{ minHeight: '100vh', background: '#111', color: 'white' }}>{body}</div>;
+  if (embedded) return <div style={{ color: th.text }}>{body}</div>;
+  return <div style={{ minHeight: '100vh', background: th.pageBg, color: th.text }}>{body}</div>;
 }
