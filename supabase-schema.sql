@@ -28,6 +28,7 @@ CREATE INDEX IF NOT EXISTS idx_gift_cards_is_used ON gift_cards(is_used);
 ALTER TABLE gift_cards ENABLE ROW LEVEL SECURITY;
 
 -- Política: solo el service role puede leer/escribir (ningún anon puede acceder directamente)
+DROP POLICY IF EXISTS "Solo service role" ON gift_cards;
 CREATE POLICY "Solo service role" ON gift_cards
   FOR ALL
   USING (true)
@@ -58,6 +59,7 @@ CREATE INDEX IF NOT EXISTS idx_contact_submissions_created ON contact_submission
 
 ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Solo service role contact" ON contact_submissions;
 CREATE POLICY "Solo service role contact" ON contact_submissions
   FOR ALL USING (true) WITH CHECK (true);
 
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS service_overrides (
 
 ALTER TABLE service_overrides ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Solo service role services" ON service_overrides;
 CREATE POLICY "Solo service role services" ON service_overrides
   FOR ALL USING (true) WITH CHECK (true);
 
