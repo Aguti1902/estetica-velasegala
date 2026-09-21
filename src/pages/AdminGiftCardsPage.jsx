@@ -95,7 +95,7 @@ export default function AdminGiftCardsPage() {
           }}
         >
           <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '8px' }}>
-            Vela Segalà
+            Estetica Segala
           </p>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.5rem', fontWeight: 400, color: 'white', textAlign: 'center', marginBottom: '40px' }}>
             Panel Administración
@@ -168,7 +168,7 @@ export default function AdminGiftCardsPage() {
         <div>
           <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2px' }}>Panel Admin</p>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white' }}>
-            Tarjetas Regalo · Vela Segalà
+            Tarjetas Regalo · Estetica Segala
           </h1>
         </div>
         <button

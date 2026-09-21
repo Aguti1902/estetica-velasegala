@@ -121,7 +121,7 @@ export default function ContactPage() {
               style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <div style={{ background: '#0d0d0d', padding: '1.75rem' }}>
                 <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '1.25rem' }}>
-                  Vela Segalà — Viladecans
+                  Estetica Segala — Viladecans
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>

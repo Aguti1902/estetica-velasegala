@@ -16,7 +16,7 @@ export const translations = {
       schedule: 'Lun–Jue 9–20h · Vie 9–15h · Viladecans',
     },
     hero: {
-      badge: 'Clínica de Medicina Estética en Viladecans',
+      badge: 'Estetica Segala · Viladecans',
       headline: 'Verte bien y sentirte mejor',
       subheadline: 'Medicina estética avanzada con criterio médico y trato cercano. Tratamientos faciales, corporales, láser y masajes en nuestra clínica de Viladecans.',
       cta1: 'Reservar cita',
@@ -75,7 +75,7 @@ export const translations = {
     about: {
       badge: 'Sobre nosotros',
       title: 'Medicina estética con compromiso médico y humano',
-      text1: 'En Vela Segalà Estética Viladecans te ayudamos a verte bien y sentirte mejor. Nuestro centro de medicina estética nace del compromiso médico y humano de combinar la experiencia clínica con un enfoque personalizado del cuidado facial y corporal.',
+      text1: 'En Estetica Segala te ayudamos a verte bien y sentirte mejor. Nuestro centro de medicina estética en Viladecans nace del compromiso médico y humano de combinar la experiencia clínica con un enfoque personalizado del cuidado facial y corporal.',
       text2: 'Cada tratamiento que realizamos responde a un diagnóstico previo, se adapta a tu piel, a tu ritmo y a tus objetivos, y lo aplicamos con rigor médico y criterio estético.',
       cta: 'Solicitar valoración',
       stats: [
@@ -127,7 +127,7 @@ export const translations = {
       cta: 'Abrir WhatsApp',
     },
     footer: {
-      tagline: 'Medicina estética avanzada en Viladecans. Porque mereces sentirte bien.',
+      tagline: 'Estetica Segala — Medicina estética avanzada en Viladecans.',
       nav: 'Navegación',
       services: 'Servicios destacados',
       legal: 'Legal',
@@ -136,7 +136,7 @@ export const translations = {
         privacy: 'Política de privacidad',
         cookies: 'Política de cookies',
       },
-      copyright: '© 2025 Vela Segalà Estética. Todos los derechos reservados.',
+      copyright: '© 2025 Estetica Segala. Todos los derechos reservados.',
     },
   },
 
@@ -157,7 +157,7 @@ export const translations = {
       schedule: 'Dl–Dj 9–20h · Dv 9–15h · Viladecans',
     },
     hero: {
-      badge: 'Clínica de Medicina Estètica a Viladecans',
+      badge: 'Estetica Segala · Viladecans',
       headline: 'Veure\'t bé i sentir-te millor',
       subheadline: 'Medicina estètica avançada amb criteri mèdic i tracte proper. Tractaments facials, corporals, làser i massatges a la nostra clínica de Viladecans.',
       cta1: 'Reservar cita',
@@ -216,7 +216,7 @@ export const translations = {
     about: {
       badge: 'Sobre nosaltres',
       title: 'Medicina estètica amb compromís mèdic i humà',
-      text1: "A Vela Segalà Estètica Viladecans t'ajudem a veure't bé i sentir-te millor. El nostre centre de medicina estètica neix del compromís mèdic i humà de combinar l'experiència clínica amb un enfocament personalitzat de la cura facial i corporal.",
+      text1: "A Estetica Segala t'ajudem a veure't bé i sentir-te millor. El nostre centre de medicina estètica a Viladecans neix del compromís mèdic i humà de combinar l'experiència clínica amb un enfocament personalitzat de la cura facial i corporal.",
       text2: "Cada tractament que realitzem respon a un diagnòstic previ, s'adapta a la teva pell, al teu ritme i als teus objectius, i l'apliquem amb rigor mèdic i criteri estètic.",
       cta: 'Sol·licitar valoració',
       stats: [
@@ -270,7 +270,7 @@ export const translations = {
       cta: 'Obrir WhatsApp',
     },
     footer: {
-      tagline: 'Medicina estètica avançada a Viladecans. Perquè mereixes sentir-te bé.',
+      tagline: 'Estetica Segala — Medicina estètica avançada a Viladecans.',
       nav: 'Navegació',
       services: 'Serveis destacats',
       legal: 'Legal',
@@ -279,7 +279,7 @@ export const translations = {
         privacy: 'Política de privacitat',
         cookies: 'Política de galetes',
       },
-      copyright: '© 2025 Vela Segalà Estètica. Tots els drets reservats.',
+      copyright: '© 2025 Estetica Segala. Tots els drets reservats.',
     },
   },
 }

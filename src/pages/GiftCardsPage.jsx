@@ -34,7 +34,7 @@ const TRUST_ITEMS = [
   },
   {
     title: 'Válida en clínica',
-    text: 'Canjeable en cualquier tratamiento de Vela Segalà Viladecans',
+    text: 'Canjeable en cualquier tratamiento de Estetica Segala Viladecans',
     icon: (
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -149,7 +149,7 @@ export default function GiftCardsPage() {
           style={{ position: 'relative', textAlign: 'center', padding: 'clamp(60px, 10vw, 100px) 20px clamp(40px, 8vw, 80px)', color: 'white' }}
         >
           <p style={{ letterSpacing: '6px', fontSize: '11px', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '16px' }}>
-            Vela Segalà · Viladecans
+            Estetica Segala · Viladecans
           </p>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 400, margin: '0 0 20px', lineHeight: 1.1 }}>
             Tarjetas Regalo
@@ -272,7 +272,7 @@ export default function GiftCardsPage() {
                 <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', borderRadius: '50%', background: 'rgba(201,168,130,0.08)' }} />
                 <div>
                   <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '8px' }}>
-                    Vela Segalà Estètica
+                    Estetica Segala
                   </p>
                   <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2.8rem', color: 'white', fontWeight: 700, margin: 0, lineHeight: 1 }}>
                     {selected}€
@@ -418,7 +418,7 @@ export default function GiftCardsPage() {
                     {selected}€
                   </p>
                   <p style={{ color: '#555', fontSize: '12px', marginTop: '6px' }}>
-                    Vela Segalà Estètica · Viladecans
+                    Estetica Segala · Viladecans
                   </p>
                 </div>
 
@@ -559,7 +559,7 @@ export default function GiftCardsPage() {
   }
 `}</style>
         <p style={{ textAlign: 'center', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '48px' }}>
-          Por qué elegir Vela Segalà
+          Por qué elegir Estetica Segala
         </p>
         <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', textAlign: 'center' }} className="trust-grid">
           {TRUST_ITEMS.map(item => (

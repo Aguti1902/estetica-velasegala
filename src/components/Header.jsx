@@ -148,7 +148,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <img src="/logo.png" alt="Vela Segalà Estètica" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+            <img src="/logo.png" alt="Estetica Segala" style={{ height: '48px', width: 'auto', objectFit: 'contain', display: 'block' }} />
           </Link>
 
           {/* Desktop Nav */}

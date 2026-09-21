@@ -127,7 +127,7 @@ export default function GiftCardSuccessPage() {
             <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
               <div>
                 <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', marginBottom: '4px' }}>
-                  Vela Segalà Estètica
+                  Estetica Segala
                 </p>
                 <p style={{ color: '#888', fontSize: '12px' }}>Viladecans, Barcelona</p>
               </div>
@@ -222,7 +222,7 @@ export default function GiftCardSuccessPage() {
               ¿Cómo canjear tu tarjeta?
             </h3>
             {[
-              'Llama o escribe para reservar tu cita en Vela Segalà Viladecans.',
+              'Llama o escribe para reservar tu cita en Estetica Segala Viladecans.',
               'El día de la visita, presenta este email o el PDF con el código.',
               'El equipo verificará el código y aplicará el descuento.',
               'Puedes usar el saldo en varias visitas si el importe es mayor.',
@@ -258,7 +258,7 @@ function buildGiftCardHTML(card) {
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Tarjeta Regalo Vela Segalà – ${card.amount}€</title>
+<title>Tarjeta Regalo Estetica Segala – ${card.amount}€</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   @page { size: A4 landscape; margin: 0; }
@@ -310,8 +310,8 @@ function buildGiftCardHTML(card) {
 
   <div class="header">
     <div class="brand">
-      <div class="brand-name">Vela Segalà</div>
-      <div class="brand-sub">Estètica · Viladecans</div>
+      <div class="brand-name">Estetica Segala</div>
+      <div class="brand-sub">Estetica Segala · Viladecans</div>
     </div>
     <div class="label">Tarjeta Regalo</div>
   </div>
@@ -330,7 +330,7 @@ function buildGiftCardHTML(card) {
       <div class="code">${card.code}</div>
     </div>
     <div class="meta">
-      <p>esteticavelasegala.com</p>
+      <p>velasegala.com</p>
       <p>Sin fecha de caducidad</p>
       <p>Válida para cualquier tratamiento</p>
       <p style="color:#444; margin-top:8px; font-size:9px;">Emitida el ${new Date(card.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>

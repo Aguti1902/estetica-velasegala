@@ -27,14 +27,14 @@ Permiten que el sitio web recuerde sus preferencias (como el idioma seleccionado
       {
         title: '3. Cookies propias y de terceros',
         body: `Cookies propias
-Son las generadas y gestionadas directamente por Estètica Vela Segala. Se utilizan para recordar sus preferencias de idioma y de consentimiento de cookies.
+Son las generadas y gestionadas directamente por Estetica Segala. Se utilizan para recordar sus preferencias de idioma y de consentimiento de cookies.
 
 Cookies de terceros
 Son las instaladas por servicios externos que utilizamos en nuestra web, como:
 - Google Analytics: para la medición estadística del tráfico y el comportamiento de los usuarios. Google puede utilizar esta información para mejorar sus propios servicios. Para más información, consulte la política de privacidad de Google: policies.google.com/privacy.
 - Google Maps: para mostrar el mapa de localización de nuestro centro. Para más información, consulte la política de privacidad de Google.
 
-Estos proveedores tienen sus propias políticas de privacidad y cookies, sobre las cuales Estètica Vela Segala no tiene control.`,
+Estos proveedores tienen sus propias políticas de privacidad y cookies, sobre las cuales Estetica Segala no tiene control.`,
       },
       {
         title: '4. Duración de las cookies',
@@ -63,7 +63,7 @@ Tenga en cuenta que bloquear las cookies puede afectar al funcionamiento correct
       },
       {
         title: '6. Modificaciones de la política de cookies',
-        body: `Estètica Vela Segala se reserva el derecho a modificar la presente Política de Cookies para adaptarla a cambios legislativos, técnicos o de nuestra actividad. La fecha de última actualización figura al inicio de este documento.
+        body: `Estetica Segala se reserva el derecho a modificar la presente Política de Cookies para adaptarla a cambios legislativos, técnicos o de nuestra actividad. La fecha de última actualización figura al inicio de este documento.
 
 Le recomendamos que consulte periódicamente esta página para estar informado de cualquier modificación.`,
       },
@@ -94,14 +94,14 @@ Permeten que el lloc web recordi les vostres preferències (com l'idioma selecci
       {
         title: '3. Galetes pròpies i de tercers',
         body: `Galetes pròpies
-Són les generades i gestionades directament per Estètica Vela Segala. S'utilitzen per recordar les vostres preferències d'idioma i de consentiment de galetes.
+Són les generades i gestionades directament per Estetica Segala. S'utilitzen per recordar les vostres preferències d'idioma i de consentiment de galetes.
 
 Galetes de tercers
 Són les instal·lades per serveis externs que utilitzem al nostre web, com:
 - Google Analytics: per a la mesura estadística del trànsit i el comportament dels usuaris. Google pot utilitzar aquesta informació per millorar els seus propis serveis. Per a més informació, consulteu la política de privacitat de Google: policies.google.com/privacy.
 - Google Maps: per mostrar el mapa de localització del nostre centre. Per a més informació, consulteu la política de privacitat de Google.
 
-Aquests proveïdors tenen les seves pròpies polítiques de privacitat i galetes, sobre les quals Estètica Vela Segala no té control.`,
+Aquests proveïdors tenen les seves pròpies polítiques de privacitat i galetes, sobre les quals Estetica Segala no té control.`,
       },
       {
         title: '4. Durada de les galetes',
@@ -130,7 +130,7 @@ Tingueu en compte que bloquejar les galetes pot afectar el correcte funcionament
       },
       {
         title: '6. Modificacions de la política de galetes',
-        body: `Estètica Vela Segala es reserva el dret de modificar la present Política de Galetes per adaptar-la a canvis legislatius, tècnics o de la nostra activitat. La data de la darrera actualització figura a l'inici d'aquest document.
+        body: `Estetica Segala es reserva el dret de modificar la present Política de Galetes per adaptar-la a canvis legislatius, tècnics o de la nostra activitat. La data de la darrera actualització figura a l'inici d'aquest document.
 
 Us recomanem que consulteu periòdicament aquesta pàgina per estar informats de qualsevol modificació.`,
       },

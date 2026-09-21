@@ -36,8 +36,8 @@ const getResponse = (input, knowledge, lang, services) => {
   if (knowledge.greetings.some(g => text.includes(g.normalize('NFD').replace(/[\u0300-\u036f]/g, '')))) {
     return {
       text: es
-        ? '¡Hola! Soy el asistente virtual de Vela Segala Estètica 👋 Estoy aquí para ayudarte con información sobre nuestros tratamientos. ¿Qué deseas saber?'
-        : "Hola! Sóc l'assistent virtual de Vela Segala Estètica 👋 Estic aquí per ajudar-te amb informació sobre els nostres tractaments. Què vols saber?",
+        ? '¡Hola! Soy el asistente virtual de Estetica Segala 👋 Estoy aquí para ayudarte con información sobre nuestros tratamientos. ¿Qué deseas saber?'
+        : "Hola! Sóc l'assistent virtual de Estetica Segala 👋 Estic aquí per ajudar-te amb informació sobre els nostres tractaments. Què vols saber?",
       suggestions: es
         ? ['¿Qué tratamientos ofrecéis?', '¿Dónde estáis?', 'Quiero reservar cita']
         : ['Quins tractaments oferiu?', 'On esteu?', 'Vull demanar cita'],
@@ -76,8 +76,8 @@ const getResponse = (input, knowledge, lang, services) => {
   if (knowledge.locationKeywords.some(k => text.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')))) {
     return {
       text: es
-        ? "📍 Nos encontramos en **Plaça 1 d'Octubre, 6, 08470 Sant Celoni, Barcelona**. Fácil acceso en transporte público y parking cercano."
-        : "📍 Estem a **Plaça 1 d'Octubre, 6, 08470 Sant Celoni, Barcelona**. Fàcil accés en transport públic i aparcament proper.",
+        ? "📍 Nos encontramos en **C/ Mare de Déu de Sales, 67C, 08840 Viladecans, Barcelona**. Fácil acceso en transporte público y parking cercano."
+        : "📍 Estem a **C/ Mare de Déu de Sales, 67C, 08840 Viladecans, Barcelona**. Fàcil accés en transport públic i aparcament proper.",
       link: { to: '/contacto', label: es ? 'Ver en el mapa →' : 'Veure al mapa →' },
     }
   }
@@ -151,8 +151,8 @@ export default function Chatbot() {
       setMessages([{
         id: 1, from: 'bot',
         text: es
-          ? '¡Hola! Soy el asistente virtual de Vela Segala Estètica. Puedo ayudarte con información sobre tratamientos, precios, citas o cómo llegar. ¿En qué puedo ayudarte?'
-          : "Hola! Sóc l'assistent virtual de Vela Segala Estètica. Puc ajudar-te amb informació sobre tractaments, preus, cites o com arribar. En què puc ajudar-te?",
+          ? '¡Hola! Soy el asistente virtual de Estetica Segala. Puedo ayudarte con información sobre tratamientos, precios, citas o cómo llegar. ¿En qué puedo ayudarte?'
+          : "Hola! Sóc l'assistent virtual de Estetica Segala. Puc ajudar-te amb informació sobre tractaments, preus, cites o com arribar. En què puc ajudar-te?",
         suggestions: es
           ? ['¿Qué tratamientos ofrecéis?', 'Quiero reservar cita', '¿Dónde estáis?']
           : ['Quins tractaments oferiu?', 'Vull demanar cita', 'On esteu?'],

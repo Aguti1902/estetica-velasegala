@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Marca */}
           <div>
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', marginBottom: '1.5rem' }}>
-              <img src="/logo.png" alt="Vela Segala Estètica" style={{ height: '44px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <img src="/logo.png" alt="Estetica Segala" style={{ height: '44px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </Link>
             <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '260px' }}>
               {t.footer.tagline}
@@ -76,7 +76,7 @@ export default function Footer() {
           <div>
             <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: '1.25rem' }}>Contacte</div>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <li style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>Plaça 1 d'Octubre, 6<br />08470 Sant Celoni</li>
+              <li style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>C/ Mare de Déu de Sales, 67C<br />08840 Viladecans</li>
               <li><a href={`tel:${t.topbar.phone.replace(/\s/g, '')}`} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>{t.topbar.phone}</a></li>
               <li><a href={`mailto:${t.topbar.email}`} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}

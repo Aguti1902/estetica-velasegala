@@ -115,8 +115,8 @@ async function sendGiftCardEmail(card) {
 <body>
 <div class="container">
   <div class="header">
-    <h1>Vela Segalà</h1>
-    <p>ESTÈTICA · VILADECANS</p>
+    <h1>Estetica Segala</h1>
+    <p>ESTETICA SEGALA · VILADECANS</p>
   </div>
   <div class="body">
     <p class="greeting">Hola ${card.buyer_name},</p>
@@ -124,7 +124,7 @@ async function sendGiftCardEmail(card) {
     
     <div class="card-box">
       <div class="card-amount">${card.amount}€</div>
-      <div class="card-label">Tarjeta Regalo · Vela Segalà</div>
+      <div class="card-label">Tarjeta Regalo · Estetica Segala</div>
       <div class="code-label">Código de canje</div>
       <div class="card-code">${card.code}</div>
     </div>
@@ -138,9 +138,9 @@ async function sendGiftCardEmail(card) {
     </p>
   </div>
   <div class="contact">
-    <p><strong>Vela Segalà Estètica</strong></p>
+    <p><strong>Estetica Segala</strong></p>
     <p>Viladecans, Barcelona</p>
-    <p>esteticavelasegala.com</p>
+    <p>velasegala.com</p>
   </div>
   <div class="footer">
     <p>TARJETA REGALO · NO REEMBOLSABLE · VÁLIDA PARA CUALQUIER TRATAMIENTO</p>
@@ -156,9 +156,9 @@ async function sendGiftCardEmail(card) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Vela Segalà <info@esteticavelasegala.com>',
+      from: 'Estetica Segala <estetica.segala@velasegala.com>',
       to: [card.buyer_email],
-      subject: `Tu tarjeta regalo de ${card.amount}€ – Vela Segalà`,
+      subject: `Tu tarjeta regalo de ${card.amount}€ – Estetica Segala`,
       html: emailHTML,
     }),
   });

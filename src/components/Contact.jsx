@@ -131,7 +131,7 @@ export default function Contact() {
             ))}
             <div style={{ flex: 1, overflow: 'hidden', minHeight: '160px' }}>
               <iframe
-                title="Mapa Vela Segala Estètica"
+                title="Mapa Estetica Segala"
                 src="https://maps.google.com/maps?q=Pla%C3%A7a+1+d%27Octubre%2C+6%2C+08470+Sant+Celoni%2C+Barcelona&output=embed&z=17"
                 width="100%" height="100%" style={{ border: 0, display: 'block', minHeight: '180px' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
               />

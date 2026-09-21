@@ -11,7 +11,7 @@ const content = {
         title: '1. Responsable del tratamiento',
         body: `En cumplimiento del Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo (RGPD) y la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD), se informa que el responsable del tratamiento de los datos personales recogidos a través de este sitio web es:
 
-Denominación social: Estètica Vela Segala
+Denominación social: Estetica Segala
 Domicilio social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Teléfono: 938 67 58 22
 WhatsApp: 621 30 72 35
@@ -91,7 +91,7 @@ Le recomendamos que consulte periódicamente esta página para estar informado d
         title: '1. Responsable del tractament',
         body: `En compliment del Reglament (UE) 2016/679 del Parlament Europeu i del Consell (RGPD) i la Llei Orgànica 3/2018, de 5 de desembre, de Protecció de Dades Personals i garantia dels drets digitals (LOPDGDD), s'informa que el responsable del tractament de les dades personals recollides a través d'aquest lloc web és:
 
-Denominació social: Estètica Vela Segala
+Denominació social: Estetica Segala
 Domicili social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Telèfon: 938 67 58 22
 WhatsApp: 621 30 72 35

@@ -1,8 +1,8 @@
 import { useLang } from '../context/LanguageContext'
 
 const items = {
-  es: ['Médicos certificados', '+200 reseñas 5★', 'Cita en 24h', 'Tecnología avanzada', 'Atención personalizada', 'Sant Celoni, BCN'],
-  ca: ['Metges certificats', '+200 ressenyes 5★', 'Cita en 24h', 'Tecnologia avançada', 'Atenció personalitzada', 'Sant Celoni, BCN'],
+  es: ['Médicos certificados', '+200 reseñas 5★', 'Cita en 24h', 'Tecnología avanzada', 'Atención personalizada', 'Viladecans, BCN'],
+  ca: ['Metges certificats', '+200 ressenyes 5★', 'Cita en 24h', 'Tecnologia avançada', 'Atenció personalitzada', 'Viladecans, BCN'],
 }
 
 export default function TrustStrip() {
