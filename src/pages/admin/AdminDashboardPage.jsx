@@ -14,7 +14,7 @@ const cards = [
   {
     to: '/admin/tarjetas',
     title: 'Tarjetas regalo',
-    desc: 'Busca códigos, compradores y marca tarjetas como usadas.',
+    desc: 'Ventas registradas automáticamente desde Stripe. Consulta códigos y marca canjeos.',
   },
   {
     to: '/',

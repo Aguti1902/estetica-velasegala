@@ -24,21 +24,38 @@ export default function AdminShell() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141414', color: '#eee' }}>
-      <header style={{
-        borderBottom: '1px solid #2a2a2a', padding: '16px 24px',
-        display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px',
-        justifyContent: 'space-between',
-      }}>
-        <div>
-          <p style={{ margin: 0, fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', color: '#c9a882' }}>
-            Estetica Segala
+    <div className="admin-layout-root" style={{ minHeight: '100vh', background: '#141414', color: '#eee', display: 'flex' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .admin-layout-root { flex-direction: column !important; }
+          .admin-layout-aside { width: 100% !important; min-height: auto !important; position: static !important; }
+          .admin-layout-nav { flex-direction: row !important; flex-wrap: wrap !important; }
+        }
+      `}</style>
+      <aside
+        className="admin-layout-aside"
+        style={{
+          width: '260px', flexShrink: 0, background: '#1a1a1a', borderRight: '1px solid #2a2a2a',
+          display: 'flex', flexDirection: 'column', padding: '24px 16px',
+          position: 'sticky', top: 0, alignSelf: 'flex-start', minHeight: '100vh',
+        }}
+      >
+        <Link to="/admin" style={{ display: 'block', textAlign: 'center', marginBottom: '28px', textDecoration: 'none' }}>
+          <img
+            src="/logo.png"
+            alt="Estetica Segala"
+            style={{ maxWidth: '100%', height: 'auto', maxHeight: '72px', objectFit: 'contain' }}
+          />
+          <p style={{
+            margin: '12px 0 0', fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase',
+            color: '#888',
+          }}
+          >
+            Panel de gestión
           </p>
-          <h1 style={{ margin: '4px 0 0', fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.25rem' }}>
-            Administración
-          </h1>
-        </div>
-        <nav style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        </Link>
+
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
           {NAV.map(({ to, label, end }) => {
             const active = end ? location.pathname === to : location.pathname.startsWith(to)
             return (
@@ -46,9 +63,11 @@ export default function AdminShell() {
                 key={to}
                 to={to}
                 style={{
-                  padding: '8px 14px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px',
-                  textDecoration: 'none', color: active ? '#141414' : '#ccc',
-                  background: active ? '#c9a882' : '#222', border: '1px solid #333',
+                  padding: '12px 16px', fontSize: '13px', textDecoration: 'none',
+                  color: active ? '#141414' : '#ccc',
+                  background: active ? '#c9a882' : 'transparent',
+                  borderRadius: '4px',
+                  fontWeight: active ? 600 : 400,
                 }}
               >
                 {label}
@@ -56,18 +75,31 @@ export default function AdminShell() {
             )
           })}
         </nav>
-        <button
-          type="button"
-          onClick={logout}
-          style={{
-            padding: '8px 14px', background: 'transparent', border: '1px solid #444',
-            color: '#888', fontSize: '11px', cursor: 'pointer', textTransform: 'uppercase',
-          }}
-        >
-          Salir
-        </button>
-      </header>
-      <main style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+
+        <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #2a2a2a' }}>
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            style={{ display: 'block', fontSize: '12px', color: '#888', marginBottom: '12px', textDecoration: 'none' }}
+          >
+            Ver web pública ↗
+          </a>
+          <button
+            type="button"
+            onClick={logout}
+            style={{
+              width: '100%', padding: '10px', background: 'transparent', border: '1px solid #444',
+              color: '#888', fontSize: '11px', cursor: 'pointer', textTransform: 'uppercase',
+              letterSpacing: '1px',
+            }}
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
+
+      <main style={{ flex: 1, padding: 'clamp(20px, 4vw, 32px)', minWidth: 0, overflow: 'auto' }}>
         <Outlet context={{ pwd }} />
       </main>
     </div>

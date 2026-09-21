@@ -189,10 +189,25 @@ export default function AdminGiftCardsPage() {
       )}
 
       {embedded && (
-        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '24px', color: 'white' }}>
+        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '16px', color: 'white' }}>
           Tarjetas regalo
         </h2>
       )}
+
+      <div style={{
+        marginBottom: '24px', padding: '14px 18px', background: '#1e1e1e', border: '1px solid #333',
+        borderRadius: '6px', fontSize: '13px', color: '#aaa', lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
+        margin: embedded ? '0 0 24px' : '0 auto 24px', paddingLeft: embedded ? '18px' : undefined,
+        paddingRight: embedded ? '18px' : undefined,
+        width: embedded ? 'auto' : 'calc(100% - clamp(32px, 8vw, 64px))',
+      }}>
+        <strong style={{ color: '#c9a882' }}>Conectado con Stripe.</strong>{' '}
+        Cuando un cliente paga en la web, Stripe avisa automáticamente y aquí aparece la tarjeta con su código.
+        Solo tienes que marcarla como usada cuando la canjeéis en clínica.{' '}
+        <a href="https://dashboard.stripe.com/payments" target="_blank" rel="noreferrer" style={{ color: '#c9a882' }}>
+          Ver pagos en Stripe ↗
+        </a>
+      </div>
 
       {/* Stats */}
       <div style={{ padding: embedded ? '0 0 24px' : 'clamp(16px, 3vw, 32px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto' }}>

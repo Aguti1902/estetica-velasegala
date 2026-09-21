@@ -25,11 +25,9 @@ export default function AdminLogin({ onSubmit, pwdError, setPwdError }) {
           padding: '48px', width: '100%', maxWidth: '420px',
         }}
       >
-        <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '8px' }}>
-          Estetica Segala
-        </p>
-        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.5rem', fontWeight: 400, color: 'white', textAlign: 'center', marginBottom: '40px' }}>
-          Panel Administración
+        <img src="/logo.png" alt="Estetica Segala" style={{ display: 'block', margin: '0 auto 24px', maxWidth: '200px', height: 'auto' }} />
+        <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white', textAlign: 'center', marginBottom: '40px' }}>
+          Acceso al panel
         </h1>
         <form onSubmit={handleSubmit}>
           <label style={{ display: 'block', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#888', marginBottom: '8px' }}>
