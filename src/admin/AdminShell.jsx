@@ -55,7 +55,7 @@ export default function AdminShell() {
           </p>
         </Link>
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+        <nav className="admin-layout-nav" style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
           {NAV.map(({ to, label, end }) => {
             const active = end ? location.pathname === to : location.pathname.startsWith(to)
             return (
