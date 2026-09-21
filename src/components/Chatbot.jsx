@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
 
 // Base de conocimiento del chatbot
 const buildKnowledge = (services, lang) => {
@@ -136,6 +136,7 @@ const categoryLabels = {
 export default function Chatbot() {
   const { lang, t } = useLang()
   const es = lang === 'es'
+  const { servicesData } = useServices()
   const services = servicesData[lang]
   const knowledge = buildKnowledge(services, lang)
 

@@ -1,16 +1,20 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
+import { submitContact } from '../utils/submitContact'
 
 export default function ContactPage() {
   const { t, lang } = useLang()
+  const { servicesData } = useServices()
   const services = servicesData[lang]
   const f = t.contact.form
   const info = t.contact.info
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', clinic: '', message: '', privacy: false })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [errors, setErrors] = useState({})
 
   const validate = () => {
@@ -20,11 +24,28 @@ export default function ContactPage() {
     if (!form.privacy) e.privacy = true
     return e
   }
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault()
     const e = validate()
     if (Object.keys(e).length > 0) { setErrors(e); return }
-    setSubmitted(true)
+    setSubmitting(true)
+    setSubmitError('')
+    try {
+      await submitContact({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        service: form.service,
+        clinic: form.clinic,
+        message: form.message,
+        source: 'contact_page',
+      })
+      setSubmitted(true)
+    } catch (err) {
+      setSubmitError(err.message || 'Error al enviar')
+    } finally {
+      setSubmitting(false)
+    }
   }
   const handleChange = (field, value) => {
     setForm(p => ({ ...p, [field]: value }))
@@ -108,8 +129,11 @@ export default function ContactPage() {
                       {f.privacy}{' '}<a href="#" onClick={e => e.stopPropagation()} style={{ color: '#0d0d0d', fontWeight: 600 }}>{f.privacyLink}</a>
                     </span>
                   </div>
-                  <button type="submit" className="btn-dark" style={{ marginTop: '0.5rem', justifyContent: 'center' }}>
-                    {f.submit}
+                  {submitError && (
+                    <p style={{ color: '#e53e3e', fontSize: '0.875rem', margin: 0 }}>{submitError}</p>
+                  )}
+                  <button type="submit" disabled={submitting} className="btn-dark" style={{ marginTop: '0.5rem', justifyContent: 'center', opacity: submitting ? 0.7 : 1 }}>
+                    {submitting ? (lang === 'es' ? 'Enviando…' : 'Enviant…') : f.submit}
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                   </button>
                 </form>

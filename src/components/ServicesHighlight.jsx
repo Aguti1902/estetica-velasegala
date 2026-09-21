@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
 
 export default function ServicesHighlight() {
   const { t, lang } = useLang()
+  const { servicesData } = useServices()
   const services = servicesData[lang].slice(0, 6)
 
   return (

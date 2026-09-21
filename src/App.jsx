@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom'
 import { useEffect, lazy, Suspense } from 'react'
 import { LanguageProvider } from './context/LanguageContext'
+import { ServicesProvider } from './context/ServicesContext'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
@@ -19,6 +20,10 @@ const AvisoLegalPage = lazy(() => import('./pages/AvisoLegalPage'))
 const PoliticaCookiesPage = lazy(() => import('./pages/PoliticaCookiesPage'))
 const GiftCardsPage = lazy(() => import('./pages/GiftCardsPage'))
 const GiftCardSuccessPage = lazy(() => import('./pages/GiftCardSuccessPage'))
+const AdminShell = lazy(() => import('./admin/AdminShell'))
+const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'))
+const AdminServicesPage = lazy(() => import('./pages/admin/AdminServicesPage'))
+const AdminContactPage = lazy(() => import('./pages/admin/AdminContactPage'))
 const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 
 function PageLoader() {
@@ -53,6 +58,7 @@ function Layout() {
 export default function App() {
   return (
     <LanguageProvider>
+      <ServicesProvider>
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -71,10 +77,17 @@ export default function App() {
               <Route path="tarjetas-regalo/confirmacion" element={<GiftCardSuccessPage />} />
             </Route>
             {/* Admin fuera del Layout normal (sin header/footer) */}
+            <Route path="admin" element={<AdminShell />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="tratamientos" element={<AdminServicesPage />} />
+              <Route path="contacto" element={<AdminContactPage />} />
+              <Route path="tarjetas" element={<AdminGiftCardsPage />} />
+            </Route>
             <Route path="admin/tarjetas" element={<AdminGiftCardsPage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
+      </ServicesProvider>
     </LanguageProvider>
   )
 }

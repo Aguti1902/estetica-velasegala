@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
 
 const navLinks = [
   { key: 'services', to: '/servicios' },
@@ -12,6 +12,7 @@ const navLinks = [
 
 export default function Footer() {
   const { t, lang } = useLang()
+  const { servicesData } = useServices()
   const services = servicesData[lang].slice(0, 6)
 
   return (

@@ -2,11 +2,12 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
 
 export default function ServiceDetailPage() {
   const { slug } = useParams()
   const { lang } = useLang()
+  const { servicesData } = useServices()
   const services = servicesData[lang]
   const service = services.find(s => s.slug === slug)
 

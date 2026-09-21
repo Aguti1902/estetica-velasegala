@@ -1,9 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useOutletContext } from 'react-router-dom';
+import { getStoredAdminPassword, setStoredAdminPassword, adminFetch } from '../admin/useAdminAuth';
 
 export default function AdminGiftCardsPage() {
-  const [authed, setAuthed] = useState(false);
-  const [pwd, setPwd] = useState('');
+  const { pwd: shellPwd } = useOutletContext() || {};
+  const embedded = Boolean(shellPwd);
+  const [authed, setAuthed] = useState(() => embedded || Boolean(getStoredAdminPassword()));
+  const [pwd, setPwd] = useState(() => shellPwd || getStoredAdminPassword());
   const [pwdError, setPwdError] = useState(false);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -25,9 +29,7 @@ export default function AdminGiftCardsPage() {
     if (filter === 'unused') query.set('used', 'false');
 
     try {
-      const res = await fetch(`/api/admin/cards?${query.toString()}`, {
-        headers: { 'X-Admin-Password': password },
-      });
+      const res = await adminFetch(`/api/admin/cards?${query.toString()}`, password);
       if (res.status === 401) { setAuthed(false); return; }
       const data = await res.json();
       setCards(Array.isArray(data) ? data : []);
@@ -45,9 +47,12 @@ export default function AdminGiftCardsPage() {
   const handleLogin = (e) => {
     e.preventDefault();
     // Verificar contra la API (si responde 401 no es correcta)
-    fetch('/api/admin/cards', { headers: { 'X-Admin-Password': pwd } })
+    adminFetch('/api/admin/cards', pwd)
       .then(r => {
-        if (r.ok || r.status !== 401) { setAuthed(true); setPwdError(false); }
+        if (r.ok || r.status !== 401) {
+          setAuthed(true); setPwdError(false);
+          setStoredAdminPassword(pwd);
+        }
         else { setPwdError(true); }
       })
       .catch(() => setPwdError(true));
@@ -56,12 +61,9 @@ export default function AdminGiftCardsPage() {
   const toggleUsed = async (card) => {
     setUpdating(card.code);
     try {
-      const res = await fetch('/api/admin/cards', {
+      const res = await adminFetch('/api/admin/cards', pwd, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Password': pwd,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           code: card.code,
           is_used: !card.is_used,
@@ -79,8 +81,15 @@ export default function AdminGiftCardsPage() {
     }
   };
 
+  useEffect(() => {
+    if (shellPwd) {
+      setPwd(shellPwd);
+      setAuthed(true);
+    }
+  }, [shellPwd]);
+
   // --- LOGIN SCREEN ---
-  if (!authed) {
+  if (!embedded && !authed) {
     return (
       <div style={{
         minHeight: '100vh', background: '#1a1a1a', display: 'flex',
@@ -141,9 +150,8 @@ export default function AdminGiftCardsPage() {
   const used = cards.filter(c => c.is_used).length;
   const revenue = cards.reduce((s, c) => s + c.amount, 0);
 
-  return (
-    <div style={{ minHeight: '100vh', background: '#111', color: 'white' }}>
-
+  const body = (
+    <>
       {/* Toast */}
       <AnimatePresence>
         {toast && (
@@ -163,24 +171,31 @@ export default function AdminGiftCardsPage() {
         )}
       </AnimatePresence>
 
-      {/* Header */}
-      <div style={{ background: '#1a1a1a', borderBottom: '1px solid #222', padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2px' }}>Panel Admin</p>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white' }}>
-            Tarjetas Regalo · Estetica Segala
-          </h1>
+      {!embedded && (
+        <div style={{ background: '#1a1a1a', borderBottom: '1px solid #222', padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '2px' }}>Panel Admin</p>
+            <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.25rem', fontWeight: 400, color: 'white' }}>
+              Tarjetas Regalo · Estetica Segala
+            </h1>
+          </div>
+          <button
+            onClick={() => { setAuthed(false); setStoredAdminPassword(''); }}
+            style={{ background: 'none', border: '1px solid #333', borderRadius: '4px', color: '#888', padding: '8px 16px', cursor: 'pointer', fontSize: '12px' }}
+          >
+            Cerrar sesión
+          </button>
         </div>
-        <button
-          onClick={() => setAuthed(false)}
-          style={{ background: 'none', border: '1px solid #333', borderRadius: '4px', color: '#888', padding: '8px 16px', cursor: 'pointer', fontSize: '12px' }}
-        >
-          Cerrar sesión
-        </button>
-      </div>
+      )}
+
+      {embedded && (
+        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '24px', color: 'white' }}>
+          Tarjetas regalo
+        </h2>
+      )}
 
       {/* Stats */}
-      <div style={{ padding: 'clamp(16px, 3vw, 32px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: embedded ? '0 0 24px' : 'clamp(16px, 3vw, 32px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto' }}>
         {[
           { label: 'Total vendidas', value: total, sub: 'tarjetas' },
           { label: 'Canjeadas', value: used, sub: `${total ? Math.round(used / total * 100) : 0}% del total` },
@@ -196,7 +211,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Controles */}
-      <div style={{ padding: '0 clamp(16px, 4vw, 32px) 24px', maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ padding: embedded ? '0 0 24px' : '0 clamp(16px, 4vw, 32px) 24px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -239,7 +254,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Tabla / Cards */}
-      <div style={{ padding: '0 clamp(16px, 4vw, 32px) 48px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: embedded ? '0 0 24px' : '0 clamp(16px, 4vw, 32px) 48px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto' }}>
         <style>{`
           .admin-table-header { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }
           .admin-table-row { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }
@@ -355,6 +370,9 @@ export default function AdminGiftCardsPage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
+
+  if (embedded) return <div style={{ color: 'white' }}>{body}</div>;
+  return <div style={{ minHeight: '100vh', background: '#111', color: 'white' }}>{body}</div>;
 }

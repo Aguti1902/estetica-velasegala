@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
-import { servicesData } from '../data/services'
+import { useServices } from '../context/ServicesContext'
 
 const I = ({ d }) => (
   <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.6">
@@ -83,6 +83,7 @@ export default function Header() {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
   const location = useLocation()
   const dropdownRef = useRef(null)
+  const { servicesData } = useServices()
   const services = servicesData[lang]
 
   useEffect(() => {
