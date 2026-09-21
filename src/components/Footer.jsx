@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Marca */}
           <div>
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-flex', marginBottom: '1.5rem' }}>
-              <img src="/logo.png" alt="Estetica Segala" style={{ height: '44px', width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+              <img src="/logo.png" alt="clíniques segalà medicina estètica" style={{ height: '36px', width: 'auto', maxWidth: '220px', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
             </Link>
             <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '260px' }}>
               {t.footer.tagline}
