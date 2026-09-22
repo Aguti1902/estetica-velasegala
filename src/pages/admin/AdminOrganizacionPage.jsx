@@ -58,8 +58,8 @@ export default function AdminOrganizacionPage() {
         Organización del catálogo
       </h2>
       <p style={{ color: th.textMuted, marginBottom: '28px', maxWidth: '640px', lineHeight: 1.55 }}>
-        Aquí puedes cambiar los títulos de las secciones que se ven en la web (como en la carta de servicios).
-        Para mover un tratamiento de sección, ábrelo en <strong>Tratamientos</strong> y elige categoría y grupo.
+        Aquí puedes cambiar los títulos de las dos secciones faciales (Tratamientos base y Tratamientos específicos).
+        Para mover un tratamiento de un grupo a otro, ábrelo en <strong>Tratamientos</strong> y elige el grupo.
       </p>
 
       <div style={{ background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: '6px', padding: '24px', maxWidth: '720px' }}>

@@ -258,7 +258,7 @@ export default function AdminServicesPage() {
 
           <Section title="Categoría y grupo (carta de servicios)">
             <p style={{ margin: '0 0 16px', fontSize: '13px', color: t.textMuted, lineHeight: 1.5 }}>
-              Así se organiza en la web. En Faciales: Tratamientos base, Tratamientos específicos u Otros.
+              Así se organiza en la web. En Faciales solo hay dos grupos: Tratamientos base y Tratamientos específicos.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <Field label="Categoría">

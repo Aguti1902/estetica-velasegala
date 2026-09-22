@@ -211,7 +211,7 @@ export const servicesData = {
       ],
     },
     {
-      id: 9, slug: 'lhygene-parfaite', category: 'facial', categoryLabel: 'Facial', section: 'facial-complementarios',
+      id: 9, slug: 'lhygene-parfaite', category: 'facial', categoryLabel: 'Facial', section: 'facial-specific',
       name: "L'Hygène Parfaite",
       description: 'La higiene perfecta: limpieza profunda con extracción meticulosa seguida de un tratamiento activo de iontoforesis y mascarilla hidratante de alta eficacia.',
       longDescription: "L'Hygène Parfaite es la evolución de la higiene facial clásica, combinando la máxima eficacia en la limpieza con un protocolo de tratamiento posterior de alto rendimiento. Incluye extracción meticulosa, iontoforesis para cerrar los poros y mascarilla de hidratación intensa. Piel perfectamente limpia y radiante garantizada.",
