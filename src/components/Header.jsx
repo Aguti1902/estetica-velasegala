@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
 import { useServices } from '../context/ServicesContext'
+import { groupBySection } from '../data/serviceCatalog'
 
 const I = ({ d }) => (
   <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.6">
@@ -30,6 +31,9 @@ const serviceIcons = {
   15: <I d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178zM15 12a3 3 0 11-6 0 3 3 0 016 0z" />,
   16: <I d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0116.35 15m.002 0h-.002" />,
   17: <I d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />,
+  // Higienes nuevas (carta)
+  50: <I d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />,
+  51: <I d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />,
 
   // ── Corporal ──────────────────────────────────────────────────────
   18: <I d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.047 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />,
@@ -83,7 +87,7 @@ export default function Header() {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
   const location = useLocation()
   const dropdownRef = useRef(null)
-  const { servicesData } = useServices()
+  const { servicesData, catalogConfig } = useServices()
   const services = servicesData[lang]
 
   useEffect(() => {
@@ -116,6 +120,27 @@ export default function Header() {
   }))
 
   const activeItems = grouped.find(g => g.cat === activeTab)?.items ?? []
+  const facialSections = activeTab === 'facial'
+    ? groupBySection(activeItems, lang, catalogConfig)
+    : null
+
+  const renderServiceLink = (service) => (
+    <Link
+      key={service.slug || service.id}
+      to={`/servicios/${service.slug}`}
+      onClick={() => setServicesOpen(false)}
+      style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '8px 10px', textDecoration: 'none', transition: 'background 0.15s', borderRadius: '2px' }}
+      onMouseEnter={e => { e.currentTarget.style.background = '#f5f5f5' }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+    >
+      <span style={{ color: '#9ca3af', flexShrink: 0, display: 'flex', lineHeight: 0 }}>
+        {serviceIcons[service.id] || serviceIcons[1]}
+      </span>
+      <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#1a1a1a', lineHeight: 1.3 }}>
+        {service.name}
+      </span>
+    </Link>
+  )
 
   return (
     <>
@@ -205,32 +230,38 @@ export default function Header() {
                         ))}
                       </div>
 
-                      {/* Panel de tratamientos en cuadrícula */}
-                      <div style={{ flex: 1, padding: '1rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', alignContent: 'start' }}>
-                        {activeItems.map(service => (
-                          <Link
-                            key={service.id}
-                            to={`/servicios/${service.slug}`}
-                            onClick={() => setServicesOpen(false)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '8px 10px', textDecoration: 'none', transition: 'background 0.15s', borderRadius: '2px' }}
-                            onMouseEnter={e => { e.currentTarget.style.background = '#f5f5f5' }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
-                          >
-                            <span style={{ color: '#9ca3af', flexShrink: 0, display: 'flex', lineHeight: 0 }}>
-                              {serviceIcons[service.id]}
-                            </span>
-                            <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#1a1a1a', lineHeight: 1.3 }}>
-                              {service.name}
-                            </span>
-                          </Link>
-                        ))}
+                      {/* Panel de tratamientos */}
+                      <div style={{ flex: 1, padding: '1rem 1.25rem', maxHeight: '420px', overflowY: 'auto' }}>
+                        {facialSections ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+                            {facialSections.map((sec) => (
+                              <div key={sec.section}>
+                                <div style={{
+                                  fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
+                                  color: '#6b7280', background: '#f5f5f5', padding: '8px 12px', marginBottom: '6px',
+                                  textAlign: 'center',
+                                }}
+                                >
+                                  {sec.label}
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px' }}>
+                                  {sec.items.map(renderServiceLink)}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', alignContent: 'start' }}>
+                            {activeItems.map(renderServiceLink)}
+                          </div>
+                        )}
                       </div>
                     </div>
 
                     {/* Footer */}
                     <div style={{ borderTop: '1px solid #f0f0f0', padding: '0.85rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafafa' }}>
                       <span style={{ fontSize: '0.65rem', color: '#a3a3a3', letterSpacing: '0.06em' }}>
-                        {lang === 'es' ? '47 tratamientos disponibles' : '47 tractaments disponibles'}
+                        {lang === 'es' ? `${services.length} tratamientos disponibles` : `${services.length} tractaments disponibles`}
                       </span>
                       <Link to="/servicios" onClick={() => setServicesOpen(false)} style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0d0d0d', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
                         {lang === 'es' ? 'Ver todos' : 'Veure tots'}
@@ -315,13 +346,34 @@ export default function Header() {
                         {grouped.map(group => (
                           <div key={group.cat} style={{ marginBottom: '1rem' }}>
                             <div style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#a3a3a3', padding: '8px 0 4px 12px' }}>{group.label}</div>
-                            {group.items.map(service => (
-                              <Link key={service.id} to={`/servicios/${service.slug}`}
-                                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#0d0d0d', fontSize: '0.82rem' }}>
-                                <span style={{ color: '#9ca3af', lineHeight: 0 }}>{serviceIcons[service.id]}</span>
-                                {service.name}
-                              </Link>
-                            ))}
+                            {group.cat === 'facial' ? (
+                              groupBySection(group.items, lang, catalogConfig).map((sec) => (
+                                <div key={sec.section} style={{ marginBottom: '0.75rem' }}>
+                                  <div style={{
+                                    fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
+                                    color: '#6b7280', background: '#f5f5f5', padding: '6px 12px', margin: '4px 0 2px',
+                                  }}
+                                  >
+                                    {sec.label}
+                                  </div>
+                                  {sec.items.map((service) => (
+                                    <Link key={service.slug} to={`/servicios/${service.slug}`}
+                                      style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#0d0d0d', fontSize: '0.82rem' }}>
+                                      <span style={{ color: '#9ca3af', lineHeight: 0 }}>{serviceIcons[service.id] || serviceIcons[1]}</span>
+                                      {service.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              ))
+                            ) : (
+                              group.items.map(service => (
+                                <Link key={service.id} to={`/servicios/${service.slug}`}
+                                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#0d0d0d', fontSize: '0.82rem' }}>
+                                  <span style={{ color: '#9ca3af', lineHeight: 0 }}>{serviceIcons[service.id]}</span>
+                                  {service.name}
+                                </Link>
+                              ))
+                            )}
                           </div>
                         ))}
                         <Link to="/servicios" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 12px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0d0d0d', textDecoration: 'none', background: '#f5f5f5', marginBottom: '0.5rem' }}>
