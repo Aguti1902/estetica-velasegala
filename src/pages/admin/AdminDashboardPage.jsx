@@ -5,7 +5,12 @@ const cards = [
   {
     to: '/admin/tratamientos',
     title: 'Tratamientos',
-    desc: 'Edita textos, precios e imágenes de cada servicio (español y catalán).',
+    desc: 'Edita textos, precios, fotos, categoría y grupo de cada servicio (español y catalán).',
+  },
+  {
+    to: '/admin/organizacion',
+    title: 'Organización',
+    desc: 'Cambia los títulos de las secciones de la carta (Tratamientos base, específicos…).',
   },
   {
     to: '/admin/contacto',

@@ -23,6 +23,7 @@ const GiftCardSuccessPage = lazy(() => import('./pages/GiftCardSuccessPage'))
 const AdminShell = lazy(() => import('./admin/AdminShell'))
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'))
 const AdminServicesPage = lazy(() => import('./pages/admin/AdminServicesPage'))
+const AdminOrganizacionPage = lazy(() => import('./pages/admin/AdminOrganizacionPage'))
 const AdminContactPage = lazy(() => import('./pages/admin/AdminContactPage'))
 const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 
@@ -80,6 +81,7 @@ export default function App() {
             <Route path="admin" element={<AdminShell />}>
               <Route index element={<AdminDashboardPage />} />
               <Route path="tratamientos" element={<AdminServicesPage />} />
+              <Route path="organizacion" element={<AdminOrganizacionPage />} />
               <Route path="contacto" element={<AdminContactPage />} />
               <Route path="tarjetas" element={<AdminGiftCardsPage />} />
             </Route>

@@ -5,6 +5,7 @@ import { adminFetch } from '../../admin/useAdminAuth'
 import { useServices } from '../../context/ServicesContext'
 import { uploadTreatmentImage } from '../../admin/uploadTreatmentImage'
 import { adminTheme as t } from '../../admin/adminTheme'
+import { DEFAULT_CATEGORIES, SLUG_SECTION, sectionsForCategory } from '../../data/serviceCatalog'
 
 function mergeDraft(base, patch) {
   return {
@@ -18,6 +19,9 @@ function mergeDraft(base, patch) {
     steps: patch.steps?.length ? patch.steps : (base.steps || []),
     benefits: patch.benefits?.length ? patch.benefits : (base.benefits || []),
     faq: patch.faq?.length ? patch.faq : (base.faq || []),
+    category: patch.category ?? base.category ?? 'facial',
+    section: patch.section ?? base.section ?? SLUG_SECTION[base.slug] ?? `${base.category || 'facial'}-general`,
+    sortOrder: patch.sortOrder ?? base.sortOrder ?? 500,
   }
 }
 
@@ -65,16 +69,25 @@ export default function AdminServicesPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return baseList
-    return baseList.filter(
-      (s) => s.name.toLowerCase().includes(q) || s.categoryLabel?.toLowerCase().includes(q),
-    )
+    let list = baseList
+    if (q) {
+      list = list.filter(
+        (s) => s.name.toLowerCase().includes(q) || s.categoryLabel?.toLowerCase().includes(q) || s.section?.includes(q),
+      )
+    }
+    return [...list].sort((a, b) => {
+      const sa = a.section || SLUG_SECTION[a.slug] || ''
+      const sb = b.section || SLUG_SECTION[b.slug] || ''
+      if (sa !== sb) return sa.localeCompare(sb)
+      return (a.sortOrder ?? 500) - (b.sortOrder ?? 500) || a.name.localeCompare(b.name)
+    })
   }, [baseList, search])
 
   const handleSave = async () => {
     if (!draft) return
     setSaving(true)
     try {
+      const catDef = DEFAULT_CATEGORIES[draft.category]
       const data = {
         name: draft.name,
         description: draft.description,
@@ -86,6 +99,10 @@ export default function AdminServicesPage() {
         steps: (draft.steps || []).filter((s) => s.title?.trim() || s.desc?.trim()),
         benefits: (draft.benefits || []).map((b) => b.trim()).filter(Boolean),
         faq: (draft.faq || []).filter((f) => f.q?.trim() || f.a?.trim()),
+        category: draft.category,
+        categoryLabel: catDef ? (locale === 'ca' ? catDef.ca : catDef.es) : draft.category,
+        section: draft.section,
+        sortOrder: Number(draft.sortOrder) || 500,
       }
       const res = await adminFetch('/api/admin/services', pwd, {
         method: 'PUT',
@@ -237,6 +254,53 @@ export default function AdminServicesPage() {
                 <input type="text" value={draft.price} onChange={(e) => setDraft({ ...draft, price: e.target.value })} style={inputStyle} />
               </Field>
             </div>
+          </Section>
+
+          <Section title="Categoría y grupo (carta de servicios)">
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: t.textMuted, lineHeight: 1.5 }}>
+              Así se organiza en la web. En Faciales: Tratamientos base, Tratamientos específicos u Otros.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <Field label="Categoría">
+                <select
+                  value={draft.category}
+                  onChange={(e) => {
+                    const category = e.target.value
+                    const firstSec = sectionsForCategory(category, {})[0]?.key || `${category}-general`
+                    setDraft({ ...draft, category, section: firstSec })
+                  }}
+                  style={{ ...inputStyle, background: t.pageBg }}
+                >
+                  {Object.entries(DEFAULT_CATEGORIES).map(([key, labels]) => (
+                    <option key={key} value={key}>{labels.es}</option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Grupo / sección">
+                <select
+                  value={draft.section}
+                  onChange={(e) => setDraft({ ...draft, section: e.target.value })}
+                  style={{ ...inputStyle, background: t.pageBg }}
+                >
+                  {sectionsForCategory(draft.category, {}).map((sec) => (
+                    <option key={sec.key} value={sec.key}>
+                      {locale === 'ca' ? sec.labelCa : sec.labelEs}
+                    </option>
+                  ))}
+                  {!sectionsForCategory(draft.category, {}).some((s) => s.key === draft.section) && (
+                    <option value={draft.section}>{draft.section}</option>
+                  )}
+                </select>
+              </Field>
+            </div>
+            <Field label="Orden en el listado (número más bajo = primero)">
+              <input
+                type="number"
+                value={draft.sortOrder ?? 500}
+                onChange={(e) => setDraft({ ...draft, sortOrder: Number(e.target.value) })}
+                style={inputStyle}
+              />
+            </Field>
           </Section>
 
           <Section title="Foto de portada">

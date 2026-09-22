@@ -36,3 +36,15 @@ ALTER TABLE service_overrides ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Solo service role services" ON service_overrides;
 CREATE POLICY "Solo service role services" ON service_overrides
   FOR ALL USING (true) WITH CHECK (true);
+
+CREATE TABLE IF NOT EXISTS catalog_config (
+  id         TEXT PRIMARY KEY DEFAULT 'default',
+  data       JSONB NOT NULL DEFAULT '{}',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE catalog_config ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Solo service role catalog" ON catalog_config;
+CREATE POLICY "Solo service role catalog" ON catalog_config
+  FOR ALL USING (true) WITH CHECK (true);

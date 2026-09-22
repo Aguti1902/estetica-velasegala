@@ -3,11 +3,11 @@ export const serviceIcons = {}
 export const servicesData = {
   es: [
     {
-      id: 1, slug: 'higiene-facial', category: 'facial', categoryLabel: 'Facial',
+      id: 1, slug: 'higiene-facial', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
       name: 'Higiene Facial',
-      description: 'Limpieza profunda personalizada en tres niveles: Essencial, Completa y Profunda. La base indispensable para una piel sana, equilibrada y luminosa.',
-      longDescription: 'La higiene facial profesional es el punto de partida de cualquier cuidado estético. Disponemos de tres niveles: Essencial (35€, 45 min), Completa (55€, 60 min) con extracción de comedones, y Profunda (75€, 75 min) con vaporizador y mascarilla de alta concentración. Todos incluyen análisis previo y cosméticos de alta gama.',
-      duration: '45–75 min', price: 'Desde 35€',
+      description: 'Limpieza profunda esencial: la base para una piel sana, equilibrada y luminosa. Análisis previo y cosméticos de alta gama.',
+      longDescription: 'La higiene facial profesional es el punto de partida de cualquier cuidado estético. Incluye análisis de piel, desmaquillado, exfoliación, extracción cuando procede, mascarilla adaptada e hidratación final con SPF. Ideal como mantenimiento mensual.',
+      duration: '60 min', price: '60€',
       image: '/images/treatments/higiene-facial.jpg',
       gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/hydrafacial-3.png'],
       steps: [
@@ -21,6 +21,48 @@ export const servicesData = {
       faq: [
         { q: '¿Con qué frecuencia se recomienda?', a: 'Mensualmente para mantener la piel en óptimas condiciones.' },
         { q: '¿Puedo hacerla si tengo acné activo?', a: 'Sí, adaptamos el protocolo para pieles con acné evitando manipulaciones que irriten zonas inflamadas.' },
+      ],
+    },
+    {
+      id: 50, slug: 'higiene-facial-expert-dermaclear', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
+      name: 'Higiene facial expert (Dermaclear)',
+      description: 'Higiene facial avanzada con protocolo Dermaclear: limpieza profunda, extracción experta y tratamiento activo para poros refinados y luminosidad.',
+      longDescription: 'Nivel expert de higiene facial con la línea Dermaclear. Combina limpieza en profundidad, extracción profesional y activos específicos para pieles que necesitan un protocolo más intenso que la higiene estándar, sin perder confort ni equilibrio cutáneo.',
+      duration: '60 min', price: '90€',
+      image: '/images/treatments/higiene-facial.jpg',
+      gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/hydrafacial-3.png'],
+      steps: [
+        { title: 'Diagnóstico Dermaclear', desc: 'Análisis de piel y selección del protocolo expert.' },
+        { title: 'Limpieza y preparación', desc: 'Desmaquillado y exfoliación adaptada al protocolo Dermaclear.' },
+        { title: 'Extracción expert', desc: 'Extracción profesional de comedones e impurezas.' },
+        { title: 'Tratamiento activo', desc: 'Ampollas y mascarilla Dermaclear de alta concentración.' },
+        { title: 'Cierre y protección', desc: 'Hidratación y SPF personalizados.' },
+      ],
+      benefits: ['Limpieza profunda expert', 'Poros más refinados', 'Luminosidad visible', 'Piel preparada para otros tratamientos'],
+      faq: [
+        { q: '¿Para quién está indicada?', a: 'Para quien busca una higiene más completa que la estándar o con tendencia a obstrucción de poros.' },
+        { q: '¿Con qué frecuencia?', a: 'Cada 4–6 semanas, según tipo de piel.' },
+      ],
+    },
+    {
+      id: 51, slug: 'higiene-facial-integral-indiba', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
+      name: 'Higiene Facial Integral (+INDIBA)',
+      description: 'Máximo nivel de higiene facial: limpieza profunda completa más radiofrecuencia INDIBA para oxigenar, reafirmar y potenciar resultados.',
+      longDescription: 'Nuestro protocolo integral une higiene facial profunda con tecnología INDIBA en facial. La combinación favorece la oxigenación tisular, mejora la firmeza y deja la piel visiblemente más luminosa y receptiva a los activos aplicados.',
+      duration: '75 min', price: '115€',
+      image: '/images/treatments/higiene-facial.jpg',
+      gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/tratamiento-facial.jpg'],
+      steps: [
+        { title: 'Análisis y limpieza', desc: 'Diagnóstico cutáneo e higiene profunda preparatoria.' },
+        { title: 'Extracción y mascarilla', desc: 'Extracción profesional y tratamiento activo de alta eficacia.' },
+        { title: 'INDIBA facial', desc: 'Radiofrecuencia para oxigenar tejidos y reafirmar.' },
+        { title: 'Infusión de activos', desc: 'Sérums y mascarilla tras la tecnología INDIBA.' },
+        { title: 'Acabado', desc: 'Hidratación y protección solar.' },
+      ],
+      benefits: ['Higiene + tecnología en una sesión', 'Efecto reafirmante', 'Luminosidad intensa', 'Resultados potenciados'],
+      faq: [
+        { q: '¿Qué aporta la INDIBA?', a: 'Oxigenación profunda y efecto tensor que complementa la higiene facial.' },
+        { q: '¿Es apta para todo tipo de piel?', a: 'Sí, adaptamos intensidad y productos; valoramos contraindicaciones en consulta.' },
       ],
     },
     {
@@ -49,7 +91,7 @@ export const servicesData = {
       name: 'Hydra-Treatment',
       description: 'Tratamiento intensivo de hidratación que restaura el manto hídrico con ácido hialurónico, ceramidas y vectores de alta tecnología. Resultados visibles desde la primera sesión.',
       longDescription: 'Hydra-Treatment es el tratamiento ideal para pieles secas, deshidratadas o apagadas. La combinación de vectores hidratantes de alta tecnología, ácido hialurónico y ceramidas restaura en profundidad el manto hídrico, devolviendo luminosidad, suavidad y elasticidad. Resultados perceptibles desde la primera aplicación.',
-      duration: '60 min', price: '85€',
+      duration: '60 min', price: '80€',
       image: '/images/treatments/hydra-green.webp',
       gallery: ['/images/treatments/hydra-green.webp', '/images/treatments/hydrafacial-1.png', '/images/treatments/hydrafacial-3.png'],
       steps: [
@@ -90,7 +132,7 @@ export const servicesData = {
       name: 'Oily Skin Solution',
       description: 'Tratamiento regulador para pieles mixtas o grasas con tendencia acneica. Controla el exceso de sebo, afina los poros y previene la aparición de imperfecciones.',
       longDescription: 'Oily Skin Solution combina exfoliantes enzimáticos, reguladores sebáceos y activos antibacterianos para equilibrar la piel sin deshidratarla. Refina los poros dilatados, reduce el brillo y previene la aparición de nuevas imperfecciones con resultados progresivos y duraderos.',
-      duration: '60 min', price: '80€',
+      duration: '60 min', price: 'Consultar',
       image: '/images/woman-receiving-beauty-treatment-at-a-clinic-2026-03-16-06-05-53-utc.jpg',
       gallery: ['/images/woman-receiving-beauty-treatment-at-a-clinic-2026-03-16-06-05-53-utc.jpg', '/images/treatments/peeling-1.webp', '/images/treatments/hydrafacial-2.jpg'],
       steps: [
@@ -111,7 +153,7 @@ export const servicesData = {
       name: 'Mesopeel',
       description: 'Peeling químico profesional que mejora la textura, el tono y la luminosidad de la piel con mínima recuperación. Resultados visibles desde la primera sesión.',
       longDescription: 'Mesopeel es un sistema de peelings químicos profesionales de alta eficacia para tratar manchas, acné, envejecimiento e irregularidades del tono. El protocolo se personaliza según el tipo de piel y el objetivo, seleccionando el ácido y la concentración más adecuados. Los resultados mejoran progresivamente con el ciclo completo.',
-      duration: '45 min', price: '70€',
+      duration: '45 min', price: '80€',
       image: '/images/treatments/mesopeel.jpg',
       gallery: ['/images/treatments/mesopeel.jpg', '/images/treatments/peeling-2.jpg', '/images/treatments/peeling-3.webp'],
       steps: [
@@ -132,7 +174,7 @@ export const servicesData = {
       name: 'SkinRetein Xpert Pack',
       description: 'Pack de 3 sesiones con retinol profesional microencapsulado de máxima potencia. Trata el envejecimiento, las manchas y la falta de firmeza con resultados acumulativos excepcionales.',
       longDescription: 'SkinRetein Xpert Pack es un protocolo intensivo de 3 sesiones basado en retinol microencapsulado profesional que estimula la renovación celular, aumenta la producción de colágeno y elastina, y reduce arrugas y manchas. El formato pack multiplica los beneficios con resultados progresivos claramente visibles.',
-      duration: '45 min por sesión', price: '195€ (pack 3 sesiones)',
+      duration: '45 min', price: '90€',
       image: '/images/treatments/peeling-2.jpg',
       gallery: ['/images/treatments/peeling-2.jpg', '/images/treatments/peeling-1.webp', '/images/treatments/peeling-3.webp'],
       steps: [
@@ -152,7 +194,7 @@ export const servicesData = {
       name: 'Gold Collagen Experience 360º',
       description: 'Tratamiento premium con colágeno marino y oro coloidal que estimula la síntesis de colágeno, aporta firmeza extrema y una luminosidad excepcional. Resultados visibles desde la primera sesión.',
       longDescription: 'Gold Collagen Experience 360º combina la potencia del colágeno marino hidrolizado con las propiedades antiaging del oro coloidal. La tecnología 360º trabaja en todas las capas de la piel, estimulando el colágeno, mejorando la elasticidad y aportando una luminosidad extraordinaria. El tratamiento ideal para ocasiones especiales o pieles exigentes.',
-      duration: '75 min', price: '110€',
+      duration: '75 min', price: '85€',
       image: '/images/treatments/bioestimuladores-1.jpg',
       gallery: ['/images/treatments/bioestimuladores-1.jpg', '/images/treatments/bioestimuladores-2.jpg', '/images/treatments/bioestimuladores-3.jpg'],
       steps: [
@@ -169,7 +211,7 @@ export const servicesData = {
       ],
     },
     {
-      id: 9, slug: 'lhygene-parfaite', category: 'facial', categoryLabel: 'Facial',
+      id: 9, slug: 'lhygene-parfaite', category: 'facial', categoryLabel: 'Facial', section: 'facial-complementarios',
       name: "L'Hygène Parfaite",
       description: 'La higiene perfecta: limpieza profunda con extracción meticulosa seguida de un tratamiento activo de iontoforesis y mascarilla hidratante de alta eficacia.',
       longDescription: "L'Hygène Parfaite es la evolución de la higiene facial clásica, combinando la máxima eficacia en la limpieza con un protocolo de tratamiento posterior de alto rendimiento. Incluye extracción meticulosa, iontoforesis para cerrar los poros y mascarilla de hidratación intensa. Piel perfectamente limpia y radiante garantizada.",
@@ -984,11 +1026,11 @@ export const servicesData = {
 
   ca: [
     {
-      id: 1, slug: 'higiene-facial', category: 'facial', categoryLabel: 'Facial',
+      id: 1, slug: 'higiene-facial', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
       name: 'Higiene Facial',
-      description: 'Neteja facial profunda personalitzada en tres nivells: Essencial, Completa i Profunda. La base indispensable per mantenir una pell sana, equilibrada i lluminosa.',
-      longDescription: 'La higiene facial professional és el punt de partida de qualsevol cura estètica. Disposem de tres nivells adaptats a cada tipus de pell: Essencial (35€, 45 min), Completa (55€, 60 min) amb extracció de comedons, i Profunda (75€, 75 min) amb vaporitzador i màscara d\'alta concentració. Tots inclouen anàlisi prèvia i cosmètics d\'alta gamma.',
-      duration: '45–75 min', price: 'Des de 35€',
+      description: 'Neteja profunda essencial: la base per a una pell sana, equilibrada i lluminosa. Anàlisi prèvia i cosmètics d\'alta gamma.',
+      longDescription: 'La higiene facial professional és el punt de partida de qualsevol cura estètica. Inclou anàlisi de pell, desmaquillatge, exfoliació, extracció quan cal, màscara adaptada i hidratació final amb SPF. Ideal com a manteniment mensual.',
+      duration: '60 min', price: '60€',
       image: '/images/treatments/higiene-facial.jpg',
       gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/hydrafacial-3.png'],
       steps: [
@@ -1002,6 +1044,48 @@ export const servicesData = {
       faq: [
         { q: 'Amb quina freqüència es recomana?', a: 'Mensualment per mantenir la pell en òptimes condicions.' },
         { q: 'Puc fer-la si tinc acne actiu?', a: 'Sí, adaptem el protocol per a pells amb acne evitant manipulacions que irritin zones inflamades.' },
+      ],
+    },
+    {
+      id: 50, slug: 'higiene-facial-expert-dermaclear', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
+      name: 'Higiene facial expert (Dermaclear)',
+      description: 'Higiene facial avançada amb protocol Dermaclear: neteja profunda, extracció experta i tractament actiu per refinar porus i lluminositat.',
+      longDescription: 'Nivell expert d\'higiene facial amb la línia Dermaclear. Combina neteja en profunditat, extracció professional i actius específics per a pells que necessiten un protocol més intens que l\'estàndard.',
+      duration: '60 min', price: '90€',
+      image: '/images/treatments/higiene-facial.jpg',
+      gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/hydrafacial-3.png'],
+      steps: [
+        { title: 'Diagnòstic Dermaclear', desc: 'Anàlisi de pell i selecció del protocol expert.' },
+        { title: 'Neteja i preparació', desc: 'Desmaquillatge i exfoliació adaptada.' },
+        { title: 'Extracció expert', desc: 'Extracció professional de comedons i impureses.' },
+        { title: 'Tractament actiu', desc: 'Ampolles i màscara Dermaclear d\'alta concentració.' },
+        { title: 'Tancament', desc: 'Hidratació i SPF personalitzats.' },
+      ],
+      benefits: ['Neteja profunda expert', 'Porus més refinats', 'Lluminositat visible', 'Pell preparada per a altres tractaments'],
+      faq: [
+        { q: 'Per a qui està indicada?', a: 'Per a qui busca una higiene més completa que l\'estàndard.' },
+        { q: 'Amb quina freqüència?', a: 'Cada 4–6 setmanes, segons tipus de pell.' },
+      ],
+    },
+    {
+      id: 51, slug: 'higiene-facial-integral-indiba', category: 'facial', categoryLabel: 'Facial', section: 'facial-base',
+      name: 'Higiene Facial Integral (+INDIBA)',
+      description: 'Màxim nivell d\'higiene facial: neteja profunda completa més radiofreqüència INDIBA per oxigenar, reafirmar i potenciar resultats.',
+      longDescription: 'El nostre protocol integral uneix higiene facial profunda amb tecnologia INDIBA facial. La combinació afavoreix l\'oxigenació tissular, millora la fermesa i deixa la pell visiblement més lluminosa.',
+      duration: '75 min', price: '115€',
+      image: '/images/treatments/higiene-facial.jpg',
+      gallery: ['/images/treatments/higiene-facial.jpg', '/images/treatments/hydrafacial-2.jpg', '/images/treatments/tratamiento-facial.jpg'],
+      steps: [
+        { title: 'Anàlisi i neteja', desc: 'Diagnòstic cutani i higiene profunda preparatòria.' },
+        { title: 'Extracció i màscara', desc: 'Extracció professional i tractament actiu.' },
+        { title: 'INDIBA facial', desc: 'Radiofreqüència per oxigenar i reafirmar.' },
+        { title: 'Infusió d\'actius', desc: 'Sèrums i màscara després de la INDIBA.' },
+        { title: 'Acabat', desc: 'Hidratació i protecció solar.' },
+      ],
+      benefits: ['Higiene + tecnologia en una sessió', 'Efecte reafirmant', 'Lluminositat intensa', 'Resultats potenciats'],
+      faq: [
+        { q: 'Què aporta la INDIBA?', a: 'Oxigenació profunda i efecte tensor que complementa la higiene facial.' },
+        { q: 'És apta per a tot tipus de pell?', a: 'Sí, adaptem intensitat i productes.' },
       ],
     },
     {
@@ -1030,7 +1114,7 @@ export const servicesData = {
       name: 'Hydra-Treatment',
       description: 'Tractament intensiu d\'hidratació que restaura el mantell hídric amb àcid hialurònic, ceramides i vectors d\'alta tecnologia. Resultats visibles des de la primera sessió.',
       longDescription: 'Hydra-Treatment és el tractament ideal per a pells seques, deshidratades o apagades. La combinació de vectors hidratants d\'alta tecnologia, àcid hialurònic i ceramides restaura en profunditat el mantell hídric, retornant lluminositat, suavitat i elasticitat. Resultats perceptibles des de la primera aplicació.',
-      duration: '60 min', price: '85€',
+      duration: '60 min', price: '80€',
       image: '/images/treatments/hydra-green.webp',
       gallery: ['/images/treatments/hydra-green.webp', '/images/treatments/hydrafacial-1.png', '/images/treatments/hydrafacial-3.png'],
       steps: [
@@ -1071,7 +1155,7 @@ export const servicesData = {
       name: 'Oily Skin Solution',
       description: 'Tractament regulador per a pells mixtes o grasses amb tendència acneica. Controla l\'excés de sèu, afina els porus i prevé l\'aparició d\'imperfeccions.',
       longDescription: 'Oily Skin Solution combina exfoliants enzimàtics, reguladors sebacis i actius antibacterians per equilibrar la pell sense deshidratar-la. Refina els porus dilatats, redueix la brillantor i prevé l\'aparició de noves imperfeccions amb resultats progressius i duradors.',
-      duration: '60 min', price: '80€',
+      duration: '60 min', price: 'Consultar',
       image: '/images/woman-receiving-beauty-treatment-at-a-clinic-2026-03-16-06-05-53-utc.jpg',
       gallery: ['/images/woman-receiving-beauty-treatment-at-a-clinic-2026-03-16-06-05-53-utc.jpg', '/images/treatments/peeling-1.webp', '/images/treatments/hydrafacial-2.jpg'],
       steps: [
@@ -1092,7 +1176,7 @@ export const servicesData = {
       name: 'Mesopeel',
       description: 'Peeling químic professional que millora la textura, el to i la lluminositat de la pell amb mínima recuperació. Resultats visibles des de la primera sessió.',
       longDescription: 'Mesopeel és un sistema de peelings químics professionals d\'alta eficàcia per tractar taques, acne, envelliment i irregularitats del to. El protocol es personalitza segons el tipus de pell i l\'objectiu, seleccionant l\'àcid i la concentració més adequats. Els resultats milloren progressivament amb el cicle complet.',
-      duration: '45 min', price: '70€',
+      duration: '45 min', price: '80€',
       image: '/images/treatments/mesopeel.jpg',
       gallery: ['/images/treatments/mesopeel.jpg', '/images/treatments/peeling-2.jpg', '/images/treatments/peeling-3.webp'],
       steps: [
@@ -1113,7 +1197,7 @@ export const servicesData = {
       name: 'SkinRetein Xpert Pack',
       description: 'Pack de 3 sessions amb retinol professional microencapsulat de màxima potència. Tracta l\'envelliment, les taques i la manca de fermesa amb resultats acumulatius excepcionals.',
       longDescription: 'SkinRetein Xpert Pack és un protocol intensiu de 3 sessions basat en retinol microencapsulat professional que estimula la renovació cel·lular, augmenta la producció de col·lagen i elastina, i redueix arrugues i taques. El format pack multiplica els beneficis amb resultats progressius clarament visibles.',
-      duration: '45 min per sessió', price: '195€ (pack 3 sessions)',
+      duration: '45 min', price: '90€',
       image: '/images/treatments/peeling-2.jpg',
       gallery: ['/images/treatments/peeling-2.jpg', '/images/treatments/peeling-1.webp', '/images/treatments/peeling-3.webp'],
       steps: [
@@ -1133,7 +1217,7 @@ export const servicesData = {
       name: 'Gold Collagen Experience 360º',
       description: 'Tractament premium amb col·lagen marí i or col·loïdal que estimula la síntesi de col·lagen, aporta fermesa extrema i una lluminositat excepcional. Resultats visibles des de la primera sessió.',
       longDescription: 'Gold Collagen Experience 360º combina la potència del col·lagen marí hidrolitzat amb les propietats antiaging de l\'or col·loïdal. La tecnologia 360º treballa en totes les capes de la pell, estimulant el col·lagen, millorant l\'elasticitat i aportant una lluminositat extraordinària. El tractament ideal per a ocasions especials o pells exigents.',
-      duration: '75 min', price: '110€',
+      duration: '75 min', price: '85€',
       image: '/images/treatments/bioestimuladores-1.jpg',
       gallery: ['/images/treatments/bioestimuladores-1.jpg', '/images/treatments/bioestimuladores-2.jpg', '/images/treatments/bioestimuladores-3.jpg'],
       steps: [

@@ -1,26 +1,37 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useLang } from '../context/LanguageContext'
 import { useServices } from '../context/ServicesContext'
+import { categoryLabel, groupBySection } from '../data/serviceCatalog'
 
 export default function ServicesPage() {
   const { lang } = useLang()
-  const { servicesData } = useServices()
+  const { servicesData, catalogConfig } = useServices()
   const services = servicesData[lang]
   const [activeCategory, setActiveCategory] = useState('all')
 
-  const categories = [...new Set(services.map(s => s.category))]
-  const filtered = activeCategory === 'all' ? services : services.filter(s => s.category === activeCategory)
+  const categories = [...new Set(services.map((s) => s.category))]
+  const filtered = activeCategory === 'all'
+    ? services
+    : services.filter((s) => s.category === activeCategory)
+
+  const sectionGroups = useMemo(() => {
+    if (activeCategory !== 'facial') return null
+    return groupBySection(filtered, lang, catalogConfig)
+  }, [activeCategory, filtered, lang, catalogConfig])
 
   const categoryLabels = {
-    es: { all: 'Todos', facial: 'Facial', corporal: 'Corporal', medics: 'Médico-Estético', laser: 'Láser' },
-    ca: { all: 'Tots', facial: 'Facial', corporal: 'Corporal', medics: 'Mèdic-Estètic', laser: 'Làser' },
+    es: { all: 'Todos' },
+    ca: { all: 'Tots' },
+  }
+  for (const cat of categories) {
+    categoryLabels.es[cat] = categoryLabel(cat, 'es', catalogConfig)
+    categoryLabels.ca[cat] = categoryLabel(cat, 'ca', catalogConfig)
   }
 
   return (
     <>
-      {/* Page Hero */}
       <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
@@ -37,14 +48,13 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      {/* Filtros + Grid */}
       <section style={{ background: '#f5f5f5', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
-          {/* Filtros */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '3rem' }}>
-            {['all', ...categories].map(cat => (
+            {['all', ...categories].map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setActiveCategory(cat)}
                 style={{
                   padding: '8px 20px', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
@@ -59,12 +69,34 @@ export default function ServicesPage() {
             ))}
           </div>
 
-          {/* Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px', background: 'transparent' }} className="services-page-grid">
-            {filtered.map((service, i) => (
-              <ServiceRow key={service.id} service={service} index={i} lang={lang} />
-            ))}
-          </div>
+          {sectionGroups ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem' }}>
+              {sectionGroups.map((group) => (
+                <div key={group.section}>
+                  <h2 style={{
+                    fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.25rem, 3vw, 1.6rem)', fontWeight: 400,
+                    textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em',
+                    background: '#fff', padding: '14px 24px', marginBottom: '1.5rem', color: '#0d0d0d',
+                    border: '1px solid #e8e8e8',
+                  }}
+                  >
+                    {group.label}
+                  </h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px' }} className="services-page-grid">
+                    {group.items.map((service, i) => (
+                      <ServiceRow key={service.slug} service={service} index={i} lang={lang} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px' }} className="services-page-grid">
+              {filtered.map((service, i) => (
+                <ServiceRow key={service.id} service={service} index={i} lang={lang} />
+              ))}
+            </div>
+          )}
         </div>
         <style>{`
           .services-page-grid { grid-template-columns: repeat(3, 1fr); }
