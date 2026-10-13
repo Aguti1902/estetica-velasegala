@@ -16,9 +16,9 @@ export default function ScrollToTop() {
         <motion.button
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 40, width: '44px', height: '44px', background: '#1f1814', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+          style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 40, width: '44px', height: '44px', background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
           onMouseEnter={e => e.currentTarget.style.background = '#333'}
-          onMouseLeave={e => e.currentTarget.style.background = '#1f1814'}
+          onMouseLeave={e => e.currentTarget.style.background = '#1a1a1a'}
           aria-label="Tornar a dalt"
         >
           <svg width="16" height="16" fill="none" stroke="#fff" viewBox="0 0 24 24">

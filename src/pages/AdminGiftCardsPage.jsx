@@ -291,7 +291,7 @@ export default function AdminGiftCardsPage() {
                   <span style={{
                     display: 'inline-block', padding: '4px 10px', borderRadius: '20px', fontSize: '11px',
                     letterSpacing: '1px', fontWeight: 600,
-                    background: card.is_used ? th.subtleBg : 'rgba(139,94,60,0.2)',
+                    background: card.is_used ? th.subtleBg : 'rgba(201,168,130,0.2)',
                     color: card.is_used ? th.textMuted : th.text,
                     border: `1px solid ${card.is_used ? th.border : th.accent}`,
                   }}>

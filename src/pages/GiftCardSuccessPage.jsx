@@ -53,10 +53,10 @@ export default function GiftCardSuccessPage() {
         <div style={{
           width: '48px', height: '48px', borderRadius: '50%',
           border: '3px solid var(--warm-200)',
-          borderTopColor: '#8b5e3c',
+          borderTopColor: '#c9a882',
           animation: 'spin 0.8s linear infinite',
         }} />
-        <p style={{ color: '#5c4030', fontSize: '15px' }}>Procesando tu pago...</p>
+        <p style={{ color: '#7a6352', fontSize: '15px' }}>Procesando tu pago...</p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
@@ -66,10 +66,10 @@ export default function GiftCardSuccessPage() {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--cream)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px', paddingTop: '80px' }}>
         <p style={{ fontSize: '40px', marginBottom: '16px' }}>📧</p>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '16px', color: '#1f1814' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '16px', color: '#1a1a1a' }}>
           ¡Pago completado!
         </h2>
-        <p style={{ color: '#5c4030', maxWidth: '480px', lineHeight: 1.7 }}>{error}</p>
+        <p style={{ color: '#7a6352', maxWidth: '480px', lineHeight: 1.7 }}>{error}</p>
         <Link to="/" className="btn-primary" style={{ marginTop: '32px', display: 'inline-block', padding: '14px 32px', textDecoration: 'none', fontSize: '13px', letterSpacing: '2px' }}>
           VOLVER AL INICIO
         </Link>
@@ -90,17 +90,17 @@ export default function GiftCardSuccessPage() {
         >
           <div style={{
             width: '72px', height: '72px', borderRadius: '50%',
-            background: '#1f1814', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center',
             margin: '0 auto 24px',
           }}>
             <svg width="32" height="32" fill="none" stroke="white" viewBox="0 0 24 24" strokeWidth="1.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           </div>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 400, color: '#1f1814', marginBottom: '12px' }}>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 400, color: '#1a1a1a', marginBottom: '12px' }}>
             ¡Tarjeta enviada!
           </h1>
-          <p style={{ color: '#5c4030', fontSize: '16px' }}>
+          <p style={{ color: '#7a6352', fontSize: '16px' }}>
             Hemos enviado la tarjeta regalo a <strong>{card?.buyerEmail}</strong>
           </p>
         </motion.div>
@@ -112,7 +112,7 @@ export default function GiftCardSuccessPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div style={{
-            background: 'linear-gradient(135deg, #1f1814 0%, #2d2d2d 100%)',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
             borderRadius: '16px',
             padding: 'clamp(24px, 5vw, 48px)',
             marginBottom: '32px',
@@ -121,18 +121,18 @@ export default function GiftCardSuccessPage() {
             boxShadow: '0 24px 80px rgba(0,0,0,0.2)',
           }}>
             {/* Decoración */}
-            <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(139,94,60,0.08)' }} />
-            <div style={{ position: 'absolute', bottom: '-70px', left: '30%', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(139,94,60,0.05)' }} />
+            <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(201,168,130,0.08)' }} />
+            <div style={{ position: 'absolute', bottom: '-70px', left: '30%', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(201,168,130,0.05)' }} />
 
             <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
               <div>
-                <p style={{ color: '#8b5e3c', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', marginBottom: '4px' }}>
+                <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Estetica Segala
                 </p>
                 <p style={{ color: '#888', fontSize: '12px' }}>Viladecans, Barcelona</p>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <p style={{ color: '#8b5e3c', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase' }}>Tarjeta Regalo</p>
+                <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase' }}>Tarjeta Regalo</p>
               </div>
             </div>
 
@@ -141,7 +141,7 @@ export default function GiftCardSuccessPage() {
                 {card?.amount}€
               </p>
               {card?.recipientName && (
-                <p style={{ color: '#9a7355', fontSize: '15px', marginBottom: '4px' }}>
+                <p style={{ color: '#b89e87', fontSize: '15px', marginBottom: '4px' }}>
                   Para: <span style={{ color: 'white' }}>{card.recipientName}</span>
                 </p>
               )}
@@ -153,7 +153,7 @@ export default function GiftCardSuccessPage() {
                   Código de canje
                 </p>
                 <p style={{
-                  fontFamily: 'monospace', fontSize: 'clamp(1rem, 4vw, 1.5rem)', color: '#8b5e3c',
+                  fontFamily: 'monospace', fontSize: 'clamp(1rem, 4vw, 1.5rem)', color: '#c9a882',
                   letterSpacing: 'clamp(2px, 1vw, 4px)', fontWeight: 700, wordBreak: 'break-all',
                 }}>
                   {card?.code}
@@ -172,10 +172,10 @@ export default function GiftCardSuccessPage() {
               padding: '24px 28px', marginBottom: '32px',
               borderLeft: '3px solid var(--accent)',
             }}>
-              <p style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#9a7355', marginBottom: '10px' }}>
+              <p style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '10px' }}>
                 Mensaje personal
               </p>
-              <p style={{ color: '#5c4030', fontStyle: 'italic', lineHeight: 1.7 }}>
+              <p style={{ color: '#7a6352', fontStyle: 'italic', lineHeight: 1.7 }}>
                 "{card.message}"
               </p>
             </div>
@@ -205,8 +205,8 @@ export default function GiftCardSuccessPage() {
               whileTap={{ scale: 0.98 }}
               style={{
                 flex: 1, padding: '14px', fontSize: '13px', letterSpacing: '2px',
-                border: '1px solid #1f1814', background: 'transparent', cursor: 'pointer',
-                borderRadius: '2px', color: '#1f1814', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                border: '1px solid #1a1a1a', background: 'transparent', cursor: 'pointer',
+                borderRadius: '2px', color: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               }}
             >
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
@@ -218,7 +218,7 @@ export default function GiftCardSuccessPage() {
 
           {/* Info */}
           <div style={{ background: 'white', border: '1px solid var(--warm-200)', borderRadius: '4px', padding: '28px' }}>
-            <h3 style={{ fontSize: '13px', letterSpacing: '3px', textTransform: 'uppercase', color: '#1f1814', marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '13px', letterSpacing: '3px', textTransform: 'uppercase', color: '#1a1a1a', marginBottom: '16px' }}>
               ¿Cómo canjear tu tarjeta?
             </h3>
             {[
@@ -230,19 +230,19 @@ export default function GiftCardSuccessPage() {
               <div key={i} style={{ display: 'flex', gap: '16px', marginBottom: '12px', alignItems: 'flex-start' }}>
                 <div style={{
                   width: '24px', height: '24px', borderRadius: '50%',
-                  background: '#1f1814', color: 'white',
+                  background: '#1a1a1a', color: 'white',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '11px', fontWeight: 600, flexShrink: 0,
                 }}>
                   {i + 1}
                 </div>
-                <p style={{ color: '#5c4030', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>{step}</p>
+                <p style={{ color: '#7a6352', fontSize: '14px', lineHeight: 1.6, margin: 0 }}>{step}</p>
               </div>
             ))}
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <Link to="/" style={{ color: '#9a7355', fontSize: '13px', textDecoration: 'none', letterSpacing: '2px' }}>
+            <Link to="/" style={{ color: '#b89e87', fontSize: '13px', textDecoration: 'none', letterSpacing: '2px' }}>
               ← VOLVER AL INICIO
             </Link>
           </div>
@@ -264,36 +264,36 @@ function buildGiftCardHTML(card) {
   @page { size: A4 landscape; margin: 0; }
   body {
     font-family: 'Georgia', 'Times New Roman', serif;
-    background: #f2ebe3;
+    background: #f9f6f1;
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; padding: 40px;
   }
   .card {
     width: 260mm; max-width: 100%;
-    background: linear-gradient(135deg, #1f1814 0%, #2a2a2a 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     border-radius: 16px;
     padding: 50px 60px;
     position: relative;
     overflow: hidden;
     color: white;
   }
-  .circle1 { position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(139,94,60,0.08); }
-  .circle2 { position: absolute; bottom: -80px; left: 35%; width: 220px; height: 220px; border-radius: 50%; background: rgba(139,94,60,0.05); }
+  .circle1 { position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(201,168,130,0.08); }
+  .circle2 { position: absolute; bottom: -80px; left: 35%; width: 220px; height: 220px; border-radius: 50%; background: rgba(201,168,130,0.05); }
   .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; position: relative; }
   .brand { }
   .brand-name { font-size: 20px; letter-spacing: 6px; text-transform: uppercase; font-weight: 300; color: white; }
-  .brand-sub { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #8b5e3c; margin-top: 4px; }
-  .label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #8b5e3c; text-align: right; }
+  .brand-sub { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c9a882; margin-top: 4px; }
+  .label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #c9a882; text-align: right; }
   .body { display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; position: relative; }
   .amount { font-size: 96px; font-weight: 700; line-height: 1; color: white; }
   .recipient { text-align: right; }
   .recipient-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
   .recipient-name { font-size: 22px; color: white; font-weight: 300; margin-bottom: 16px; }
-  .message { font-style: italic; color: #9a7355; font-size: 14px; max-width: 280px; line-height: 1.6; text-align: right; }
+  .message { font-style: italic; color: #b89e87; font-size: 14px; max-width: 280px; line-height: 1.6; text-align: right; }
   .footer { border-top: 1px solid #333; padding-top: 28px; display: flex; justify-content: space-between; align-items: flex-end; position: relative; }
   .code-section { }
   .code-label { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #666; margin-bottom: 8px; }
-  .code { font-family: 'Courier New', monospace; font-size: 28px; letter-spacing: 6px; color: #8b5e3c; font-weight: 700; }
+  .code { font-family: 'Courier New', monospace; font-size: 28px; letter-spacing: 6px; color: #c9a882; font-weight: 700; }
   .meta { text-align: right; }
   .meta p { font-size: 11px; color: #555; margin-bottom: 4px; letter-spacing: 1px; }
   .no-print { }

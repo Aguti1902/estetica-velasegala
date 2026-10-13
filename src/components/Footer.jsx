@@ -16,7 +16,7 @@ export default function Footer() {
   const services = servicesData[lang].slice(0, 6)
 
   return (
-    <footer style={{ background: '#1f1814', color: '#fff' }}>
+    <footer style={{ background: '#1a1a1a', color: '#fff' }}>
       {/* Main */}
       <div className="container" style={{ padding: 'clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }} className="footer-grid">

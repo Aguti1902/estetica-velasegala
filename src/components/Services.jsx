@@ -14,7 +14,7 @@ export default function Services() {
   const filtered = activeCategory === 'all' ? services : services.filter(s => s.category === activeCategory)
 
   return (
-    <section id="servicios" style={{ background: '#f2ebe3', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
+    <section id="servicios" style={{ background: '#f9f6f1', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
       <div className="container">
 
         {/* Header */}
@@ -29,7 +29,7 @@ export default function Services() {
           >{t.services.title}</motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            style={{ fontSize: '0.95rem', color: '#5c4030', lineHeight: 1.7, maxWidth: '520px' }}
+            style={{ fontSize: '0.95rem', color: '#7a6352', lineHeight: 1.7, maxWidth: '520px' }}
           >{t.services.subtitle}</motion.p>
         </div>
 
@@ -48,9 +48,9 @@ export default function Services() {
                 fontWeight: 600,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                border: `1.5px solid ${activeCategory === cat ? '#1f1814' : '#d0d0d0'}`,
-                background: activeCategory === cat ? '#1f1814' : 'transparent',
-                color: activeCategory === cat ? '#fff' : '#5c4030',
+                border: `1.5px solid ${activeCategory === cat ? '#1a1a1a' : '#d0d0d0'}`,
+                background: activeCategory === cat ? '#1a1a1a' : 'transparent',
+                color: activeCategory === cat ? '#fff' : '#7a6352',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
               }}
@@ -61,7 +61,7 @@ export default function Services() {
         </motion.div>
 
         {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5px', background: '#d4c2ad' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5px', background: '#e8d9c8' }}>
           {filtered.map((service, i) => (
             <ServiceCard key={service.id} service={service} index={i} t={t} />
           ))}
@@ -80,7 +80,7 @@ function ServiceCard({ service, index, t }) {
       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ delay: (index % 6) * 0.07 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ background: hovered ? '#1f1814' : '#fff', transition: 'background 0.3s', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+      style={{ background: hovered ? '#1a1a1a' : '#fff', transition: 'background 0.3s', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
     >
       {service.image && (
         <div style={{ height: '200px', overflow: 'hidden' }}>
@@ -89,17 +89,17 @@ function ServiceCard({ service, index, t }) {
       )}
       <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#9a7355', transition: 'color 0.3s' }}>
+          <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#b89e87', transition: 'color 0.3s' }}>
             {service.categoryLabel}
           </span>
-          <span style={{ fontSize: '0.65rem', color: hovered ? 'rgba(255,255,255,0.5)' : '#9a7355', border: `1px solid ${hovered ? 'rgba(255,255,255,0.15)' : '#d4c2ad'}`, padding: '3px 8px', transition: 'all 0.3s' }}>
+          <span style={{ fontSize: '0.65rem', color: hovered ? 'rgba(255,255,255,0.5)' : '#b89e87', border: `1px solid ${hovered ? 'rgba(255,255,255,0.15)' : '#e8d9c8'}`, padding: '3px 8px', transition: 'all 0.3s' }}>
             {service.duration}
           </span>
         </div>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 600, color: hovered ? '#fff' : '#1f1814', lineHeight: 1.2, marginBottom: '0.75rem', transition: 'color 0.3s' }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 600, color: hovered ? '#fff' : '#1a1a1a', lineHeight: 1.2, marginBottom: '0.75rem', transition: 'color 0.3s' }}>
           {service.name}
         </h3>
-        <p style={{ fontSize: '0.85rem', color: hovered ? 'rgba(255,255,255,0.6)' : '#5c4030', lineHeight: 1.7, flex: 1, marginBottom: '1.5rem', transition: 'color 0.3s' }}>
+        <p style={{ fontSize: '0.85rem', color: hovered ? 'rgba(255,255,255,0.6)' : '#7a6352', lineHeight: 1.7, flex: 1, marginBottom: '1.5rem', transition: 'color 0.3s' }}>
           {service.description}
         </p>
         <Link
@@ -107,8 +107,8 @@ function ServiceCard({ service, index, t }) {
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
-            color: hovered ? '#fff' : '#1f1814', textDecoration: 'none',
-            borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#1f1814'}`,
+            color: hovered ? '#fff' : '#1a1a1a', textDecoration: 'none',
+            borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#1a1a1a'}`,
             paddingBottom: '2px', width: 'fit-content', transition: 'all 0.3s'
           }}
         >

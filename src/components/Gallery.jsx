@@ -18,7 +18,7 @@ export default function Gallery() {
   const [lightbox, setLightbox] = useState(null)
 
   return (
-    <section id="galeria" style={{ background: '#1f1814', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
+    <section id="galeria" style={{ background: '#1a1a1a', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
       <div className="container">
 
         {/* Header */}
@@ -86,7 +86,7 @@ function GalleryItem({ img, i, onClick }) {
       initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       onClick={onClick}
-      style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', background: '#1f1814' }}
+      style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', background: '#1a1a1a' }}
     >
       <img
         src={img.src} alt={img.alt}

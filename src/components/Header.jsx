@@ -130,13 +130,13 @@ export default function Header() {
       to={`/servicios/${service.slug}`}
       onClick={() => setServicesOpen(false)}
       style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '8px 10px', textDecoration: 'none', transition: 'background 0.15s', borderRadius: '2px' }}
-      onMouseEnter={e => { e.currentTarget.style.background = '#f2ebe3' }}
+      onMouseEnter={e => { e.currentTarget.style.background = '#f9f6f1' }}
       onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
     >
       <span style={{ color: '#9ca3af', flexShrink: 0, display: 'flex', lineHeight: 0 }}>
         {serviceIcons[service.id] || serviceIcons[1]}
       </span>
-      <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#1f1814', lineHeight: 1.3 }}>
+      <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#1a1a1a', lineHeight: 1.3 }}>
         {service.name}
       </span>
     </Link>
@@ -145,7 +145,7 @@ export default function Header() {
   return (
     <>
       {/* Topbar */}
-      <div style={{ background: '#1f1814', color: '#fff', fontSize: '0.7rem', letterSpacing: '0.08em', padding: '10px 0' }} className="hidden md:block">
+      <div style={{ background: '#1a1a1a', color: '#fff', fontSize: '0.7rem', letterSpacing: '0.08em', padding: '10px 0' }} className="hidden md:block">
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: '2rem' }}>
             <a href={`tel:${t.topbar.phone.replace(/\s/g, '')}`} style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -168,7 +168,7 @@ export default function Header() {
       {/* Navbar */}
       <motion.header
         initial={{ y: -80 }} animate={{ y: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }}
-        style={{ position: 'sticky', top: 0, zIndex: 50, background: scrolled ? 'rgba(242,235,227,0.97)' : 'var(--cream)', borderBottom: '1px solid var(--warm-200)', backdropFilter: scrolled ? 'blur(12px)' : 'none', transition: 'all 0.3s' }}
+        style={{ position: 'sticky', top: 0, zIndex: 50, background: scrolled ? 'rgba(249,246,241,0.97)' : 'var(--cream)', borderBottom: '1px solid var(--warm-200)', backdropFilter: scrolled ? 'blur(12px)' : 'none', transition: 'all 0.3s' }}
       >
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px', position: 'relative' }}>
 
@@ -186,7 +186,7 @@ export default function Header() {
                 onMouseEnter={() => setServicesOpen(true)}
                 onMouseLeave={() => setServicesOpen(false)}
                 onClick={() => setServicesOpen(o => !o)}
-                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: isActive('/servicios') ? '#1f1814' : '#5c4030', background: 'none', border: 'none', cursor: 'pointer', padding: '0 1rem', height: '70px', borderBottom: isActive('/servicios') ? '1.5px solid #1f1814' : '1.5px solid transparent', transition: 'color 0.2s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: isActive('/servicios') ? '#1a1a1a' : '#7a6352', background: 'none', border: 'none', cursor: 'pointer', padding: '0 1rem', height: '70px', borderBottom: isActive('/servicios') ? '1.5px solid #1a1a1a' : '1.5px solid transparent', transition: 'color 0.2s' }}
                 onFocus={() => setServicesOpen(true)}
               >
                 {lang === 'es' ? 'Servicios' : 'Serveis'}
@@ -202,7 +202,7 @@ export default function Header() {
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.18 }}
                     onMouseEnter={() => setServicesOpen(true)}
                     onMouseLeave={() => setServicesOpen(false)}
-                    style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: '660px', background: '#fff', border: '1.5px solid #d4c2ad', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', zIndex: 100 }}
+                    style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', width: '660px', background: '#fff', border: '1.5px solid #e8d9c8', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', zIndex: 100 }}
                   >
                     <div style={{ display: 'flex' }}>
 
@@ -216,14 +216,14 @@ export default function Header() {
                             style={{
                               width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
                               padding: '11px 16px', background: 'none', border: 'none', cursor: 'pointer',
-                              borderLeft: `2px solid ${activeTab === group.cat ? '#1f1814' : 'transparent'}`,
+                              borderLeft: `2px solid ${activeTab === group.cat ? '#1a1a1a' : 'transparent'}`,
                               transition: 'all 0.15s', textAlign: 'left',
                             }}
                           >
-                            <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: activeTab === group.cat ? '#1f1814' : '#9a7355', lineHeight: 1.3, transition: 'color 0.15s' }}>
+                            <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: activeTab === group.cat ? '#1a1a1a' : '#b89e87', lineHeight: 1.3, transition: 'color 0.15s' }}>
                               {group.label}
                             </span>
-                            <span style={{ marginLeft: 'auto', color: activeTab === group.cat ? '#1f1814' : '#d0d0d0', transition: 'color 0.15s' }}>
+                            <span style={{ marginLeft: 'auto', color: activeTab === group.cat ? '#1a1a1a' : '#d0d0d0', transition: 'color 0.15s' }}>
                               <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
                             </span>
                           </button>
@@ -238,7 +238,7 @@ export default function Header() {
                               <div key={sec.section}>
                                 <div style={{
                                   fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
-                                  color: '#9a7355', background: '#f2ebe3', padding: '8px 12px', marginBottom: '6px',
+                                  color: '#b89e87', background: '#f9f6f1', padding: '8px 12px', marginBottom: '6px',
                                   textAlign: 'center',
                                 }}
                                 >
@@ -260,10 +260,10 @@ export default function Header() {
 
                     {/* Footer */}
                     <div style={{ borderTop: '1px solid #f0f0f0', padding: '0.85rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafafa' }}>
-                      <span style={{ fontSize: '0.65rem', color: '#9a7355', letterSpacing: '0.06em' }}>
+                      <span style={{ fontSize: '0.65rem', color: '#b89e87', letterSpacing: '0.06em' }}>
                         {lang === 'es' ? `${services.length} tratamientos disponibles` : `${services.length} tractaments disponibles`}
                       </span>
-                      <Link to="/servicios" onClick={() => setServicesOpen(false)} style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <Link to="/servicios" onClick={() => setServicesOpen(false)} style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1a1a1a', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px' }}>
                         {lang === 'es' ? 'Ver todos' : 'Veure tots'}
                         <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                       </Link>
@@ -281,9 +281,9 @@ export default function Header() {
               { labelEs: 'Tarjetas Regalo', labelCa: 'Targetes Regal', to: '/tarjetas-regalo' },
             ].map(link => (
               <Link key={link.to} to={link.to}
-                style={{ fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: isActive(link.to) ? '#1f1814' : '#5c4030', textDecoration: 'none', padding: '0 1rem', height: '70px', display: 'flex', alignItems: 'center', borderBottom: isActive(link.to) ? '1.5px solid #1f1814' : '1.5px solid transparent', transition: 'color 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.color = '#1f1814'}
-                onMouseLeave={e => e.currentTarget.style.color = isActive(link.to) ? '#1f1814' : '#5c4030'}
+                style={{ fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: isActive(link.to) ? '#1a1a1a' : '#7a6352', textDecoration: 'none', padding: '0 1rem', height: '70px', display: 'flex', alignItems: 'center', borderBottom: isActive(link.to) ? '1.5px solid #1a1a1a' : '1.5px solid transparent', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#1a1a1a'}
+                onMouseLeave={e => e.currentTarget.style.color = isActive(link.to) ? '#1a1a1a' : '#7a6352'}
               >
                 {lang === 'es' ? link.labelEs : link.labelCa}
               </Link>
@@ -293,9 +293,9 @@ export default function Header() {
           {/* Actions */}
           <div className="hidden lg:flex" style={{ gap: '12px', alignItems: 'center', flexShrink: 0 }}>
             <button onClick={toggleLang}
-              style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#5c4030', background: 'none', border: '1px solid #d4c2ad', padding: '6px 14px', cursor: 'pointer', transition: 'all 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#1f1814'; e.currentTarget.style.color = '#1f1814' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#d4c2ad'; e.currentTarget.style.color = '#5c4030' }}
+              style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7a6352', background: 'none', border: '1px solid #e8d9c8', padding: '6px 14px', cursor: 'pointer', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#1a1a1a'; e.currentTarget.style.color = '#1a1a1a' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#e8d9c8'; e.currentTarget.style.color = '#7a6352' }}
             >{t.nav.lang}</button>
             <Link to="/contacto" className="btn-dark" style={{ padding: '10px 24px', fontSize: '0.7rem' }}>
               {t.nav.cta}
@@ -304,15 +304,15 @@ export default function Header() {
 
           {/* Mobile burger */}
           <div className="flex lg:hidden" style={{ gap: '10px', alignItems: 'center' }}>
-            <button onClick={toggleLang} style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#5c4030', background: 'none', border: '1px solid #d4c2ad', padding: '5px 10px', cursor: 'pointer' }}>
+            <button onClick={toggleLang} style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7a6352', background: 'none', border: '1px solid #e8d9c8', padding: '5px 10px', cursor: 'pointer' }}>
               {t.nav.lang}
             </button>
             <button onClick={() => setMenuOpen(o => !o)}
               style={{ width: '40px', height: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', background: 'none', border: 'none', cursor: 'pointer' }}
               aria-label="Menú">
-              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1f1814' }} animate={menuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.2 }} />
-              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1f1814' }} animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} transition={{ duration: 0.2 }} />
-              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1f1814' }} animate={menuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.2 }} />
+              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1a1a1a' }} animate={menuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.2 }} />
+              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1a1a1a' }} animate={menuOpen ? { opacity: 0 } : { opacity: 1 }} transition={{ duration: 0.2 }} />
+              <motion.span style={{ display: 'block', width: '22px', height: '1.5px', background: '#1a1a1a' }} animate={menuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.2 }} />
             </button>
           </div>
         </div>
@@ -323,10 +323,10 @@ export default function Header() {
             <motion.div
               initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
               className="lg:hidden"
-              style={{ borderTop: '1px solid #d4c2ad', overflow: 'hidden', maxHeight: '80vh', overflowY: 'auto' }}
+              style={{ borderTop: '1px solid #e8d9c8', overflow: 'hidden', maxHeight: '80vh', overflowY: 'auto' }}
             >
               <div className="container" style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-                <Link to="/" style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
+                <Link to="/" style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1a1a1a', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
                   {lang === 'es' ? 'Inicio' : 'Inici'}
                 </Link>
 
@@ -334,7 +334,7 @@ export default function Header() {
                 <div style={{ borderBottom: '1px solid #f0f0f0' }}>
                   <button
                     onClick={() => setMobileServicesOpen(o => !o)}
-                    style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', background: 'none', border: 'none', cursor: 'pointer', padding: '12px 0' }}>
+                    style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1a1a1a', background: 'none', border: 'none', cursor: 'pointer', padding: '12px 0' }}>
                     {lang === 'es' ? 'Servicios' : 'Serveis'}
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ transform: mobileServicesOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -345,20 +345,20 @@ export default function Header() {
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
                         {grouped.map(group => (
                           <div key={group.cat} style={{ marginBottom: '1rem' }}>
-                            <div style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9a7355', padding: '8px 0 4px 12px' }}>{group.label}</div>
+                            <div style={{ fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#b89e87', padding: '8px 0 4px 12px' }}>{group.label}</div>
                             {group.cat === 'facial' ? (
                               groupBySection(group.items, lang, catalogConfig).map((sec) => (
                                 <div key={sec.section} style={{ marginBottom: '0.75rem' }}>
                                   <div style={{
                                     fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase',
-                                    color: '#9a7355', background: '#f2ebe3', padding: '6px 12px', margin: '4px 0 2px',
+                                    color: '#b89e87', background: '#f9f6f1', padding: '6px 12px', margin: '4px 0 2px',
                                   }}
                                   >
                                     {sec.label}
                                   </div>
                                   {sec.items.map((service) => (
                                     <Link key={service.slug} to={`/servicios/${service.slug}`}
-                                      style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#1f1814', fontSize: '0.82rem' }}>
+                                      style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#1a1a1a', fontSize: '0.82rem' }}>
                                       <span style={{ color: '#9ca3af', lineHeight: 0 }}>{serviceIcons[service.id] || serviceIcons[1]}</span>
                                       {service.name}
                                     </Link>
@@ -368,7 +368,7 @@ export default function Header() {
                             ) : (
                               group.items.map(service => (
                                 <Link key={service.id} to={`/servicios/${service.slug}`}
-                                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#1f1814', fontSize: '0.82rem' }}>
+                                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px', textDecoration: 'none', color: '#1a1a1a', fontSize: '0.82rem' }}>
                                   <span style={{ color: '#9ca3af', lineHeight: 0 }}>{serviceIcons[service.id]}</span>
                                   {service.name}
                                 </Link>
@@ -376,7 +376,7 @@ export default function Header() {
                             )}
                           </div>
                         ))}
-                        <Link to="/servicios" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 12px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', textDecoration: 'none', background: '#f2ebe3', marginBottom: '0.5rem' }}>
+                        <Link to="/servicios" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 12px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1a1a1a', textDecoration: 'none', background: '#f9f6f1', marginBottom: '0.5rem' }}>
                           {lang === 'es' ? 'Ver todos los servicios' : 'Veure tots els serveis'} →
                         </Link>
                       </motion.div>
@@ -391,7 +391,7 @@ export default function Header() {
                   { labelEs: 'Tarjetas Regalo', labelCa: 'Targetes Regal', to: '/tarjetas-regalo' },
                 ].map(link => (
                   <Link key={link.to} to={link.to}
-                    style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
+                    style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1a1a1a', textDecoration: 'none', padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
                     {lang === 'es' ? link.labelEs : link.labelCa}
                   </Link>
                 ))}

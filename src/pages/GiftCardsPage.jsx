@@ -162,7 +162,7 @@ export default function GiftCardsPage() {
             {['50€ · 100€ · 200€', 'Sin fecha de caducidad', 'Email instantáneo'].map(t => (
               <span key={t} style={{
                 fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.5)', borderLeft: '2px solid #8b5e3c', paddingLeft: '10px',
+                color: 'rgba(255,255,255,0.5)', borderLeft: '2px solid #c9a882', paddingLeft: '10px',
               }}>{t}</span>
             ))}
           </div>
@@ -178,10 +178,10 @@ export default function GiftCardsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, textAlign: 'center', marginBottom: '8px', color: '#1f1814' }}>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, textAlign: 'center', marginBottom: '8px', color: '#1a1a1a' }}>
               Elige el importe
             </h2>
-            <p style={{ textAlign: 'center', color: '#5c4030', marginBottom: '48px' }}>
+            <p style={{ textAlign: 'center', color: '#7a6352', marginBottom: '48px' }}>
               Todas las tarjetas son válidas para cualquier tratamiento, sin fecha de caducidad.
             </p>
 
@@ -194,9 +194,9 @@ export default function GiftCardsPage() {
                   whileHover={{ y: -4 }}
                   whileTap={{ scale: 0.98 }}
                   style={{
-                    background: selected === amt ? '#1f1814' : 'white',
-                    color: selected === amt ? 'white' : '#1f1814',
-                    border: selected === amt ? '2px solid #1f1814' : '2px solid var(--warm-200)',
+                    background: selected === amt ? '#1a1a1a' : 'white',
+                    color: selected === amt ? 'white' : '#1a1a1a',
+                    border: selected === amt ? '2px solid #1a1a1a' : '2px solid var(--warm-200)',
                     borderRadius: '4px',
                     padding: '36px 28px',
                     cursor: 'pointer',
@@ -220,14 +220,14 @@ export default function GiftCardsPage() {
 
                   <div style={{
                     fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase',
-                    color: selected === amt ? '#8b5e3c' : '#9a7355', marginBottom: '12px',
+                    color: selected === amt ? '#c9a882' : '#b89e87', marginBottom: '12px',
                   }}>
                     Tarjeta Regalo
                   </div>
                   <div style={{
                     fontFamily: 'var(--font-serif)', fontSize: '3rem', fontWeight: 700, lineHeight: 1,
                     marginBottom: '20px',
-                    color: selected === amt ? 'white' : '#1f1814',
+                    color: selected === amt ? 'white' : '#1a1a1a',
                   }}>
                     {amt}€
                   </div>
@@ -237,10 +237,10 @@ export default function GiftCardsPage() {
                       <div key={perk} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                         <div style={{
                           width: '4px', height: '4px', borderRadius: '50%',
-                          background: selected === amt ? '#8b5e3c' : '#9a7355',
+                          background: selected === amt ? '#c9a882' : '#b89e87',
                           flexShrink: 0,
                         }} />
-                        <span style={{ fontSize: '13px', color: selected === amt ? '#ccc' : '#5c4030' }}>
+                        <span style={{ fontSize: '13px', color: selected === amt ? '#ccc' : '#7a6352' }}>
                           {perk}
                         </span>
                       </div>
@@ -265,13 +265,13 @@ export default function GiftCardsPage() {
               }} />
               {/* Tarjeta */}
               <div style={{
-                background: 'linear-gradient(135deg, #1f1814 0%, #2a2a2a 100%)',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%)',
                 padding: '36px', display: 'flex', flexDirection: 'column',
                 justifyContent: 'space-between', position: 'relative', overflow: 'hidden',
               }}>
-                <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', borderRadius: '50%', background: 'rgba(139,94,60,0.08)' }} />
+                <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', borderRadius: '50%', background: 'rgba(201,168,130,0.08)' }} />
                 <div>
-                  <p style={{ color: '#8b5e3c', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '8px' }}>
                     Estetica Segala
                   </p>
                   <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2.8rem', color: 'white', fontWeight: 700, margin: 0, lineHeight: 1 }}>
@@ -282,7 +282,7 @@ export default function GiftCardsPage() {
                   </p>
                 </div>
                 <div style={{ borderTop: '1px solid #333', paddingTop: '16px' }}>
-                  <p style={{ color: '#8b5e3c', fontFamily: 'monospace', fontSize: '14px', letterSpacing: '4px', fontWeight: 700 }}>
+                  <p style={{ color: '#c9a882', fontFamily: 'monospace', fontSize: '14px', letterSpacing: '4px', fontWeight: 700 }}>
                     VS–XXXX–XXXX
                   </p>
                   <p style={{ color: '#555', fontSize: '11px', marginTop: '4px' }}>
@@ -325,7 +325,7 @@ export default function GiftCardsPage() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '8px',
-                color: '#5c4030', fontSize: '14px', marginBottom: '40px',
+                color: '#7a6352', fontSize: '14px', marginBottom: '40px',
                 padding: 0,
               }}
             >
@@ -339,7 +339,7 @@ export default function GiftCardsPage() {
 
               {/* Formulario */}
               <form onSubmit={handleContinueToPayment}>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '32px', color: '#1f1814' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '32px', color: '#1a1a1a' }}>
                   Datos del comprador
                 </h2>
 
@@ -348,11 +348,11 @@ export default function GiftCardsPage() {
                   <input name="buyerName" required value={form.buyerName} onChange={handleChange} placeholder="María García" style={inputStyle} />
                 </div>
                 <div style={{ marginBottom: '32px' }}>
-                  <label style={labelStyle}>Tu email * <span style={{ color: '#9a7355', fontWeight: 400 }}>(recibirás la tarjeta aquí)</span></label>
+                  <label style={labelStyle}>Tu email * <span style={{ color: '#b89e87', fontWeight: 400 }}>(recibirás la tarjeta aquí)</span></label>
                   <input name="buyerEmail" type="email" required value={form.buyerEmail} onChange={handleChange} placeholder="tu@email.com" style={inputStyle} />
                 </div>
 
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 400, marginBottom: '24px', color: '#1f1814', paddingTop: '16px', borderTop: '1px solid var(--warm-200)' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 400, marginBottom: '24px', color: '#1a1a1a', paddingTop: '16px', borderTop: '1px solid var(--warm-200)' }}>
                   Personalizar (opcional)
                 </h2>
 
@@ -388,7 +388,7 @@ export default function GiftCardsPage() {
                   CONTINUAR AL PAGO — {selected}€
                 </motion.button>
 
-                <p style={{ textAlign: 'center', color: '#9a7355', fontSize: '12px', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <p style={{ textAlign: 'center', color: '#b89e87', fontSize: '12px', marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                   <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                   </svg>
@@ -405,13 +405,13 @@ export default function GiftCardsPage() {
                 position: 'sticky',
                 top: '100px',
               }}>
-                <p style={{ fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: '#9a7355', marginBottom: '20px' }}>
+                <p style={{ fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '20px' }}>
                   Resumen
                 </p>
                 <div style={{
-                  background: '#1f1814', borderRadius: '8px', padding: '28px', marginBottom: '24px',
+                  background: '#1a1a1a', borderRadius: '8px', padding: '28px', marginBottom: '24px',
                 }}>
-                  <p style={{ color: '#8b5e3c', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '6px' }}>
                     Tarjeta Regalo
                   </p>
                   <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'white', fontWeight: 700, margin: 0 }}>
@@ -424,10 +424,10 @@ export default function GiftCardsPage() {
 
                 {AMOUNT_PERKS[selected].map(perk => (
                   <div key={perk} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                    <svg width="16" height="16" style={{ flexShrink: 0, color: '#8b5e3c', marginTop: '2px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                    <svg width="16" height="16" style={{ flexShrink: 0, color: '#c9a882', marginTop: '2px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
-                    <span style={{ fontSize: '14px', color: '#5c4030' }}>{perk}</span>
+                    <span style={{ fontSize: '14px', color: '#7a6352' }}>{perk}</span>
                   </div>
                 ))}
 
@@ -440,7 +440,7 @@ export default function GiftCardsPage() {
                   ].map(([text, ok]) => (
                     <div key={text} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
                       <span style={{ color: ok ? '#4caf50' : '#f44336', fontSize: '14px', flexShrink: 0 }}>{ok ? '✓' : '×'}</span>
-                      <span style={{ fontSize: '13px', color: '#5c4030' }}>{text}</span>
+                      <span style={{ fontSize: '13px', color: '#7a6352' }}>{text}</span>
                     </div>
                   ))}
                 </div>
@@ -459,7 +459,7 @@ export default function GiftCardsPage() {
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: '8px',
-                color: '#5c4030', fontSize: '14px', marginBottom: '32px',
+                color: '#7a6352', fontSize: '14px', marginBottom: '32px',
                 padding: 0,
               }}
             >
@@ -471,10 +471,10 @@ export default function GiftCardsPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '40px', alignItems: 'start' }} className="gift-step3-grid">
               <div>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '8px', color: '#1f1814' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.75rem', fontWeight: 400, marginBottom: '8px', color: '#1a1a1a' }}>
                   Completa el pago
                 </h2>
-                <p style={{ color: '#5c4030', marginBottom: '28px', fontSize: '15px' }}>
+                <p style={{ color: '#7a6352', marginBottom: '28px', fontSize: '15px' }}>
                   Tarjeta regalo de {selected}€ · {form.buyerEmail}
                 </p>
 
@@ -507,25 +507,25 @@ export default function GiftCardsPage() {
                 position: 'sticky',
                 top: '100px',
               }}>
-                <p style={{ fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: '#9a7355', marginBottom: '16px' }}>
+                <p style={{ fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '16px' }}>
                   Resumen
                 </p>
                 <div style={{
-                  background: '#1f1814', borderRadius: '8px', padding: '24px', marginBottom: '20px',
+                  background: '#1a1a1a', borderRadius: '8px', padding: '24px', marginBottom: '20px',
                 }}>
-                  <p style={{ color: '#8b5e3c', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '6px' }}>
+                  <p style={{ color: '#c9a882', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '6px' }}>
                     Tarjeta Regalo
                   </p>
                   <p style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: 'white', fontWeight: 700, margin: 0 }}>
                     {selected}€
                   </p>
                 </div>
-                <p style={{ fontSize: '13px', color: '#5c4030', marginBottom: '6px' }}><strong>Comprador:</strong> {form.buyerName}</p>
+                <p style={{ fontSize: '13px', color: '#7a6352', marginBottom: '6px' }}><strong>Comprador:</strong> {form.buyerName}</p>
                 {form.recipientName && (
-                  <p style={{ fontSize: '13px', color: '#5c4030', marginBottom: '6px' }}><strong>Para:</strong> {form.recipientName}</p>
+                  <p style={{ fontSize: '13px', color: '#7a6352', marginBottom: '6px' }}><strong>Para:</strong> {form.recipientName}</p>
                 )}
                 {form.message && (
-                  <p style={{ fontSize: '13px', color: '#5c4030', fontStyle: 'italic', lineHeight: 1.5 }}>"{form.message}"</p>
+                  <p style={{ fontSize: '13px', color: '#7a6352', fontStyle: 'italic', lineHeight: 1.5 }}>"{form.message}"</p>
                 )}
               </div>
             </div>
@@ -558,7 +558,7 @@ export default function GiftCardsPage() {
     }
   }
 `}</style>
-        <p style={{ textAlign: 'center', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', color: '#9a7355', marginBottom: '48px' }}>
+        <p style={{ textAlign: 'center', fontSize: '10px', letterSpacing: '5px', textTransform: 'uppercase', color: '#b89e87', marginBottom: '48px' }}>
           Por qué elegir Estetica Segala
         </p>
         <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', textAlign: 'center' }} className="trust-grid">
@@ -568,12 +568,12 @@ export default function GiftCardsPage() {
                 width: '52px', height: '52px', borderRadius: '50%',
                 background: 'var(--warm-50)', border: '1px solid var(--warm-200)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 16px', color: '#8b5e3c',
+                margin: '0 auto 16px', color: '#c9a882',
               }}>
                 {item.icon}
               </div>
-              <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '6px', color: '#1f1814' }}>{item.title}</h3>
-              <p style={{ fontSize: '13px', color: '#5c4030', lineHeight: 1.6 }}>{item.text}</p>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '6px', color: '#1a1a1a' }}>{item.title}</h3>
+              <p style={{ fontSize: '13px', color: '#7a6352', lineHeight: 1.6 }}>{item.text}</p>
             </div>
           ))}
         </div>
@@ -587,7 +587,7 @@ const labelStyle = {
   fontSize: '12px',
   letterSpacing: '2px',
   textTransform: 'uppercase',
-  color: '#5c4030',
+  color: '#7a6352',
   marginBottom: '8px',
 };
 
@@ -599,7 +599,7 @@ const inputStyle = {
   fontSize: '15px',
   fontFamily: 'var(--font-sans)',
   background: 'white',
-  color: '#1f1814',
+  color: '#1a1a1a',
   outline: 'none',
   boxSizing: 'border-box',
   transition: 'border-color 0.2s',

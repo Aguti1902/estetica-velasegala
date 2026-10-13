@@ -61,7 +61,7 @@ function ServiceCard({ service, index, lang, bookLabel }) {
     <motion.div
       initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }} transition={{ delay: index * 0.08 }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: hovered ? 'var(--cream)' : '#fff', border: '1px solid var(--warm-200)', borderRadius: '4px', transition: 'all 0.3s', transform: hovered ? 'translateY(-4px)' : 'translateY(0)', boxShadow: hovered ? '0 16px 40px rgba(139,94,60,0.18)' : '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+      style={{ background: hovered ? 'var(--cream)' : '#fff', border: '1px solid var(--warm-200)', borderRadius: '4px', transition: 'all 0.3s', transform: hovered ? 'translateY(-4px)' : 'translateY(0)', boxShadow: hovered ? '0 16px 40px rgba(201,168,130,0.18)' : '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
       <Link to={`/servicios/${service.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
 
         {/* Imagen */}

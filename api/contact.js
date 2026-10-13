@@ -74,44 +74,44 @@ export default async function handler(req, res) {
 <!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"></head>
-<body style="font-family: Georgia, serif; background: #f2ebe3; margin: 0; padding: 40px 20px;">
+<body style="font-family: Georgia, serif; background: #f9f6f1; margin: 0; padding: 40px 20px;">
   <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.08);">
-    <div style="background: #1f1814; color: white; padding: 32px 40px; text-align: center;">
+    <div style="background: #1a1a1a; color: white; padding: 32px 40px; text-align: center;">
       <h1 style="font-size: 22px; letter-spacing: 4px; text-transform: uppercase; margin: 0 0 6px; font-weight: 300;">Nuevo mensaje web</h1>
-      <p style="color: #8b5e3c; letter-spacing: 2px; font-size: 12px; margin: 0;">Vela Segalà · Viladecans</p>
+      <p style="color: #c9a882; letter-spacing: 2px; font-size: 12px; margin: 0;">Vela Segalà · Viladecans</p>
     </div>
     <div style="padding: 40px;">
-      <p style="color: #5c4030; font-size: 15px; line-height: 1.7; margin: 0 0 28px;">
+      <p style="color: #7a6352; font-size: 15px; line-height: 1.7; margin: 0 0 28px;">
         Has recibido un nuevo mensaje desde el formulario de contacto de <strong>esteticavelasegala.com</strong>.
       </p>
-      <table style="width: 100%; border-collapse: collapse; font-size: 15px; color: #1f1814;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 15px; color: #1a1a1a;">
         <tr>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad; color: #9a7355; width: 140px; vertical-align: top;">Nombre</td>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad;"><strong>${safeName}</strong></td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8; color: #b89e87; width: 140px; vertical-align: top;">Nombre</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8;"><strong>${safeName}</strong></td>
         </tr>
         <tr>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad; color: #9a7355; vertical-align: top;">Email</td>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad;"><a href="mailto:${safeEmail}" style="color: #1f1814;">${safeEmail}</a></td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8; color: #b89e87; vertical-align: top;">Email</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8;"><a href="mailto:${safeEmail}" style="color: #1a1a1a;">${safeEmail}</a></td>
         </tr>
         <tr>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad; color: #9a7355; vertical-align: top;">Teléfono</td>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad;">${safePhone}</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8; color: #b89e87; vertical-align: top;">Teléfono</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8;">${safePhone}</td>
         </tr>
         <tr>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad; color: #9a7355; vertical-align: top;">Servicio</td>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad;">${safeService}</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8; color: #b89e87; vertical-align: top;">Servicio</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8;">${safeService}</td>
         </tr>
         <tr>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad; color: #9a7355; vertical-align: top;">Clínica</td>
-          <td style="padding: 12px 0; border-bottom: 1px solid #d4c2ad;">${safeClinic}</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8; color: #b89e87; vertical-align: top;">Clínica</td>
+          <td style="padding: 12px 0; border-bottom: 1px solid #e8d9c8;">${safeClinic}</td>
         </tr>
         <tr>
-          <td style="padding: 12px 0; color: #9a7355; vertical-align: top;">Mensaje</td>
+          <td style="padding: 12px 0; color: #b89e87; vertical-align: top;">Mensaje</td>
           <td style="padding: 12px 0; line-height: 1.6;">${safeMessage}</td>
         </tr>
       </table>
     </div>
-    <div style="background: #f2ebe3; padding: 20px 40px; text-align: center; font-size: 12px; color: #9a7355;">
+    <div style="background: #f9f6f1; padding: 20px 40px; text-align: center; font-size: 12px; color: #b89e87;">
       Responde directamente a este email para contactar con el cliente.
     </div>
   </div>

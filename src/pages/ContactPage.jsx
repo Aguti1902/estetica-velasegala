@@ -53,15 +53,15 @@ export default function ContactPage() {
   }
 
   const inputStyle = (err) => ({
-    width: '100%', padding: '12px 14px', fontSize: '0.875rem', color: '#1f1814',
-    background: '#fff', border: `1.5px solid ${err ? '#e53e3e' : '#d4c2ad'}`,
+    width: '100%', padding: '12px 14px', fontSize: '0.875rem', color: '#1a1a1a',
+    background: '#fff', border: `1.5px solid ${err ? '#e53e3e' : '#e8d9c8'}`,
     outline: 'none', transition: 'border-color 0.2s', fontFamily: 'var(--font-sans)',
   })
 
   return (
     <>
       {/* Page Hero */}
-      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <div style={{ background: '#1a1a1a', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
             — {t.contact.badge}
@@ -73,44 +73,44 @@ export default function ContactPage() {
       </div>
 
       {/* Contenido */}
-      <section style={{ background: '#f2ebe3', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <section style={{ background: '#f9f6f1', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2px', background: '#d4c2ad' }} className="contact-page-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '2px', background: '#e8d9c8' }} className="contact-page-grid">
 
             {/* Formulario */}
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
               style={{ background: '#fff', padding: 'clamp(2rem, 4vw, 3rem)' }}>
               {submitted ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', textAlign: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', background: '#1f1814', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ width: '48px', height: '48px', background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                     <svg width="22" height="22" fill="none" stroke="#fff" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', fontWeight: 400, color: '#1f1814', marginBottom: '0.5rem' }}>{f.successMsg}</h3>
-                  <p style={{ fontSize: '0.875rem', color: '#5c4030' }}>{lang === 'es' ? 'Te contactaremos en menos de 24h.' : 'Et contactarem en menys de 24h.'}</p>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', fontWeight: 400, color: '#1a1a1a', marginBottom: '0.5rem' }}>{f.successMsg}</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#7a6352' }}>{lang === 'es' ? 'Te contactaremos en menos de 24h.' : 'Et contactarem en menys de 24h.'}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} noValidate>
-                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '0.5rem' }}>
+                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1a1a1a', marginBottom: '0.5rem' }}>
                     {lang === 'es' ? 'Escríbenos' : 'Escriu-nos'}
                   </h2>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }} className="form-row-cp">
                     <Field label={f.name} required>
                       <input type="text" value={form.name} onChange={e => handleChange('name', e.target.value)} style={inputStyle(errors.name)} placeholder="Maria García"
-                        onFocus={e => e.target.style.borderColor = '#1f1814'} onBlur={e => e.target.style.borderColor = errors.name ? '#e53e3e' : '#d4c2ad'} />
+                        onFocus={e => e.target.style.borderColor = '#1a1a1a'} onBlur={e => e.target.style.borderColor = errors.name ? '#e53e3e' : '#e8d9c8'} />
                     </Field>
                     <Field label={f.email} required>
                       <input type="email" value={form.email} onChange={e => handleChange('email', e.target.value)} style={inputStyle(errors.email)} placeholder="maria@email.com"
-                        onFocus={e => e.target.style.borderColor = '#1f1814'} onBlur={e => e.target.style.borderColor = errors.email ? '#e53e3e' : '#d4c2ad'} />
+                        onFocus={e => e.target.style.borderColor = '#1a1a1a'} onBlur={e => e.target.style.borderColor = errors.email ? '#e53e3e' : '#e8d9c8'} />
                     </Field>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }} className="form-row-cp">
                     <Field label={f.phone}>
                       <input type="tel" value={form.phone} onChange={e => handleChange('phone', e.target.value)} style={inputStyle(false)} placeholder="600 000 000"
-                        onFocus={e => e.target.style.borderColor = '#1f1814'} onBlur={e => e.target.style.borderColor = '#d4c2ad'} />
+                        onFocus={e => e.target.style.borderColor = '#1a1a1a'} onBlur={e => e.target.style.borderColor = '#e8d9c8'} />
                     </Field>
                     <Field label={f.service}>
                       <select value={form.service} onChange={e => handleChange('service', e.target.value)} style={{ ...inputStyle(false), background: '#fff' }}
-                        onFocus={e => e.target.style.borderColor = '#1f1814'} onBlur={e => e.target.style.borderColor = '#d4c2ad'}>
+                        onFocus={e => e.target.style.borderColor = '#1a1a1a'} onBlur={e => e.target.style.borderColor = '#e8d9c8'}>
                         <option value="">{f.servicePlaceholder}</option>
                         {services.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
                       </select>
@@ -119,14 +119,14 @@ export default function ContactPage() {
                   </div>
                   <Field label={f.message}>
                     <textarea rows={5} value={form.message} onChange={e => handleChange('message', e.target.value)} style={{ ...inputStyle(false), resize: 'none' }} placeholder={f.messagePlaceholder}
-                      onFocus={e => e.target.style.borderColor = '#1f1814'} onBlur={e => e.target.style.borderColor = '#d4c2ad'} />
+                      onFocus={e => e.target.style.borderColor = '#1a1a1a'} onBlur={e => e.target.style.borderColor = '#e8d9c8'} />
                   </Field>
                   <div onClick={() => handleChange('privacy', !form.privacy)} style={{ display: 'flex', gap: '12px', cursor: 'pointer', alignItems: 'flex-start' }}>
-                    <div style={{ width: '18px', height: '18px', border: `1.5px solid ${form.privacy ? '#1f1814' : errors.privacy ? '#e53e3e' : '#d0d0d0'}`, background: form.privacy ? '#1f1814' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px', transition: 'all 0.15s' }}>
+                    <div style={{ width: '18px', height: '18px', border: `1.5px solid ${form.privacy ? '#1a1a1a' : errors.privacy ? '#e53e3e' : '#d0d0d0'}`, background: form.privacy ? '#1a1a1a' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px', transition: 'all 0.15s' }}>
                       {form.privacy && <svg width="10" height="10" fill="none" stroke="#fff" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                     </div>
-                    <span style={{ fontSize: '0.8rem', color: '#5c4030', lineHeight: 1.5, userSelect: 'none' }}>
-                      {f.privacy}{' '}<a href="#" onClick={e => e.stopPropagation()} style={{ color: '#1f1814', fontWeight: 600 }}>{f.privacyLink}</a>
+                    <span style={{ fontSize: '0.8rem', color: '#7a6352', lineHeight: 1.5, userSelect: 'none' }}>
+                      {f.privacy}{' '}<a href="#" onClick={e => e.stopPropagation()} style={{ color: '#1a1a1a', fontWeight: 600 }}>{f.privacyLink}</a>
                     </span>
                   </div>
                   {submitError && (
@@ -143,7 +143,7 @@ export default function ContactPage() {
             {/* Info — Viladecans */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}
               style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <div style={{ background: '#1f1814', padding: '1.75rem' }}>
+              <div style={{ background: '#1a1a1a', padding: '1.75rem' }}>
                 <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '1.25rem' }}>
                   Estetica Segala — Viladecans
                 </div>
@@ -192,8 +192,8 @@ export default function ContactPage() {
 function Field({ label, children, required }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-      <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#5c4030' }}>
-        {label}{required && <span style={{ color: '#1f1814', marginLeft: '3px' }}>*</span>}
+      <label style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7a6352' }}>
+        {label}{required && <span style={{ color: '#1a1a1a', marginLeft: '3px' }}>*</span>}
       </label>
       {children}
     </div>

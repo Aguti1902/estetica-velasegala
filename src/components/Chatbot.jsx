@@ -207,12 +207,12 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.22 }}
-            style={{ position: 'absolute', bottom: '64px', right: 0, width: 'min(360px, calc(100vw - 2rem))', background: '#fff', border: '1.5px solid #d4c2ad', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', maxHeight: 'min(520px, calc(100vh - 11rem))' }}
+            style={{ position: 'absolute', bottom: '64px', right: 0, width: 'min(360px, calc(100vw - 2rem))', background: '#fff', border: '1.5px solid #e8d9c8', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', maxHeight: 'min(520px, calc(100vh - 11rem))' }}
           >
             {/* Header */}
-            <div style={{ background: '#1f1814', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+            <div style={{ background: '#1a1a1a', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
               <div style={{ width: '32px', height: '32px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="16" height="16" fill="none" stroke="#1f1814" viewBox="0 0 24 24" strokeWidth="1.8">
+                <svg width="16" height="16" fill="none" stroke="#1a1a1a" viewBox="0 0 24 24" strokeWidth="1.8">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
               </div>
@@ -236,8 +236,8 @@ export default function Chatbot() {
                     <div style={{
                       maxWidth: '85%',
                       padding: msg.from === 'user' ? '8px 12px' : '10px 14px',
-                      background: msg.from === 'user' ? '#1f1814' : '#f2ebe3',
-                      color: msg.from === 'user' ? '#fff' : '#1f1814',
+                      background: msg.from === 'user' ? '#1a1a1a' : '#f9f6f1',
+                      color: msg.from === 'user' ? '#fff' : '#1a1a1a',
                       fontSize: '0.82rem',
                       lineHeight: 1.6,
                       whiteSpace: 'pre-line',
@@ -253,9 +253,9 @@ export default function Chatbot() {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
                       {msg.suggestions.map((s, i) => (
                         <button key={i} onClick={() => sendMessage(s)}
-                          style={{ fontSize: '0.72rem', padding: '5px 10px', background: '#fff', border: '1px solid #d4c2ad', color: '#1f1814', cursor: 'pointer', transition: 'all 0.15s' }}
-                          onMouseEnter={e => { e.currentTarget.style.background = '#1f1814'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#1f1814' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#1f1814'; e.currentTarget.style.borderColor = '#d4c2ad' }}
+                          style={{ fontSize: '0.72rem', padding: '5px 10px', background: '#fff', border: '1px solid #e8d9c8', color: '#1a1a1a', cursor: 'pointer', transition: 'all 0.15s' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = '#1a1a1a' }}
+                          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#1a1a1a'; e.currentTarget.style.borderColor = '#e8d9c8' }}
                         >{s}</button>
                       ))}
                     </div>
@@ -265,7 +265,7 @@ export default function Chatbot() {
                   {msg.link && (
                     <div style={{ marginTop: '8px' }}>
                       <Link to={msg.link.to} onClick={() => setOpen(false)}
-                        style={{ fontSize: '0.72rem', fontWeight: 700, color: '#1f1814', textDecoration: 'none', borderBottom: '1px solid #1f1814', paddingBottom: '1px' }}>
+                        style={{ fontSize: '0.72rem', fontWeight: 700, color: '#1a1a1a', textDecoration: 'none', borderBottom: '1px solid #1a1a1a', paddingBottom: '1px' }}>
                         {msg.link.label}
                       </Link>
                     </div>
@@ -276,13 +276,13 @@ export default function Chatbot() {
                     <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {grouped.map(group => (
                         <div key={group.cat}>
-                          <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#9a7355', marginBottom: '4px' }}>{group.label}</div>
+                          <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#b89e87', marginBottom: '4px' }}>{group.label}</div>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                             {group.items.map(s => (
                               <button key={s.id} onClick={() => sendMessage(s.name)}
-                                style={{ fontSize: '0.7rem', padding: '4px 8px', background: '#f2ebe3', border: '1px solid #d4c2ad', color: '#1f1814', cursor: 'pointer', transition: 'all 0.15s' }}
-                                onMouseEnter={e => { e.currentTarget.style.background = '#1f1814'; e.currentTarget.style.color = '#fff' }}
-                                onMouseLeave={e => { e.currentTarget.style.background = '#f2ebe3'; e.currentTarget.style.color = '#1f1814' }}
+                                style={{ fontSize: '0.7rem', padding: '4px 8px', background: '#f9f6f1', border: '1px solid #e8d9c8', color: '#1a1a1a', cursor: 'pointer', transition: 'all 0.15s' }}
+                                onMouseEnter={e => { e.currentTarget.style.background = '#1a1a1a'; e.currentTarget.style.color = '#fff' }}
+                                onMouseLeave={e => { e.currentTarget.style.background = '#f9f6f1'; e.currentTarget.style.color = '#1a1a1a' }}
                               >{s.name}</button>
                             ))}
                           </div>
@@ -295,9 +295,9 @@ export default function Chatbot() {
 
               {/* Typing indicator */}
               {typing && (
-                <div style={{ display: 'flex', gap: '5px', padding: '10px 14px', background: '#f2ebe3', width: 'fit-content' }}>
+                <div style={{ display: 'flex', gap: '5px', padding: '10px 14px', background: '#f9f6f1', width: 'fit-content' }}>
                   {[0, 1, 2].map(i => (
-                    <span key={i} style={{ width: '6px', height: '6px', background: '#9a7355', borderRadius: '50%', display: 'inline-block', animation: `bounce 1s ${i * 0.15}s infinite` }} />
+                    <span key={i} style={{ width: '6px', height: '6px', background: '#b89e87', borderRadius: '50%', display: 'inline-block', animation: `bounce 1s ${i * 0.15}s infinite` }} />
                   ))}
                 </div>
               )}
@@ -306,19 +306,19 @@ export default function Chatbot() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} style={{ padding: '0.75rem', borderTop: '1.5px solid #d4c2ad', display: 'flex', gap: '8px', flexShrink: 0 }}>
+            <form onSubmit={handleSubmit} style={{ padding: '0.75rem', borderTop: '1.5px solid #e8d9c8', display: 'flex', gap: '8px', flexShrink: 0 }}>
               <input
                 ref={inputRef}
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder={es ? 'Escribe tu consulta...' : 'Escriu la teva consulta...'}
-                style={{ flex: 1, padding: '9px 12px', fontSize: '0.82rem', border: '1.5px solid #d4c2ad', outline: 'none', fontFamily: 'var(--font-sans)', color: '#1f1814', background: '#fff' }}
-                onFocus={e => e.target.style.borderColor = '#1f1814'}
-                onBlur={e => e.target.style.borderColor = '#d4c2ad'}
+                style={{ flex: 1, padding: '9px 12px', fontSize: '0.82rem', border: '1.5px solid #e8d9c8', outline: 'none', fontFamily: 'var(--font-sans)', color: '#1a1a1a', background: '#fff' }}
+                onFocus={e => e.target.style.borderColor = '#1a1a1a'}
+                onBlur={e => e.target.style.borderColor = '#e8d9c8'}
               />
               <button type="submit" disabled={!input.trim()}
-                style={{ width: '38px', height: '38px', background: input.trim() ? '#1f1814' : '#d4c2ad', border: 'none', cursor: input.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}>
-                <svg width="16" height="16" fill="none" stroke={input.trim() ? '#fff' : '#9a7355'} viewBox="0 0 24 24">
+                style={{ width: '38px', height: '38px', background: input.trim() ? '#1a1a1a' : '#e8d9c8', border: 'none', cursor: input.trim() ? 'pointer' : 'default', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}>
+                <svg width="16" height="16" fill="none" stroke={input.trim() ? '#fff' : '#b89e87'} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                 </svg>
               </button>
@@ -338,7 +338,7 @@ export default function Chatbot() {
           minWidth: '52px',
           minHeight: '52px',
           borderRadius: '50%',
-          background: '#1f1814',
+          background: '#1a1a1a',
           border: 'none',
           cursor: 'pointer',
           boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
