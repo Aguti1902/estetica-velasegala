@@ -24,6 +24,7 @@ const AdminShell = lazy(() => import('./admin/AdminShell'))
 const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage'))
 const AdminServicesPage = lazy(() => import('./pages/admin/AdminServicesPage'))
 const AdminOrganizacionPage = lazy(() => import('./pages/admin/AdminOrganizacionPage'))
+const AdminCalendarPage = lazy(() => import('./pages/admin/AdminCalendarPage'))
 const AdminContactPage = lazy(() => import('./pages/admin/AdminContactPage'))
 const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 
@@ -80,6 +81,7 @@ export default function App() {
             {/* Admin fuera del Layout normal (sin header/footer) */}
             <Route path="admin" element={<AdminShell />}>
               <Route index element={<AdminDashboardPage />} />
+              <Route path="calendario" element={<AdminCalendarPage />} />
               <Route path="tratamientos" element={<AdminServicesPage />} />
               <Route path="organizacion" element={<AdminOrganizacionPage />} />
               <Route path="contacto" element={<AdminContactPage />} />
