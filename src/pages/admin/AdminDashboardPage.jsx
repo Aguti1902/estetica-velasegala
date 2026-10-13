@@ -8,6 +8,11 @@ const cards = [
     desc: 'Citas de Natalia, L–V. Añade clientas y marca si vienen de WhatsApp, teléfono u otro canal.',
   },
   {
+    to: '/admin/clientas',
+    title: 'Clientas',
+    desc: 'Ficha de cada clienta: tratamientos, gasto total y cada cuánto viene.',
+  },
+  {
     to: '/admin/tratamientos',
     title: 'Tratamientos',
     desc: 'Edita textos, precios, fotos, categoría y grupo de cada servicio (español y catalán).',

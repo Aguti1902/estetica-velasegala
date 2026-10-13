@@ -26,11 +26,13 @@ function emptyForm(defaults = {}) {
   const start = defaults.startTime || '10:00'
   return {
     id: defaults.id || null,
+    client_id: defaults.client_id || null,
     client_name: defaults.client_name || '',
     client_phone: defaults.client_phone || '',
     client_email: defaults.client_email || '',
     service_name: defaults.service_name || '',
     service_slug: defaults.service_slug || '',
+    amount: defaults.amount ?? '',
     dateKey,
     startTime: start,
     endTime: defaults.endTime || addMinutes(combineDateAndTime(dateKey, start), 60).toTimeString().slice(0, 5),
@@ -38,6 +40,7 @@ function emptyForm(defaults = {}) {
     channel: defaults.channel || 'whatsapp',
     notes: defaults.notes || '',
     employee: defaults.employee || CLINIC.employee,
+    clientMode: defaults.client_id ? 'existing' : 'search', // search | existing | new
   }
 }
 
@@ -64,6 +67,9 @@ export default function AdminCalendarPage() {
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState('')
   const [error, setError] = useState('')
+  const [clientQuery, setClientQuery] = useState('')
+  const [clientResults, setClientResults] = useState([])
+  const [searchingClients, setSearchingClients] = useState(false)
 
   const showToast = (msg) => {
     setToast(msg)
@@ -105,6 +111,28 @@ export default function AdminCalendarPage() {
 
   useEffect(() => { load() }, [load])
 
+  useEffect(() => {
+    if (!modal || modal.clientMode === 'existing') return
+    if (!clientQuery.trim() || clientQuery.trim().length < 2) {
+      setClientResults([])
+      return
+    }
+    let cancelled = false
+    setSearchingClients(true)
+    const t = setTimeout(async () => {
+      try {
+        const res = await adminFetch(`/api/admin/clients?search=${encodeURIComponent(clientQuery.trim())}&limit=8`, pwd)
+        if (!cancelled && res.ok) {
+          const data = await res.json()
+          setClientResults(Array.isArray(data) ? data.filter((c) => c.status !== 'archived') : [])
+        }
+      } finally {
+        if (!cancelled) setSearchingClients(false)
+      }
+    }, 280)
+    return () => { cancelled = true; clearTimeout(t) }
+  }, [clientQuery, modal, pwd])
+
   const slots = useMemo(() => daySlots(), [])
 
   const goToday = () => {
@@ -125,6 +153,8 @@ export default function AdminCalendarPage() {
 
   const openNew = (dateKey, startTime) => {
     setError('')
+    setClientQuery('')
+    setClientResults([])
     setModal(emptyForm({ dateKey, startTime }))
   }
 
@@ -132,13 +162,17 @@ export default function AdminCalendarPage() {
     const start = new Date(appt.starts_at)
     const end = new Date(appt.ends_at)
     setError('')
+    setClientQuery('')
+    setClientResults([])
     setModal(emptyForm({
       id: appt.id,
+      client_id: appt.client_id || null,
       client_name: appt.client_name,
       client_phone: appt.client_phone || '',
       client_email: appt.client_email || '',
       service_name: appt.service_name || '',
       service_slug: appt.service_slug || '',
+      amount: appt.amount ?? '',
       dateKey: toDateKey(start),
       startTime: formatTime(start),
       endTime: formatTime(end),
@@ -149,9 +183,34 @@ export default function AdminCalendarPage() {
     }))
   }
 
+  const pickClient = (c) => {
+    setModal((m) => ({
+      ...m,
+      client_id: c.id,
+      client_name: c.name,
+      client_phone: c.phone || '',
+      client_email: c.email || '',
+      clientMode: 'existing',
+    }))
+    setClientQuery('')
+    setClientResults([])
+  }
+
+  const clearClient = () => {
+    setModal((m) => ({
+      ...m,
+      client_id: null,
+      client_name: '',
+      client_phone: '',
+      client_email: '',
+      clientMode: 'search',
+    }))
+    setClientQuery('')
+  }
+
   const saveModal = async () => {
     if (!modal?.client_name?.trim()) {
-      setError('Indica el nombre de la clienta')
+      setError('Busca una clienta o crea una nueva')
       return
     }
     setSaving(true)
@@ -159,12 +218,16 @@ export default function AdminCalendarPage() {
     try {
       const starts = combineDateAndTime(modal.dateKey, modal.startTime)
       const ends = combineDateAndTime(modal.dateKey, modal.endTime)
+      const amountNum = modal.amount === '' || modal.amount == null ? 0 : Number(modal.amount)
       const payload = {
+        client_id: modal.client_id || undefined,
+        create_client: !modal.client_id,
         client_name: modal.client_name.trim(),
         client_phone: modal.client_phone,
         client_email: modal.client_email,
         service_name: modal.service_name,
         service_slug: modal.service_slug,
+        amount: Number.isFinite(amountNum) ? amountNum : 0,
         starts_at: starts.toISOString(),
         ends_at: ends.toISOString(),
         status: modal.status,
@@ -430,16 +493,118 @@ export default function AdminCalendarPage() {
             <div style={{ marginBottom: 12, padding: 10, background: '#fef2f2', color: '#991b1b', borderRadius: 4, fontSize: 13 }}>{error}</div>
           )}
 
-          <Field label="Nombre de la clienta *">
-            <input value={modal.client_name} onChange={(e) => setModal({ ...modal, client_name: e.target.value })} style={inputStyle} placeholder="Nombre y apellidos" />
-          </Field>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-            <Field label="Teléfono">
-              <input value={modal.client_phone} onChange={(e) => setModal({ ...modal, client_phone: e.target.value })} style={inputStyle} placeholder="600 000 000" />
-            </Field>
-            <Field label="Email">
-              <input type="email" value={modal.client_email} onChange={(e) => setModal({ ...modal, client_email: e.target.value })} style={inputStyle} />
-            </Field>
+          <div style={{ marginBottom: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontSize: 12, color: th.textMuted }}>Clienta *</span>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  type="button"
+                  onClick={() => { setModal({ ...modal, clientMode: 'search' }); setClientQuery('') }}
+                  style={{ ...chipBtn, background: modal.clientMode !== 'new' ? th.text : '#fff', color: modal.clientMode !== 'new' ? '#fff' : th.text }}
+                >
+                  Buscar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModal({
+                    ...modal, clientMode: 'new', client_id: null,
+                    client_name: '', client_phone: '', client_email: '',
+                  })}
+                  style={{ ...chipBtn, background: modal.clientMode === 'new' ? th.text : '#fff', color: modal.clientMode === 'new' ? '#fff' : th.text }}
+                >
+                  Nueva
+                </button>
+              </div>
+            </div>
+
+            {modal.clientMode === 'existing' && modal.client_id ? (
+              <div style={{
+                padding: 14, background: th.subtleBg, borderRadius: 8, border: `1px solid ${th.border}`,
+                display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start',
+              }}
+              >
+                <div>
+                  <strong style={{ fontSize: 15 }}>{modal.client_name}</strong>
+                  <div style={{ fontSize: 12, color: th.textMuted, marginTop: 4 }}>
+                    {modal.client_phone || 'Sin teléfono'}
+                    {modal.client_email ? ` · ${modal.client_email}` : ''}
+                  </div>
+                </div>
+                <button type="button" onClick={clearClient} style={{ ...chipBtn, color: '#dc2626' }}>Quitar</button>
+              </div>
+            ) : modal.clientMode === 'new' ? (
+              <>
+                <Field label="Nombre *">
+                  <input value={modal.client_name} onChange={(e) => setModal({ ...modal, client_name: e.target.value })} style={inputStyle} placeholder="Nombre y apellidos" />
+                </Field>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <Field label="Teléfono">
+                    <input value={modal.client_phone} onChange={(e) => setModal({ ...modal, client_phone: e.target.value })} style={inputStyle} />
+                  </Field>
+                  <Field label="Email">
+                    <input type="email" value={modal.client_email} onChange={(e) => setModal({ ...modal, client_email: e.target.value })} style={inputStyle} />
+                  </Field>
+                </div>
+                <p style={{ margin: '0 0 8px', fontSize: 12, color: th.textMuted }}>
+                  Se guardará en Clientas al crear la cita.
+                </p>
+              </>
+            ) : (
+              <div style={{ position: 'relative' }}>
+                <input
+                  value={clientQuery}
+                  onChange={(e) => setClientQuery(e.target.value)}
+                  style={inputStyle}
+                  placeholder="Escribe nombre o teléfono para buscar…"
+                  autoFocus
+                />
+                {searchingClients && (
+                  <p style={{ fontSize: 12, color: th.textMuted, margin: '6px 0 0' }}>Buscando…</p>
+                )}
+                {clientResults.length > 0 && (
+                  <ul style={{
+                    listStyle: 'none', margin: '8px 0 0', padding: 0, border: `1px solid ${th.border}`,
+                    borderRadius: 6, maxHeight: 200, overflow: 'auto',
+                  }}
+                  >
+                    {clientResults.map((c) => (
+                      <li key={c.id}>
+                        <button
+                          type="button"
+                          onClick={() => pickClient(c)}
+                          style={{
+                            width: '100%', textAlign: 'left', padding: '10px 12px', border: 'none',
+                            borderBottom: `1px solid ${th.border}`, background: '#fff', cursor: 'pointer',
+                          }}
+                        >
+                          <strong style={{ fontSize: 14 }}>{c.name}</strong>
+                          <div style={{ fontSize: 12, color: th.textMuted }}>
+                            {c.phone || 'Sin teléfono'}
+                            {c.stats?.visitCount != null ? ` · ${c.stats.visitCount} visitas` : ''}
+                            {c.stats?.totalSpent != null ? ` · ${Number(c.stats.totalSpent).toFixed(0)}€` : ''}
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {clientQuery.trim().length >= 2 && !searchingClients && clientResults.length === 0 && (
+                  <p style={{ fontSize: 13, color: th.textMuted, margin: '8px 0 0' }}>
+                    No hay resultados.{' '}
+                    <button
+                      type="button"
+                      onClick={() => setModal({
+                        ...modal, clientMode: 'new', client_id: null,
+                        client_name: clientQuery.trim(), client_phone: '', client_email: '',
+                      })}
+                      style={{ background: 'none', border: 'none', color: th.text, textDecoration: 'underline', cursor: 'pointer', padding: 0, fontSize: 13 }}
+                    >
+                      Crear «{clientQuery.trim()}» como nueva
+                    </button>
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <Field label="Tratamiento / servicio">
@@ -448,17 +613,19 @@ export default function AdminCalendarPage() {
               onChange={(e) => {
                 const slug = e.target.value
                 const svc = services.find((s) => s.slug === slug)
+                const priceGuess = svc?.price ? String(svc.price).replace(/[^\d.,]/g, '').replace(',', '.') : ''
                 setModal({
                   ...modal,
                   service_slug: slug,
                   service_name: svc?.name || '',
+                  amount: modal.amount || (priceGuess && !Number.isNaN(Number(priceGuess)) ? priceGuess : modal.amount),
                 })
               }}
               style={inputStyle}
             >
               <option value="">— Elegir tratamiento —</option>
               {services.map((s) => (
-                <option key={s.slug} value={s.slug}>{s.name}</option>
+                <option key={s.slug} value={s.slug}>{s.name}{s.price ? ` (${s.price})` : ''}</option>
               ))}
             </select>
             {!modal.service_slug && (
@@ -469,6 +636,18 @@ export default function AdminCalendarPage() {
                 placeholder="O escribe el servicio a mano"
               />
             )}
+          </Field>
+
+          <Field label="Importe (€) — para el historial de gasto">
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={modal.amount}
+              onChange={(e) => setModal({ ...modal, amount: e.target.value })}
+              style={inputStyle}
+              placeholder="0"
+            />
           </Field>
 
           <Field label="Empleada">
@@ -602,4 +781,8 @@ const btnGhost = {
 }
 const btnIcon = {
   ...btnGhost, width: 36, padding: '8px 0', fontSize: 18, lineHeight: 1,
+}
+const chipBtn = {
+  padding: '5px 10px', border: `1px solid ${th.border}`, borderRadius: 999,
+  cursor: 'pointer', fontSize: 11, background: '#fff',
 }

@@ -6,6 +6,7 @@ import { adminTheme as t, adminNavLink } from './adminTheme'
 const NAV = [
   { to: '/admin', label: 'Inicio', end: true },
   { to: '/admin/calendario', label: 'Agenda' },
+  { to: '/admin/clientas', label: 'Clientas' },
   { to: '/admin/tratamientos', label: 'Tratamientos' },
   { to: '/admin/organizacion', label: 'Organización' },
   { to: '/admin/contacto', label: 'Contacto' },

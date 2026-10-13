@@ -25,6 +25,7 @@ const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage')
 const AdminServicesPage = lazy(() => import('./pages/admin/AdminServicesPage'))
 const AdminOrganizacionPage = lazy(() => import('./pages/admin/AdminOrganizacionPage'))
 const AdminCalendarPage = lazy(() => import('./pages/admin/AdminCalendarPage'))
+const AdminClientsPage = lazy(() => import('./pages/admin/AdminClientsPage'))
 const AdminContactPage = lazy(() => import('./pages/admin/AdminContactPage'))
 const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 
@@ -82,6 +83,7 @@ export default function App() {
             <Route path="admin" element={<AdminShell />}>
               <Route index element={<AdminDashboardPage />} />
               <Route path="calendario" element={<AdminCalendarPage />} />
+              <Route path="clientas" element={<AdminClientsPage />} />
               <Route path="tratamientos" element={<AdminServicesPage />} />
               <Route path="organizacion" element={<AdminOrganizacionPage />} />
               <Route path="contacto" element={<AdminContactPage />} />
