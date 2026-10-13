@@ -50,7 +50,7 @@ export default function GiftCardEmbeddedCheckout({ checkoutData, onError }) {
   return (
     <div>
       {!ready && (
-        <div style={{ textAlign: 'center', padding: '48px 0', color: '#7a6352', fontSize: '14px' }}>
+        <div style={{ textAlign: 'center', padding: '48px 0', color: '#5c4030', fontSize: '14px' }}>
           Cargando formulario de pago seguro...
         </div>
       )}

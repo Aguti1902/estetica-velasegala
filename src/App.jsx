@@ -30,7 +30,7 @@ const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 function PageLoader() {
   return (
     <div style={{ minHeight: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: '32px', height: '2px', background: '#0d0d0d', animation: 'pulse 1s infinite' }} />
+      <div style={{ width: '32px', height: '2px', background: '#1f1814', animation: 'pulse 1s infinite' }} />
     </div>
   )
 }

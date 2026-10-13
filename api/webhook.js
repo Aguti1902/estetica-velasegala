@@ -93,23 +93,23 @@ async function sendGiftCardEmail(card) {
 <head>
 <meta charset="UTF-8">
 <style>
-  body { font-family: 'Georgia', serif; background: #f9f6f1; margin: 0; padding: 40px 20px; }
+  body { font-family: 'Georgia', serif; background: #f2ebe3; margin: 0; padding: 40px 20px; }
   .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
-  .header { background: #1a1a1a; color: white; padding: 40px; text-align: center; }
+  .header { background: #1f1814; color: white; padding: 40px; text-align: center; }
   .header h1 { font-size: 24px; letter-spacing: 6px; text-transform: uppercase; margin: 0 0 8px; font-weight: 300; }
-  .header p { color: #c9a882; letter-spacing: 3px; font-size: 12px; margin: 0; }
+  .header p { color: #8b5e3c; letter-spacing: 3px; font-size: 12px; margin: 0; }
   .body { padding: 50px 40px; }
-  .greeting { font-size: 18px; color: #1a1a1a; margin-bottom: 24px; }
-  .card-box { border: 2px solid #c9a882; border-radius: 4px; padding: 32px; text-align: center; margin: 32px 0; background: #fdf8f3; }
-  .card-amount { font-size: 56px; font-weight: 700; color: #1a1a1a; line-height: 1; margin-bottom: 8px; }
-  .card-label { font-size: 11px; letter-spacing: 4px; color: #7a6352; text-transform: uppercase; margin-bottom: 24px; }
-  .card-code { font-family: 'Courier New', monospace; font-size: 22px; letter-spacing: 6px; color: #c9a882; font-weight: 700; background: white; padding: 12px 24px; border-radius: 4px; border: 1px solid #e8d9c8; display: inline-block; margin-top: 8px; }
-  .code-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #b89e87; margin-bottom: 8px; }
-  .info { color: #7a6352; font-size: 15px; line-height: 1.8; margin-bottom: 24px; }
-  .message-box { background: #f9f6f1; border-left: 3px solid #c9a882; padding: 16px 20px; margin: 24px 0; font-style: italic; color: #7a6352; border-radius: 0 4px 4px 0; }
-  .contact { text-align: center; padding: 32px; border-top: 1px solid #e8d9c8; }
-  .contact p { color: #b89e87; font-size: 13px; margin: 4px 0; }
-  .footer { background: #1a1a1a; color: #7a6352; text-align: center; padding: 24px; font-size: 11px; letter-spacing: 2px; }
+  .greeting { font-size: 18px; color: #1f1814; margin-bottom: 24px; }
+  .card-box { border: 2px solid #8b5e3c; border-radius: 4px; padding: 32px; text-align: center; margin: 32px 0; background: #f7f1ea; }
+  .card-amount { font-size: 56px; font-weight: 700; color: #1f1814; line-height: 1; margin-bottom: 8px; }
+  .card-label { font-size: 11px; letter-spacing: 4px; color: #5c4030; text-transform: uppercase; margin-bottom: 24px; }
+  .card-code { font-family: 'Courier New', monospace; font-size: 22px; letter-spacing: 6px; color: #8b5e3c; font-weight: 700; background: white; padding: 12px 24px; border-radius: 4px; border: 1px solid #d4c2ad; display: inline-block; margin-top: 8px; }
+  .code-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #9a7355; margin-bottom: 8px; }
+  .info { color: #5c4030; font-size: 15px; line-height: 1.8; margin-bottom: 24px; }
+  .message-box { background: #f2ebe3; border-left: 3px solid #8b5e3c; padding: 16px 20px; margin: 24px 0; font-style: italic; color: #5c4030; border-radius: 0 4px 4px 0; }
+  .contact { text-align: center; padding: 32px; border-top: 1px solid #d4c2ad; }
+  .contact p { color: #9a7355; font-size: 13px; margin: 4px 0; }
+  .footer { background: #1f1814; color: #5c4030; text-align: center; padding: 24px; font-size: 11px; letter-spacing: 2px; }
 </style>
 </head>
 <body>

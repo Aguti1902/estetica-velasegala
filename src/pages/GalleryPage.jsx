@@ -30,7 +30,7 @@ export default function GalleryPage() {
   return (
     <>
       {/* Page Hero */}
-      <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
             — {lang === 'es' ? 'Nuestro trabajo' : 'La nostra feina'}
@@ -42,13 +42,13 @@ export default function GalleryPage() {
       </div>
 
       {/* Galería */}
-      <section style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <section style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           {/* Filtros */}
           <div style={{ display: 'flex', gap: '8px', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
             {filters[lang].map(f => (
               <button key={f.id} onClick={() => setActiveFilter(f.id)}
-                style={{ padding: '8px 20px', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', border: `1.5px solid ${activeFilter === f.id ? '#fff' : 'rgba(255,255,255,0.2)'}`, background: activeFilter === f.id ? '#fff' : 'transparent', color: activeFilter === f.id ? '#0d0d0d' : 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.2s' }}>
+                style={{ padding: '8px 20px', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', border: `1.5px solid ${activeFilter === f.id ? '#fff' : 'rgba(255,255,255,0.2)'}`, background: activeFilter === f.id ? '#fff' : 'transparent', color: activeFilter === f.id ? '#1f1814' : 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.2s' }}>
                 {f.label}
               </button>
             ))}
@@ -96,7 +96,7 @@ function GalleryItem({ img, i, onClick }) {
       initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: (i % 4) * 0.05 }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       onClick={onClick}
-      style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', background: '#1a1a1a' }}>
+      style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', background: '#1f1814' }}>
       <img src={img.src} alt={img.alt} loading="lazy"
         style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block', transform: hovered ? 'scale(1.06)' : 'scale(1)', transition: 'transform 0.5s' }} />
       <div style={{ position: 'absolute', inset: 0, background: hovered ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0)', transition: 'background 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

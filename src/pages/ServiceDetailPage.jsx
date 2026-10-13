@@ -18,7 +18,7 @@ export default function ServiceDetailPage() {
   return (
     <>
       {/* Hero */}
-      <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0', position: 'relative', overflow: 'hidden' }}>
         {service.image && (
           <div style={{ position: 'absolute', inset: 0, opacity: 0.15 }}>
             <img src={service.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -75,39 +75,39 @@ export default function ServiceDetailPage() {
             <div>
               {/* Descripción */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: '3rem' }}>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                   {lang === 'es' ? '¿En qué consiste?' : 'En què consisteix?'}
                 </h2>
-                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#0d0d0d', marginBottom: '1.5rem' }} />
-                <p style={{ fontSize: '1rem', color: '#6b7280', lineHeight: 1.9 }}>{service.longDescription}</p>
+                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#1f1814', marginBottom: '1.5rem' }} />
+                <p style={{ fontSize: '1rem', color: '#5c4030', lineHeight: 1.9 }}>{service.longDescription}</p>
               </motion.div>
 
               {/* Galería de imágenes */}
               {service.gallery && service.gallery.length > 0 && (
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: '3rem' }}>
-                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                     {lang === 'es' ? 'Galería del tratamiento' : 'Galeria del tractament'}
                   </h2>
-                  <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#0d0d0d', marginBottom: '1.5rem' }} />
+                  <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#1f1814', marginBottom: '1.5rem' }} />
                   <ServiceGallery images={service.gallery} name={service.name} />
                 </motion.div>
               )}
 
               {/* Pasos */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: '3rem' }}>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                   {lang === 'es' ? 'Cómo funciona' : 'Com funciona'}
                 </h2>
-                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#0d0d0d', marginBottom: '1.5rem' }} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5px', background: '#e8e8e8' }}>
+                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#1f1814', marginBottom: '1.5rem' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5px', background: '#d4c2ad' }}>
                   {service.steps.map((step, i) => (
                     <div key={i} style={{ background: '#fff', padding: '1.5rem', display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
-                      <div style={{ width: '32px', height: '32px', background: '#0d0d0d', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div style={{ width: '32px', height: '32px', background: '#1f1814', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <span style={{ color: '#fff', fontFamily: 'var(--font-serif)', fontSize: '0.85rem', fontWeight: 600 }}>{String(i + 1).padStart(2, '0')}</span>
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#0d0d0d', marginBottom: '4px' }}>{step.title}</h3>
-                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.6 }}>{step.desc}</p>
+                        <h3 style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#1f1814', marginBottom: '4px' }}>{step.title}</h3>
+                        <p style={{ fontSize: '0.875rem', color: '#5c4030', lineHeight: 1.6 }}>{step.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -116,15 +116,15 @@ export default function ServiceDetailPage() {
 
               {/* Beneficios */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: '3rem' }}>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                   {lang === 'es' ? 'Beneficios' : 'Beneficis'}
                 </h2>
-                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#0d0d0d', marginBottom: '1.5rem' }} />
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: '#e8e8e8' }} className="benefits-grid">
+                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#1f1814', marginBottom: '1.5rem' }} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: '#d4c2ad' }} className="benefits-grid">
                   {service.benefits.map((b, i) => (
                     <div key={i} style={{ background: '#fff', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '6px', height: '6px', background: '#0d0d0d', flexShrink: 0 }} />
-                      <span style={{ fontSize: '0.875rem', color: '#0d0d0d', fontWeight: 500 }}>{b}</span>
+                      <div style={{ width: '6px', height: '6px', background: '#1f1814', flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.875rem', color: '#1f1814', fontWeight: 500 }}>{b}</span>
                     </div>
                   ))}
                 </div>
@@ -132,11 +132,11 @@ export default function ServiceDetailPage() {
 
               {/* FAQ */}
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                   {lang === 'es' ? 'Preguntas frecuentes' : 'Preguntes freqüents'}
                 </h2>
-                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#0d0d0d', marginBottom: '1.5rem' }} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5px', background: '#e8e8e8' }}>
+                <span style={{ display: 'block', width: '40px', height: '1.5px', background: '#1f1814', marginBottom: '1.5rem' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5px', background: '#d4c2ad' }}>
                   {service.faq.map((item, i) => (
                     <FaqItem key={i} question={item.q} answer={item.a} />
                   ))}
@@ -148,7 +148,7 @@ export default function ServiceDetailPage() {
             <div className="detail-sidebar">
               {/* CTA card */}
               <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                style={{ background: '#0d0d0d', padding: '2rem', marginBottom: '1.5px', position: 'sticky', top: '90px' }}>
+                style={{ background: '#1f1814', padding: '2rem', marginBottom: '1.5px', position: 'sticky', top: '90px' }}>
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 600, color: '#fff', marginBottom: '0.75rem', lineHeight: 1.2 }}>
                   {lang === 'es' ? 'Reservar cita' : 'Reservar cita'}
                 </h3>
@@ -194,7 +194,7 @@ export default function ServiceDetailPage() {
 
       {/* Imagen principal si existe */}
       {service.image && (
-        <div style={{ background: '#f5f5f5', padding: '0' }}>
+        <div style={{ background: '#f2ebe3', padding: '0' }}>
           <div style={{ maxHeight: '500px', overflow: 'hidden' }}>
             <img src={service.image} alt={service.name} style={{ width: '100%', height: 'clamp(220px, 50vw, 500px)', objectFit: 'cover', display: 'block' }} />
           </div>
@@ -209,7 +209,7 @@ export default function ServiceDetailPage() {
               <p className="label" style={{ marginBottom: '1rem' }}>— {lang === 'es' ? 'Misma categoría' : 'Mateixa categoria'}</p>
               <h2 className="section-title">{lang === 'es' ? 'Tratamientos relacionados' : 'Tractaments relacionats'}</h2>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px', background: '#e8e8e8' }} className="related-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px', background: '#d4c2ad' }} className="related-grid">
               {related.map((s, i) => (
                 <RelatedCard key={s.id} service={s} index={i} lang={lang} />
               ))}
@@ -240,11 +240,11 @@ function FaqItem({ question, answer }) {
         onClick={() => setOpen(o => !o)}
         style={{ width: '100%', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: '1rem' }}
       >
-        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0d0d0d', flex: 1 }}>{question}</span>
-        <span style={{ fontSize: '1.2rem', color: '#a3a3a3', flexShrink: 0, transform: open ? 'rotate(45deg)' : 'rotate(0)', transition: 'transform 0.2s', lineHeight: 1 }}>+</span>
+        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1f1814', flex: 1 }}>{question}</span>
+        <span style={{ fontSize: '1.2rem', color: '#9a7355', flexShrink: 0, transform: open ? 'rotate(45deg)' : 'rotate(0)', transition: 'transform 0.2s', lineHeight: 1 }}>+</span>
       </button>
       {open && (
-        <div style={{ padding: '0 1.5rem 1.25rem', fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.7, borderTop: '1px solid #f0f0f0' }}>
+        <div style={{ padding: '0 1.5rem 1.25rem', fontSize: '0.875rem', color: '#5c4030', lineHeight: 1.7, borderTop: '1px solid #f0f0f0' }}>
           {answer}
         </div>
       )}
@@ -323,19 +323,19 @@ function RelatedCard({ service, index, lang }) {
     <motion.div
       initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.07 }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: hovered ? '#0d0d0d' : '#fff', transition: 'background 0.3s' }}
+      style={{ background: hovered ? '#1f1814' : '#fff', transition: 'background 0.3s' }}
     >
       <Link to={`/servicios/${service.slug}`} style={{ textDecoration: 'none', display: 'block', padding: '1.75rem' }}>
-        <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#a3a3a3', marginBottom: '0.5rem', transition: 'color 0.3s' }}>
+        <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#9a7355', marginBottom: '0.5rem', transition: 'color 0.3s' }}>
           {service.duration}
         </div>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: hovered ? '#fff' : '#0d0d0d', lineHeight: 1.2, marginBottom: '0.5rem', transition: 'color 0.3s' }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: hovered ? '#fff' : '#1f1814', lineHeight: 1.2, marginBottom: '0.5rem', transition: 'color 0.3s' }}>
           {service.name}
         </h3>
-        <p style={{ fontSize: '0.82rem', color: hovered ? 'rgba(255,255,255,0.55)' : '#6b7280', lineHeight: 1.5, marginBottom: '1rem', transition: 'color 0.3s' }}>
+        <p style={{ fontSize: '0.82rem', color: hovered ? 'rgba(255,255,255,0.55)' : '#5c4030', lineHeight: 1.5, marginBottom: '1rem', transition: 'color 0.3s' }}>
           {service.description.slice(0, 90)}...
         </p>
-        <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: hovered ? '#fff' : '#0d0d0d', borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#0d0d0d'}`, paddingBottom: '1px', transition: 'all 0.3s' }}>
+        <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: hovered ? '#fff' : '#1f1814', borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#1f1814'}`, paddingBottom: '1px', transition: 'all 0.3s' }}>
           {lang === 'es' ? 'Ver tratamiento' : 'Veure tractament'} →
         </span>
       </Link>

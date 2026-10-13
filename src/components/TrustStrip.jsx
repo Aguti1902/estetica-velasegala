@@ -10,7 +10,7 @@ export default function TrustStrip() {
   const list = items[lang]
 
   return (
-    <div style={{ background: '#0d0d0d', padding: '0.9rem 0', overflow: 'hidden' }}>
+    <div style={{ background: '#1f1814', padding: '0.9rem 0', overflow: 'hidden' }}>
       <div className="container">
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem 1.4rem' }}>
           {list.map((item, i) => (

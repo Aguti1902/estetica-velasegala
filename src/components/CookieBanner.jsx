@@ -51,7 +51,7 @@ export default function CookieBanner() {
           transition={{ duration: 0.3, ease: 'easeOut' }}
           style={{
             position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999,
-            background: '#0d0d0d', borderTop: '1px solid rgba(255,255,255,0.1)',
+            background: '#1f1814', borderTop: '1px solid rgba(255,255,255,0.1)',
           }}
         >
           <div className="container" style={{ padding: '1.25rem clamp(1.5rem, 5vw, 4rem)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap' }}>
@@ -78,10 +78,10 @@ export default function CookieBanner() {
                 onClick={handleAccept}
                 style={{
                   padding: '9px 20px', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-                  background: '#fff', color: '#0d0d0d', border: '1px solid #fff',
+                  background: '#fff', color: '#1f1814', border: '1px solid #fff',
                   cursor: 'pointer', transition: 'all 0.2s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#e8e8e8'; e.currentTarget.style.borderColor = '#e8e8e8' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#d4c2ad'; e.currentTarget.style.borderColor = '#d4c2ad' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.borderColor = '#fff' }}
               >
                 {c.accept}

@@ -32,7 +32,7 @@ export default function ServicesPage() {
 
   return (
     <>
-      <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
             — {lang === 'es' ? 'Nuestros tratamientos' : 'Els nostres tractaments'}
@@ -48,7 +48,7 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      <section style={{ background: '#f5f5f5', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <section style={{ background: '#f2ebe3', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '3rem' }}>
             {['all', ...categories].map((cat) => (
@@ -58,9 +58,9 @@ export default function ServicesPage() {
                 onClick={() => setActiveCategory(cat)}
                 style={{
                   padding: '8px 20px', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
-                  border: `1.5px solid ${activeCategory === cat ? '#0d0d0d' : '#d0d0d0'}`,
-                  background: activeCategory === cat ? '#0d0d0d' : 'transparent',
-                  color: activeCategory === cat ? '#fff' : '#6b7280',
+                  border: `1.5px solid ${activeCategory === cat ? '#1f1814' : '#d0d0d0'}`,
+                  background: activeCategory === cat ? '#1f1814' : 'transparent',
+                  color: activeCategory === cat ? '#fff' : '#5c4030',
                   cursor: 'pointer', transition: 'all 0.2s',
                 }}
               >
@@ -76,8 +76,8 @@ export default function ServicesPage() {
                   <h2 style={{
                     fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.25rem, 3vw, 1.6rem)', fontWeight: 400,
                     textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em',
-                    background: '#fff', padding: '14px 24px', marginBottom: '1.5rem', color: '#0d0d0d',
-                    border: '1px solid #e8e8e8',
+                    background: '#fff', padding: '14px 24px', marginBottom: '1.5rem', color: '#1f1814',
+                    border: '1px solid #d4c2ad',
                   }}
                   >
                     {group.label}
@@ -115,7 +115,7 @@ function ServiceRow({ service, index, lang }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ delay: (index % 3) * 0.07 }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: hovered ? '#0d0d0d' : '#fff', border: '1.5px solid #e8e8e8', transition: 'background 0.3s, border-color 0.3s', borderColor: hovered ? '#0d0d0d' : '#e8e8e8' }}
+      style={{ background: hovered ? '#1f1814' : '#fff', border: '1.5px solid #d4c2ad', transition: 'background 0.3s, border-color 0.3s', borderColor: hovered ? '#1f1814' : '#d4c2ad' }}
     >
       <Link to={`/servicios/${service.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }}>
         {service.image && (
@@ -126,22 +126,22 @@ function ServiceRow({ service, index, lang }) {
         )}
         <div style={{ padding: '1.75rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#a3a3a3', transition: 'color 0.3s' }}>
+            <span style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: hovered ? 'rgba(255,255,255,0.4)' : '#9a7355', transition: 'color 0.3s' }}>
               {service.categoryLabel}
             </span>
-            <span style={{ fontSize: '0.65rem', color: hovered ? 'rgba(255,255,255,0.5)' : '#a3a3a3', border: `1px solid ${hovered ? 'rgba(255,255,255,0.15)' : '#e8e8e8'}`, padding: '3px 8px', transition: 'all 0.3s' }}>
+            <span style={{ fontSize: '0.65rem', color: hovered ? 'rgba(255,255,255,0.5)' : '#9a7355', border: `1px solid ${hovered ? 'rgba(255,255,255,0.15)' : '#d4c2ad'}`, padding: '3px 8px', transition: 'all 0.3s' }}>
               {service.duration}
             </span>
           </div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 600, color: hovered ? '#fff' : '#0d0d0d', lineHeight: 1.2, marginBottom: '0.5rem', transition: 'color 0.3s' }}>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 600, color: hovered ? '#fff' : '#1f1814', lineHeight: 1.2, marginBottom: '0.5rem', transition: 'color 0.3s' }}>
             {service.name}
           </h3>
-          <p style={{ fontSize: '0.83rem', color: hovered ? 'rgba(255,255,255,0.6)' : '#6b7280', lineHeight: 1.6, marginBottom: '1.25rem', transition: 'color 0.3s' }}>
+          <p style={{ fontSize: '0.83rem', color: hovered ? 'rgba(255,255,255,0.6)' : '#5c4030', lineHeight: 1.6, marginBottom: '1.25rem', transition: 'color 0.3s' }}>
             {service.description}
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: hovered ? 'rgba(255,255,255,0.7)' : '#0d0d0d', transition: 'color 0.3s' }}>{service.price}</span>
-            <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: hovered ? '#fff' : '#0d0d0d', borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#0d0d0d'}`, paddingBottom: '1px', transition: 'all 0.3s' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: hovered ? 'rgba(255,255,255,0.7)' : '#1f1814', transition: 'color 0.3s' }}>{service.price}</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: hovered ? '#fff' : '#1f1814', borderBottom: `1px solid ${hovered ? 'rgba(255,255,255,0.4)' : '#1f1814'}`, paddingBottom: '1px', transition: 'all 0.3s' }}>
               {lang === 'es' ? 'Ver más' : 'Veure més'} →
             </span>
           </div>

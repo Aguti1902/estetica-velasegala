@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export default function LegalLayout({ label, title, updated, sections }) {
   return (
     <>
-      <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
             — {label}
@@ -17,7 +17,7 @@ export default function LegalLayout({ label, title, updated, sections }) {
         </div>
       </div>
 
-      <section style={{ background: '#f5f5f5', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <section style={{ background: '#f2ebe3', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container" style={{ maxWidth: '760px' }}>
           {sections.map((section, i) => (
             <motion.div
@@ -26,9 +26,9 @@ export default function LegalLayout({ label, title, updated, sections }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ delay: i * 0.04 }}
-              style={{ background: '#fff', padding: 'clamp(1.5rem, 3vw, 2.5rem)', marginBottom: '2px', borderLeft: '3px solid #0d0d0d' }}
+              style={{ background: '#fff', padding: 'clamp(1.5rem, 3vw, 2.5rem)', marginBottom: '2px', borderLeft: '3px solid #1f1814' }}
             >
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '1rem' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: '#1f1814', marginBottom: '1rem' }}>
                 {section.title}
               </h2>
               <div style={{ fontSize: '0.875rem', color: '#4b5563', lineHeight: 1.9, whiteSpace: 'pre-line' }}>

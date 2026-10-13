@@ -42,7 +42,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <div style={{ background: '#0d0d0d', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
+      <div style={{ background: '#1f1814', padding: 'clamp(4rem, 8vw, 6rem) 0' }}>
         <div className="container">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="label-white" style={{ marginBottom: '1.25rem' }}>
             — {t.about.badge}
@@ -57,12 +57,12 @@ export default function AboutPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ background: '#f5f5f5', padding: '0' }}>
+      <div style={{ background: '#f2ebe3', padding: '0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5px', background: '#e8e8e8' }} className="stats-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5px', background: '#d4c2ad' }} className="stats-grid">
             {t.about.stats.map((s, i) => (
-              <div key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f5f5f5', padding: '2.5rem', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', fontWeight: 600, color: '#0d0d0d', lineHeight: 1 }}>
+              <div key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f2ebe3', padding: '2.5rem', textAlign: 'center' }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', fontWeight: 600, color: '#1f1814', lineHeight: 1 }}>
                   <CountUp value={s.value} />
                 </div>
                 <div className="label" style={{ marginTop: '10px' }}>{s.label}</div>
@@ -93,10 +93,10 @@ export default function AboutPage() {
               <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="section-title" style={{ marginBottom: '1.5rem' }}>
                 {lang === 'es' ? 'Medicina con propósito' : 'Medicina amb propòsit'}
               </motion.h2>
-              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.9, marginBottom: '1.25rem' }}>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ fontSize: '0.95rem', color: '#5c4030', lineHeight: 1.9, marginBottom: '1.25rem' }}>
                 {t.about.text1}
               </motion.p>
-              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.9, marginBottom: '2.5rem' }}>
+              <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} style={{ fontSize: '0.95rem', color: '#5c4030', lineHeight: 1.9, marginBottom: '2.5rem' }}>
                 {t.about.text2}
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
@@ -117,13 +117,13 @@ export default function AboutPage() {
       </section>
 
       {/* Equipo */}
-      <section style={{ background: '#f5f5f5', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
+      <section style={{ background: '#f2ebe3', padding: 'clamp(5rem, 10vw, 7rem) 0' }}>
         <div className="container">
           <div style={{ marginBottom: '3rem' }}>
             <p className="label" style={{ marginBottom: '1.25rem' }}>— {lang === 'es' ? 'Nuestro equipo' : 'El nostre equip'}</p>
             <h2 className="section-title">{lang === 'es' ? 'Profesionales especializados' : 'Professionals especialitzats'}</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px', background: '#e8e8e8' }} className="team-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5px', background: '#d4c2ad' }} className="team-grid">
             {team.map((member, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 style={{ background: '#fff', overflow: 'hidden' }}>
@@ -131,9 +131,9 @@ export default function AboutPage() {
                   <img src={member.img} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%)' }} loading="lazy" />
                 </div>
                 <div style={{ padding: '1.5rem' }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: '#0d0d0d', marginBottom: '4px' }}>{member.name}</h3>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0d0d0d', marginBottom: '4px' }}>{member.role}</div>
-                  <div style={{ fontSize: '0.82rem', color: '#a3a3a3' }}>{member.spec}</div>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 600, color: '#1f1814', marginBottom: '4px' }}>{member.name}</h3>
+                  <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1f1814', marginBottom: '4px' }}>{member.role}</div>
+                  <div style={{ fontSize: '0.82rem', color: '#9a7355' }}>{member.spec}</div>
                 </div>
               </motion.div>
             ))}

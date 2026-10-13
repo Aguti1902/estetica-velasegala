@@ -12,7 +12,7 @@ export const translations = {
     topbar: {
       phone: '93 658 84 06',
       whatsapp: '644104257',
-      email: 'estetica.segala@velasegala.com',
+      email: 'vela@velasegala.com',
       schedule: 'Lun–Jue 9–20h · Vie 9–15h · Viladecans',
     },
     hero: {
@@ -109,7 +109,7 @@ export const translations = {
           phone: '93 658 84 06',
           phone2: '644 10 42 57',
           schedule: 'Lunes a jueves: 9:00 – 20:00\nViernes: 9:00 – 15:00',
-          email: 'estetica.segala@velasegala.com',
+          email: 'vela@velasegala.com',
         },
       ],
       info: {
@@ -153,7 +153,7 @@ export const translations = {
     topbar: {
       phone: '93 658 84 06',
       whatsapp: '644104257',
-      email: 'estetica.segala@velasegala.com',
+      email: 'vela@velasegala.com',
       schedule: 'Dl–Dj 9–20h · Dv 9–15h · Viladecans',
     },
     hero: {
@@ -252,7 +252,7 @@ export const translations = {
           phone: '93 658 84 06',
           phone2: '644 10 42 57',
           schedule: 'Dilluns a dijous: 9:00 – 20:00\nDivendres: 9:00 – 15:00',
-          email: 'estetica.segala@velasegala.com',
+          email: 'vela@velasegala.com',
         },
       ],
       info: {

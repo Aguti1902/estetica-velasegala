@@ -20,7 +20,7 @@ export default function Hero() {
             alt="Tratamiento estético Viladecans"
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', position: 'absolute', inset: 0 }}
           />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(249,246,241,0) 60%, var(--cream) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(242,235,227,0) 60%, var(--cream) 100%)' }} />
           {/* Badge sobre imagen */}
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}

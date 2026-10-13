@@ -5,20 +5,20 @@
    DESIGN TOKENS — Viladecans
    ============================= */
 :root {
-  --black: #1a1a1a;
+  --black: #1f1814;
   --white: #ffffff;
-  --cream: #f9f6f1;
-  --warm-50: #fdf8f3;
-  --warm-100: #f5ede2;
-  --warm-200: #e8d9c8;
-  --warm-400: #b89e87;
-  --warm-600: #7a6352;
-  --accent: #c9a882;
-  --gray-50: #f9f6f1;
-  --gray-100: #f5ede2;
-  --gray-200: #e8d9c8;
-  --gray-400: #b89e87;
-  --gray-600: #7a6352;
+  --cream: #f2ebe3;
+  --warm-50: #f7f1ea;
+  --warm-100: #ebe0d2;
+  --warm-200: #d4c2ad;
+  --warm-400: #9a7355;
+  --warm-600: #5c4030;
+  --accent: #8b5e3c;
+  --gray-50: #f2ebe3;
+  --gray-100: #ebe0d2;
+  --gray-200: #d4c2ad;
+  --gray-400: #9a7355;
+  --gray-600: #5c4030;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
 }
@@ -28,7 +28,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-sans);
-  background: var(--white);
+  background: var(--cream);
   color: var(--black);
   -webkit-font-smoothing: antialiased;
 }
@@ -105,7 +105,7 @@ body {
   border-color: var(--accent);
   color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(201,168,130,0.35);
+  box-shadow: 0 8px 24px rgba(139,94,60,0.35);
 }
 
 .btn-ghost {

@@ -35,7 +35,7 @@ export default function CtaBanner() {
           <div style={{ overflow: 'hidden', position: 'relative', minHeight: '320px' }}>
             <img src="/images/woman-receiving-injection-in-beauty-clinic-2026-04-13-03-04-46-utc.jpg"
               alt="Reservar cita" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', position: 'absolute', inset: 0 }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(249,246,241,0.1) 0%, rgba(255,255,255,0.5) 100%)' }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(242,235,227,0.1) 0%, rgba(255,255,255,0.5) 100%)' }} />
           </div>
 
           {/* Divisor vertical */}

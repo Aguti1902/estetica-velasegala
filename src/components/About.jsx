@@ -43,10 +43,10 @@ export default function About() {
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="section-title" style={{ marginBottom: '2rem' }}>
               {t.about.title}
             </motion.h2>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.8, marginBottom: '1.25rem' }}>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} style={{ fontSize: '0.95rem', color: '#5c4030', lineHeight: 1.8, marginBottom: '1.25rem' }}>
               {t.about.text1}
             </motion.p>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.8, marginBottom: '2.5rem' }}>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }} style={{ fontSize: '0.95rem', color: '#5c4030', lineHeight: 1.8, marginBottom: '2.5rem' }}>
               {t.about.text2}
             </motion.p>
             <motion.a initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} href="#contacte" className="btn-dark">
@@ -61,10 +61,10 @@ export default function About() {
           <div>
             {/* Stats */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5px', background: '#e8e8e8', marginBottom: '2rem' }}>
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5px', background: '#d4c2ad', marginBottom: '2rem' }}>
               {t.about.stats.map((s, i) => (
-                <div key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f5f5f5', padding: '2rem', textAlign: 'center' }}>
-                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', fontWeight: 600, color: '#0d0d0d', lineHeight: 1 }}>
+                <div key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f2ebe3', padding: '2rem', textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', fontWeight: 600, color: '#1f1814', lineHeight: 1 }}>
                     <CountUp value={s.value} />
                   </div>
                   <div className="label" style={{ marginTop: '8px' }}>{s.label}</div>
@@ -74,7 +74,7 @@ export default function About() {
 
             {/* Imágenes */}
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5px', background: '#e8e8e8' }}>
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5px', background: '#d4c2ad' }}>
               <div style={{ gridColumn: 'span 2', overflow: 'hidden', height: '200px' }}>
                 <img src="/images/xMedicina-estetica.jpg" alt="Equipo" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
