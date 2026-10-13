@@ -40,32 +40,64 @@ export default function AdminContactPage() {
   const unread = items.filter((m) => m.status === 'new').length
 
   const filterBtn = (active) => ({
-    padding: '9px 16px', fontSize: 12.5, cursor: 'pointer', borderRadius: t.radiusPill,
-    background: active ? t.text : '#fff',
+    height: 30,
+    padding: '0 12px',
+    fontSize: 12,
+    lineHeight: '30px',
+    cursor: 'pointer',
+    borderRadius: t.radiusPill,
+    background: active ? t.text : 'transparent',
     color: active ? '#fff' : t.textMuted,
-    border: `1px solid ${t.borderStrong}`,
-    fontWeight: active ? 650 : 500,
+    border: 'none',
+    fontWeight: active ? 650 : 550,
     fontFamily: t.font,
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    whiteSpace: 'nowrap',
   })
 
   return (
-    <div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
+    <div style={{ width: '100%', minWidth: 0 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12, alignItems: 'center', marginBottom: 20, minWidth: 0 }}>
         <div>
           <h2 style={uiPageTitle}>
             Contacto
           </h2>
-          <p style={{ color: t.textMuted, marginTop: '8px' }}>
+          <p style={{ color: t.textMuted, marginTop: '6px', fontSize: 13.5 }}>
             {unread > 0 ? `${unread} mensaje(s) sin leer` : 'Bandeja al día'}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          padding: 3,
+          background: '#fff',
+          border: `1px solid ${t.border}`,
+          borderRadius: t.radiusPill,
+          boxShadow: t.shadow,
+          maxWidth: '100%',
+          minWidth: 0,
+          flexWrap: 'wrap',
+        }}
+        >
           {[['all', 'Todos'], ['new', 'Nuevos'], ['read', 'Leídos'], ['archived', 'Archivados']].map(([v, label]) => (
             <button key={v} type="button" onClick={() => setFilter(v)} style={filterBtn(filter === v)}>
               {label}
             </button>
           ))}
-          <button type="button" onClick={load} style={{ ...filterBtn(false), padding: '8px 12px' }}>
+          <button
+            type="button"
+            onClick={load}
+            aria-label="Actualizar"
+            style={{
+              ...filterBtn(false),
+              width: 30,
+              padding: 0,
+              color: t.text,
+              flexShrink: 0,
+            }}
+          >
             ↻
           </button>
         </div>
