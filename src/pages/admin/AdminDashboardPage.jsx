@@ -117,7 +117,9 @@ export default function AdminDashboardPage() {
       const count = active.filter((a) => toDateKey(new Date(a.starts_at)) === key).length
       barDays.push({
         key,
-        label: cursor.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+        day: cursor.getDate(),
+        dow: cursor.getDay(),
+        label: cursor.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', ''),
         count,
         isToday: key === todayKey,
       })
@@ -188,7 +190,12 @@ export default function AdminDashboardPage() {
   return (
     <div style={{ width: '100%' }}>
       <style>{`
-        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); gap: 16px; margin-bottom: 16px; }
+        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.9fr); gap: 16px; margin-bottom: 16px; }
+        .admin-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .admin-kpi-card { transition: transform 0.16s ease, box-shadow 0.16s ease; }
+        .admin-kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(28,25,23,0.08); }
+        .admin-heat-cell { transition: transform 0.12s ease; }
+        .admin-heat-cell:hover { transform: translateY(-1px); }
         @media (max-width: 900px) {
           .admin-dash-split { grid-template-columns: 1fr; }
         }
@@ -241,13 +248,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* KPI row */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-        gap: 12,
-        marginBottom: 16,
-      }}
-      >
+      <div className="admin-kpi-grid">
         <Kpi
           label="Citas hoy"
           value={loading ? '—' : stats.todayCount}
@@ -301,49 +302,17 @@ export default function AdminDashboardPage() {
 
       <div className="admin-dash-split">
         {/* Activity chart */}
-        <section style={uiCard({ padding: 24 })}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 20 }}>
+        <section style={uiCard({ padding: 24, minWidth: 0, overflow: 'hidden' })}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 18 }}>
             <div>
               <h3 style={sectionTitle}>Actividad del periodo</h3>
-              <p style={sectionSub}>Citas por día · {stats.rangeLabel}</p>
+              <p style={sectionSub}>
+                {stats.barDays.length > 10 ? 'Calendario de citas' : 'Citas por día'} · {stats.rangeLabel}
+              </p>
             </div>
             <Link to="/admin/calendario" style={linkQuiet}>Ver agenda →</Link>
           </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: 10,
-            height: 160,
-            paddingTop: 8,
-          }}
-          >
-            {stats.barDays.map((d) => (
-              <div key={d.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, height: '100%', justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: t.text }}>{d.count}</span>
-                <div style={{
-                  width: '100%',
-                  maxWidth: 42,
-                  height: `${Math.max(8, (d.count / stats.maxBar) * 110)}px`,
-                  borderRadius: 14,
-                  background: d.isToday
-                    ? `linear-gradient(180deg, ${t.accent} 0%, ${t.accentDark} 100%)`
-                    : `linear-gradient(180deg, #e7e2db 0%, #d4cdc3 100%)`,
-                  boxShadow: d.isToday ? '0 8px 18px rgba(201,168,130,0.35)' : 'none',
-                  transition: 'height 0.35s ease',
-                }}
-                />
-                <span style={{
-                  fontSize: 11,
-                  fontWeight: d.isToday ? 700 : 500,
-                  color: d.isToday ? t.text : t.textMuted,
-                  textTransform: 'capitalize',
-                }}
-                >
-                  {d.label}
-                </span>
-              </div>
-            ))}
-          </div>
+          <ActivityChart days={stats.barDays} max={stats.maxBar} />
         </section>
 
         {/* Channels */}
@@ -599,11 +568,12 @@ function Kpi({ label, value, hint, tone, to }) {
   const linkProps = to ? { to, style: { textDecoration: 'none', color: 'inherit' } } : {}
   return (
     <Comp {...linkProps}>
-      <div style={uiCard({
-        padding: '18px 18px 16px',
+      <div className="admin-kpi-card" style={uiCard({
+        padding: '16px 16px 14px',
         height: '100%',
         position: 'relative',
         overflow: 'hidden',
+        minWidth: 0,
       })}
       >
         <div style={{
@@ -642,6 +612,160 @@ function Kpi({ label, value, hint, tone, to }) {
         <p style={{ margin: 0, fontSize: 12, color: c.fg, fontWeight: 600 }}>{hint}</p>
       </div>
     </Comp>
+  )
+}
+
+function heatColor(count, max) {
+  if (!count) return '#f6f3ef'
+  const ratio = count / Math.max(max, 1)
+  if (ratio > 0.75) return '#8a6d4b'
+  if (ratio > 0.4) return '#c9a882'
+  return '#ead9c4'
+}
+
+function ActivityChart({ days, max }) {
+  if (!days.length) return <Empty hint="Sin días en este periodo" />
+  if (days.length <= 10) return <ShortBars days={days} max={max} />
+  return <MonthHeatmap days={days} max={max} />
+}
+
+function ShortBars({ days, max }) {
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))`,
+      gap: 8,
+      alignItems: 'end',
+      height: 168,
+      paddingTop: 8,
+    }}
+    >
+      {days.map((d) => (
+        <div key={d.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, height: '100%', justifyContent: 'flex-end', minWidth: 0 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: d.count ? t.text : t.textMuted }}>{d.count || '·'}</span>
+          <div style={{
+            width: '100%',
+            maxWidth: 36,
+            height: d.count ? `${Math.max(18, (d.count / max) * 108)}px` : 6,
+            borderRadius: 999,
+            background: d.isToday
+              ? `linear-gradient(180deg, ${t.accent} 0%, ${t.accentDark} 100%)`
+              : d.count
+                ? 'linear-gradient(180deg, #e7e2db 0%, #cfc6bb 100%)'
+                : '#efeae4',
+            boxShadow: d.isToday ? '0 8px 16px rgba(201,168,130,0.35)' : 'none',
+          }}
+          />
+          <span style={{
+            fontSize: 11,
+            fontWeight: d.isToday ? 700 : 500,
+            color: d.isToday ? t.text : t.textMuted,
+            textTransform: 'capitalize',
+          }}
+          >
+            {d.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function MonthHeatmap({ days, max }) {
+  const weeks = []
+  let week = Array(7).fill(null)
+  for (const d of days) {
+    const col = d.dow === 0 ? 6 : d.dow - 1
+    if (col === 0 && week.some(Boolean)) {
+      weeks.push(week)
+      week = Array(7).fill(null)
+    }
+    week[col] = d
+  }
+  if (week.some(Boolean)) weeks.push(week)
+
+  const weekTotals = weeks.map((w, i) => ({
+    label: `S${i + 1}`,
+    count: w.reduce((s, d) => s + (d?.count || 0), 0),
+  }))
+
+  return (
+    <div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+        gap: 6,
+        marginBottom: 6,
+      }}
+      >
+        {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map((d) => (
+          <div key={d} style={{ textAlign: 'center', fontSize: 11, fontWeight: 700, color: t.textMuted, letterSpacing: '0.04em' }}>
+            {d}
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {weeks.map((w, wi) => (
+          <div key={wi} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 6 }}>
+            {w.map((d, di) => (
+              d ? (
+                <div
+                  key={d.key}
+                  className="admin-heat-cell"
+                  title={`${d.day} · ${d.count} cita${d.count === 1 ? '' : 's'}`}
+                  style={{
+                    minHeight: 52,
+                    borderRadius: 14,
+                    background: heatColor(d.count, max),
+                    color: d.count && d.count / Math.max(max, 1) > 0.4 ? '#fff' : t.text,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1,
+                    border: d.isToday ? `2px solid ${t.text}` : '1px solid transparent',
+                    boxShadow: d.isToday ? '0 6px 16px rgba(28,25,23,0.12)' : 'none',
+                  }}
+                >
+                  <span style={{ fontSize: 13, fontWeight: 700, lineHeight: 1 }}>{d.day}</span>
+                  <span style={{ fontSize: 10, fontWeight: 650, opacity: d.count ? 1 : 0.45 }}>
+                    {d.count ? `${d.count}` : '·'}
+                  </span>
+                </div>
+              ) : (
+                <div key={`e-${wi}-${di}`} />
+              )
+            ))}
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16, alignItems: 'center' }}>
+        {weekTotals.map((w) => (
+          <span key={w.label} style={{
+            padding: '5px 10px',
+            borderRadius: 999,
+            background: t.subtleBg,
+            border: `1px solid ${t.border}`,
+            fontSize: 12,
+            color: t.textMuted,
+            fontWeight: 650,
+          }}
+          >
+            {w.label} · {w.count}
+          </span>
+        ))}
+        <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: t.textMuted }}>
+          {[0, 1, 2, 3].map((n) => (
+            <span key={n} title={n ? `${n}+` : '0'} style={{
+              width: 12, height: 12, borderRadius: 4, background: heatColor(n, 3),
+              border: '1px solid rgba(28,25,23,0.06)',
+            }}
+            />
+          ))}
+          menos → más
+        </span>
+      </div>
+    </div>
   )
 }
 

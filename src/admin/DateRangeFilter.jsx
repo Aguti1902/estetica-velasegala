@@ -16,7 +16,7 @@ export default function DateRangeFilter({
       flexWrap: 'wrap',
       gap: 8,
       alignItems: 'center',
-      padding: compact ? '8px 10px' : '12px 14px',
+      padding: compact ? '8px 10px' : '10px 12px',
       background: t.cardBg,
       border: `1px solid ${t.border}`,
       borderRadius: t.radiusLg,
