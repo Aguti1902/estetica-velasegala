@@ -75,28 +75,30 @@ export const uiInput = {
 }
 
 export const uiBtnPrimary = {
-  padding: '12px 20px',
+  padding: '7px 14px',
   background: `linear-gradient(135deg, ${adminTheme.text} 0%, #3f3a36 100%)`,
   color: '#fff',
   border: 'none',
   borderRadius: adminTheme.radiusPill,
   cursor: 'pointer',
-  fontSize: 13,
+  fontSize: 12.5,
   fontWeight: 650,
   fontFamily: adminTheme.font,
-  boxShadow: '0 8px 20px rgba(28,25,23,0.18)',
+  boxShadow: '0 2px 8px rgba(28,25,23,0.12)',
+  lineHeight: 1.2,
 }
 
 export const uiBtnGhost = {
-  padding: '11px 16px',
+  padding: '6px 12px',
   background: '#fff',
-  border: `1.5px solid ${adminTheme.borderStrong}`,
+  border: `1px solid ${adminTheme.borderStrong}`,
   borderRadius: adminTheme.radiusPill,
   cursor: 'pointer',
-  fontSize: 13,
+  fontSize: 12.5,
   color: adminTheme.text,
   fontFamily: adminTheme.font,
   fontWeight: 550,
+  lineHeight: 1.2,
 }
 
 export const uiPageTitle = {

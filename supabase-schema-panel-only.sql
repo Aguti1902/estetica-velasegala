@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS appointments (
   starts_at     TIMESTAMPTZ NOT NULL,
   ends_at       TIMESTAMPTZ NOT NULL,
   status        TEXT NOT NULL DEFAULT 'confirmed'
-                  CHECK (status IN ('confirmed', 'pending', 'cancelled', 'completed')),
+                  CHECK (status IN ('confirmed', 'pending', 'cancelled', 'completed', 'no_show')),
   channel       TEXT NOT NULL DEFAULT 'whatsapp'
                   CHECK (channel IN ('whatsapp', 'phone', 'web', 'instagram', 'walkin', 'other')),
   notes         TEXT,
@@ -106,3 +106,7 @@ CREATE POLICY "Solo service role clients" ON clients
 ALTER TABLE appointments ADD COLUMN IF NOT EXISTS client_id UUID REFERENCES clients(id) ON DELETE SET NULL;
 ALTER TABLE appointments ADD COLUMN IF NOT EXISTS amount NUMERIC(10,2) DEFAULT 0;
 CREATE INDEX IF NOT EXISTS idx_appointments_client ON appointments(client_id);
+
+-- Ampliar estados (si la tabla ya existía con CHECK antiguo)
+ALTER TABLE appointments DROP CONSTRAINT IF EXISTS appointments_status_check;
+ALTER TABLE appointments ADD CONSTRAINT appointments_status_check CHECK (status IN ('confirmed', 'pending', 'cancelled', 'completed', 'no_show'));

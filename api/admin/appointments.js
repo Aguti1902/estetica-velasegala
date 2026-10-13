@@ -2,7 +2,7 @@ import { adminCors, requireAdmin } from '../_lib/adminAuth.js';
 import { supabaseConfigured, supabaseHeaders, supabaseRest } from '../_lib/supabase.js';
 
 const CHANNELS = ['whatsapp', 'phone', 'web', 'instagram', 'walkin', 'other'];
-const STATUSES = ['confirmed', 'pending', 'cancelled', 'completed'];
+const STATUSES = ['confirmed', 'pending', 'cancelled', 'completed', 'no_show'];
 
 export default async function handler(req, res) {
   adminCors(res, 'GET, POST, PUT, PATCH, DELETE, OPTIONS');

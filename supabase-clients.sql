@@ -26,3 +26,6 @@ ALTER TABLE appointments ADD COLUMN IF NOT EXISTS client_id UUID REFERENCES clie
 ALTER TABLE appointments ADD COLUMN IF NOT EXISTS amount NUMERIC(10,2) DEFAULT 0;
 
 CREATE INDEX IF NOT EXISTS idx_appointments_client ON appointments(client_id);
+-- Ampliar estados de citas (no_show)
+ALTER TABLE appointments DROP CONSTRAINT IF EXISTS appointments_status_check;
+ALTER TABLE appointments ADD CONSTRAINT appointments_status_check CHECK (status IN ('confirmed', 'pending', 'cancelled', 'completed', 'no_show'));

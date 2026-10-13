@@ -23,9 +23,24 @@ export const LEAD_CHANNELS = [
 export const APPT_STATUSES = [
   { id: 'confirmed', label: 'Confirmada', color: '#16a34a' },
   { id: 'pending', label: 'Pendiente', color: '#d97706' },
+  { id: 'completed', label: 'Completada', color: '#0f766e' },
+  { id: 'no_show', label: 'No ha asistido', color: '#b45309' },
   { id: 'cancelled', label: 'Cancelada', color: '#dc2626' },
-  { id: 'completed', label: 'Completada', color: '#6b7280' },
 ]
+
+/** Extrae euros numéricos de un precio tipo "90€" o "Consultar" */
+export function parseServicePrice(price) {
+  if (price == null || price === '') return ''
+  const m = String(price).match(/(\d+[.,]?\d*)/)
+  if (!m) return ''
+  return m[1].replace(',', '.')
+}
+
+/** Minutos de duración desde "60 min" / "75 min" */
+export function parseServiceDurationMinutes(duration, fallback = 60) {
+  const m = String(duration || '').match(/(\d+)/)
+  return m ? Number(m[1]) : fallback
+}
 
 export function channelMeta(id) {
   return LEAD_CHANNELS.find((c) => c.id === id) || LEAD_CHANNELS[LEAD_CHANNELS.length - 1]

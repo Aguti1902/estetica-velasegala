@@ -20,6 +20,8 @@ import {
   daySlots,
   formatTime,
   isOpenDay,
+  parseServiceDurationMinutes,
+  parseServicePrice,
   statusMeta,
   toDateKey,
   weekDaysMonFri,
@@ -46,8 +48,13 @@ function emptyForm(defaults = {}) {
     channel: defaults.channel || 'whatsapp',
     notes: defaults.notes || '',
     employee: defaults.employee || CLINIC.employee,
-    clientMode: defaults.client_id ? 'existing' : 'search', // search | existing | new
+    clientMode: defaults.client_id ? 'existing' : 'search',
   }
+}
+
+function minutesFromOpen(date) {
+  const openMin = CLINIC.openHour * 60 + CLINIC.openMinute
+  return date.getHours() * 60 + date.getMinutes() - openMin
 }
 
 export default function AdminCalendarPage() {
@@ -55,20 +62,16 @@ export default function AdminCalendarPage() {
   const { servicesData } = useServices()
   const services = servicesData.es || []
 
-  const [view, setView] = useState('day') // day | week
+  const [view, setView] = useState('day')
   const [anchor, setAnchor] = useState(() => {
     const d = new Date()
-    if (!isOpenDay(d)) {
-      // saltar a lunes siguiente si es finde
-      const mon = weekDaysMonFri(d)[0]
-      return mon
-    }
+    if (!isOpenDay(d)) return weekDaysMonFri(d)[0]
     return d
   })
   const [appts, setAppts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showCancelled, setShowCancelled] = useState(false)
-  const [modal, setModal] = useState(null) // form object | null
+  const [modal, setModal] = useState(null)
   const [hoursOpen, setHoursOpen] = useState(false)
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState('')
@@ -76,11 +79,20 @@ export default function AdminCalendarPage() {
   const [clientQuery, setClientQuery] = useState('')
   const [clientResults, setClientResults] = useState([])
   const [searchingClients, setSearchingClients] = useState(false)
+  const [now, setNow] = useState(() => new Date())
+  const [draggingId, setDraggingId] = useState(null)
+  const [dragOver, setDragOver] = useState(null) // { dateKey, time }
+  const [moving, setMoving] = useState(false)
 
   const showToast = (msg) => {
     setToast(msg)
     setTimeout(() => setToast(''), 3000)
   }
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 30000)
+    return () => clearInterval(id)
+  }, [])
 
   const range = useMemo(() => {
     if (view === 'week') {
@@ -140,6 +152,7 @@ export default function AdminCalendarPage() {
   }, [clientQuery, modal, pwd])
 
   const slots = useMemo(() => daySlots(), [])
+  const closeTime = `${String(CLINIC.closeHour).padStart(2, '0')}:${String(CLINIC.closeMinute).padStart(2, '0')}`
 
   const goToday = () => {
     const d = new Date()
@@ -151,7 +164,6 @@ export default function AdminCalendarPage() {
     if (view === 'week') d.setDate(d.getDate() + dir * 7)
     else {
       d.setDate(d.getDate() + dir)
-      // saltar fines de semana
       while (!isOpenDay(d)) d.setDate(d.getDate() + dir)
     }
     setAnchor(d)
@@ -214,6 +226,30 @@ export default function AdminCalendarPage() {
     setClientQuery('')
   }
 
+  const applyService = (slug) => {
+    const svc = services.find((s) => s.slug === slug)
+    if (!svc) {
+      setModal((m) => ({ ...m, service_slug: '', service_name: m.service_name }))
+      return
+    }
+    const price = parseServicePrice(svc.price)
+    const mins = parseServiceDurationMinutes(svc.duration, 60)
+    setModal((m) => {
+      const start = combineDateAndTime(m.dateKey, m.startTime)
+      const end = addMinutes(start, mins)
+      const endStr = formatTime(end)
+      const closeMin = CLINIC.closeHour * 60 + CLINIC.closeMinute
+      const endMin = end.getHours() * 60 + end.getMinutes()
+      return {
+        ...m,
+        service_slug: slug,
+        service_name: svc.name || '',
+        amount: price !== '' ? price : m.amount,
+        endTime: endMin > closeMin ? closeTime : endStr,
+      }
+    })
+  }
+
   const saveModal = async () => {
     if (!modal?.client_name?.trim()) {
       setError('Busca una clienta o crea una nueva')
@@ -259,23 +295,76 @@ export default function AdminCalendarPage() {
     }
   }
 
-  const cancelAppt = async () => {
-    if (!modal?.id) return
-    if (!window.confirm('¿Cancelar esta cita?')) return
+  const setApptStatus = async (appt, status) => {
+    const labels = {
+      completed: 'marcada como completada',
+      no_show: 'marcada como no asistida',
+      cancelled: 'cancelada',
+      confirmed: 'confirmada de nuevo',
+      pending: 'marcada como pendiente',
+    }
+    if (status === 'cancelled' && !window.confirm('¿Cancelar esta cita?')) return
     setSaving(true)
     try {
       const res = await adminFetch('/api/admin/appointments', pwd, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: modal.id, status: 'cancelled', client_name: modal.client_name, starts_at: combineDateAndTime(modal.dateKey, modal.startTime).toISOString(), ends_at: combineDateAndTime(modal.dateKey, modal.endTime).toISOString() }),
+        body: JSON.stringify({ id: appt.id, status }),
       })
       if (res.ok) {
-        setModal(null)
-        showToast('Cita cancelada')
+        if (modal?.id === appt.id) setModal(null)
+        showToast(`Cita ${labels[status] || 'actualizada'}`)
         await load()
+      } else {
+        const err = await res.json().catch(() => ({}))
+        showToast(err.error || 'No se pudo actualizar el estado')
       }
     } finally {
       setSaving(false)
+    }
+  }
+
+  const moveAppointment = async (appt, dateKey, startTime) => {
+    const start = combineDateAndTime(dateKey, startTime)
+    const duration = Math.max(
+      CLINIC.slotMinutes,
+      (new Date(appt.ends_at) - new Date(appt.starts_at)) / 60000,
+    )
+    let end = addMinutes(start, duration)
+    const close = combineDateAndTime(dateKey, closeTime)
+    if (end > close) end = close
+    if (end <= start) {
+      showToast('No cabe en el horario de cierre')
+      return
+    }
+    setMoving(true)
+    // Optimistic
+    setAppts((prev) => prev.map((a) => (
+      a.id === appt.id
+        ? { ...a, starts_at: start.toISOString(), ends_at: end.toISOString() }
+        : a
+    )))
+    try {
+      const res = await adminFetch('/api/admin/appointments', pwd, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: appt.id,
+          starts_at: start.toISOString(),
+          ends_at: end.toISOString(),
+        }),
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        showToast(err.error || 'No se pudo mover la cita')
+        await load()
+      } else {
+        showToast(`Movida a ${dateKey} ${startTime}`)
+      }
+    } finally {
+      setMoving(false)
+      setDraggingId(null)
+      setDragOver(null)
     }
   }
 
@@ -288,13 +377,19 @@ export default function AdminCalendarPage() {
     : anchor.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   const cancelledCount = appts.filter((a) => a.status === 'cancelled').length
+  const todayKey = toDateKey(now)
+  const openMin = CLINIC.openHour * 60 + CLINIC.openMinute
+  const closeMin = CLINIC.closeHour * 60 + CLINIC.closeMinute
+  const nowMin = now.getHours() * 60 + now.getMinutes()
+  const nowTop = ((nowMin - openMin) / CLINIC.slotMinutes) * SLOT_H
+  const showNowLine = nowMin >= openMin && nowMin <= closeMin
 
   return (
     <div>
       {toast && (
         <div style={{
-          position: 'fixed', top: 16, right: 16, zIndex: 200, background: th.pageBg,
-          border: `1px solid ${th.border}`, padding: '14px 20px', fontSize: 14, borderRadius: th.radiusPill,
+          position: 'fixed', top: 16, right: 16, zIndex: 200, background: '#fff',
+          border: `1px solid ${th.border}`, padding: '10px 16px', fontSize: 13, borderRadius: th.radiusPill,
           boxShadow: th.shadowMd,
         }}
         >
@@ -302,41 +397,43 @@ export default function AdminCalendarPage() {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16, marginBottom: 20 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12, marginBottom: 16 }}>
         <div>
-          <h2 style={uiPageTitle}>
-            Calendario de reservas
-          </h2>
-          <p style={{ color: th.textMuted, margin: '8px 0 0', fontSize: 14 }}>
-            Gestiona citas de {CLINIC.employee} · L–V {CLINIC.openHour}:00–{CLINIC.closeHour}:{String(CLINIC.closeMinute).padStart(2, '0')}
+          <h2 style={uiPageTitle}>Calendario de reservas</h2>
+          <p style={{ color: th.textMuted, margin: '6px 0 0', fontSize: 13.5 }}>
+            {CLINIC.employee} · L–V {CLINIC.openHour}:00–{CLINIC.closeHour}:{String(CLINIC.closeMinute).padStart(2, '0')}
+            {' · '}Arrastra citas para moverlas
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" onClick={() => setHoursOpen(true)} style={btnGhost}>Horarios</button>
-          <button type="button" onClick={() => openNew(toDateKey(isOpenDay(anchor) ? anchor : weekDaysMonFri(anchor)[0]), '10:00')} style={btnPrimary}>
+          <button
+            type="button"
+            onClick={() => openNew(toDateKey(isOpenDay(anchor) ? anchor : weekDaysMonFri(anchor)[0]), '10:00')}
+            style={btnPrimary}
+          >
             + Nueva reserva
           </button>
         </div>
       </div>
 
       {error && !modal && (
-        <div style={{ marginBottom: 16, padding: 14, background: th.dangerSoft, border: '1px solid #fecaca', color: th.danger, borderRadius: th.radius, fontSize: 13 }}>
+        <div style={{ marginBottom: 12, padding: 12, background: th.dangerSoft, border: '1px solid #fecaca', color: th.danger, borderRadius: th.radius, fontSize: 13 }}>
           {error}
         </div>
       )}
 
-      {/* Controles */}
       <div style={{
-        display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', marginBottom: 16,
-        padding: '14px 16px', background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg,
+        display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12,
+        padding: '10px 12px', background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg,
         boxShadow: th.shadow,
       }}
       >
         <button type="button" onClick={goToday} style={btnGhost}>Hoy</button>
         <button type="button" onClick={() => shift(-1)} style={btnIcon}>‹</button>
         <button type="button" onClick={() => shift(1)} style={btnIcon}>›</button>
-        <strong style={{ fontSize: 15, textTransform: 'capitalize', minWidth: 200 }}>{titleDate}</strong>
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <strong style={{ fontSize: 14, textTransform: 'capitalize', minWidth: 180 }}>{titleDate}</strong>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
           {[['day', 'Día'], ['week', 'Semana']].map(([v, label]) => (
             <button
               key={v}
@@ -344,25 +441,24 @@ export default function AdminCalendarPage() {
               onClick={() => setView(v)}
               style={{
                 ...btnGhost,
-                background: view === v ? th.text : th.pageBg,
+                background: view === v ? th.text : '#fff',
                 color: view === v ? '#fff' : th.text,
               }}
             >
               {label}
             </button>
           ))}
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted, cursor: 'pointer', marginLeft: 8 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted, cursor: 'pointer', marginLeft: 6 }}>
             <input type="checkbox" checked={showCancelled} onChange={(e) => setShowCancelled(e.target.checked)} />
-            Ver canceladas{cancelledCount ? ` (${cancelledCount})` : ''}
+            Canceladas{cancelledCount ? ` (${cancelledCount})` : ''}
           </label>
         </div>
       </div>
 
-      {/* Grid */}
       <div style={{ border: `1px solid ${th.border}`, borderRadius: th.radiusLg, overflow: 'hidden', background: th.cardBg, boxShadow: th.shadow }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: `64px repeat(${range.days.length}, 1fr)`,
+          gridTemplateColumns: `56px repeat(${range.days.length}, 1fr)`,
           borderBottom: `1px solid ${th.border}`,
           background: th.subtleBg,
         }}
@@ -372,17 +468,18 @@ export default function AdminCalendarPage() {
             <div
               key={toDateKey(d)}
               style={{
-                padding: '12px 8px', textAlign: 'center', borderLeft: `1px solid ${th.border}`,
+                padding: '10px 6px', textAlign: 'center', borderLeft: `1px solid ${th.border}`,
                 fontSize: 12, fontWeight: 600,
+                background: toDateKey(d) === todayKey ? th.accentSoft : 'transparent',
               }}
             >
               <div style={{ textTransform: 'uppercase', letterSpacing: '0.08em', color: th.textMuted, fontSize: 10 }}>
                 {d.toLocaleDateString('es-ES', { weekday: 'short' })}
               </div>
-              <div style={{ fontSize: 18, fontFamily: th.fontDisplay, marginTop: 2 }}>{d.getDate()}</div>
+              <div style={{ fontSize: 17, fontFamily: th.fontDisplay, marginTop: 2 }}>{d.getDate()}</div>
               <div style={{
-                marginTop: 6, display: 'inline-block', padding: '3px 10px', borderRadius: 999,
-                background: '#e8dff5', color: '#5b21b6', fontSize: 10, letterSpacing: '0.06em',
+                marginTop: 4, display: 'inline-block', padding: '2px 8px', borderRadius: 999,
+                background: th.accentSoft, color: th.accentDark, fontSize: 9, letterSpacing: '0.06em', fontWeight: 700,
               }}
               >
                 {CLINIC.employee.toUpperCase()}
@@ -394,15 +491,14 @@ export default function AdminCalendarPage() {
         {loading ? (
           <p style={{ padding: 40, textAlign: 'center', color: th.textMuted }}>Cargando agenda…</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: `64px repeat(${range.days.length}, 1fr)`, maxHeight: '70vh', overflowY: 'auto' }}>
-            {/* Columna horas */}
+          <div style={{ display: 'grid', gridTemplateColumns: `56px repeat(${range.days.length}, 1fr)`, maxHeight: '70vh', overflowY: 'auto' }}>
             <div>
               {slots.map((t) => (
                 <div
                   key={t}
                   style={{
                     height: SLOT_H, borderBottom: `1px solid ${th.border}`,
-                    fontSize: 11, color: th.textMuted, padding: '4px 6px',
+                    fontSize: 11, color: th.textMuted, padding: '4px 4px',
                   }}
                 >
                   {t}
@@ -413,56 +509,170 @@ export default function AdminCalendarPage() {
             {range.days.map((day) => {
               const key = toDateKey(day)
               const dayAppts = appts.filter((a) => toDateKey(new Date(a.starts_at)) === key)
+              const isToday = key === todayKey
               return (
-                <div key={key} style={{ position: 'relative', borderLeft: `1px solid ${th.border}` }}>
-                  {slots.map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => openNew(key, t)}
-                      title={`Nueva cita ${t}`}
+                <div
+                  key={key}
+                  style={{ position: 'relative', borderLeft: `1px solid ${th.border}` }}
+                  onDragOver={(e) => {
+                    if (!draggingId) return
+                    e.preventDefault()
+                  }}
+                >
+                  {slots.map((t) => {
+                    const isOver = dragOver?.dateKey === key && dragOver?.time === t
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => { if (!draggingId) openNew(key, t) }}
+                        title={`Nueva cita ${t}`}
+                        onDragOver={(e) => {
+                          if (!draggingId) return
+                          e.preventDefault()
+                          e.dataTransfer.dropEffect = 'move'
+                          setDragOver({ dateKey: key, time: t })
+                        }}
+                        onDragLeave={() => {
+                          setDragOver((cur) => (cur?.dateKey === key && cur?.time === t ? null : cur))
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault()
+                          const id = e.dataTransfer.getData('text/appt-id') || draggingId
+                          const appt = appts.find((a) => a.id === id)
+                          setDragOver(null)
+                          setDraggingId(null)
+                          if (appt) moveAppointment(appt, key, t)
+                        }}
+                        style={{
+                          display: 'block', width: '100%', height: SLOT_H, border: 'none',
+                          borderBottom: `1px solid ${th.border}`,
+                          background: isOver ? th.accentSoft : 'transparent',
+                          cursor: 'pointer', padding: 0,
+                        }}
+                      />
+                    )
+                  })}
+
+                  {isToday && showNowLine && (
+                    <div
+                      aria-hidden
                       style={{
-                        display: 'block', width: '100%', height: SLOT_H, border: 'none',
-                        borderBottom: `1px solid ${th.border}`, background: 'transparent', cursor: 'pointer', padding: 0,
+                        position: 'absolute', left: 0, right: 0, top: nowTop,
+                        zIndex: 5, pointerEvents: 'none',
                       }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = '#fafafa' }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
-                    />
-                  ))}
+                    >
+                      <div style={{
+                        position: 'absolute', left: -5, top: -5,
+                        width: 10, height: 10, borderRadius: '50%', background: '#ef4444',
+                        boxShadow: '0 0 0 3px rgba(239,68,68,0.2)',
+                      }}
+                      />
+                      <div style={{ height: 2, background: '#ef4444', boxShadow: '0 0 8px rgba(239,68,68,0.45)' }} />
+                      <span style={{
+                        position: 'absolute', right: 4, top: -14,
+                        fontSize: 10, fontWeight: 700, color: '#ef4444',
+                        background: '#fff', padding: '1px 6px', borderRadius: 999,
+                      }}
+                      >
+                        {formatTime(now)}
+                      </span>
+                    </div>
+                  )}
+
                   {dayAppts.map((a) => {
                     const start = new Date(a.starts_at)
                     const end = new Date(a.ends_at)
-                    const openMin = CLINIC.openHour * 60 + CLINIC.openMinute
-                    const startMin = start.getHours() * 60 + start.getMinutes()
-                    const endMin = end.getHours() * 60 + end.getMinutes()
-                    const top = ((startMin - openMin) / CLINIC.slotMinutes) * SLOT_H
-                    const height = Math.max(((endMin - startMin) / CLINIC.slotMinutes) * SLOT_H - 4, 28)
+                    const top = (minutesFromOpen(start) / CLINIC.slotMinutes) * SLOT_H
+                    const height = Math.max(((end - start) / 60000 / CLINIC.slotMinutes) * SLOT_H - 4, 36)
                     const ch = channelMeta(a.channel)
                     const st = statusMeta(a.status)
-                    const faded = a.status === 'cancelled' || a.status === 'completed'
+                    const faded = a.status === 'cancelled' || a.status === 'completed' || a.status === 'no_show'
+                    const showLabels = height >= 96
+                    const canAct = a.status !== 'cancelled'
+                    const isDragging = draggingId === a.id
+
                     return (
-                      <button
+                      <div
                         key={a.id}
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); openEdit(a) }}
+                        draggable={canAct && !moving}
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData('text/appt-id', a.id)
+                          e.dataTransfer.effectAllowed = 'move'
+                          setDraggingId(a.id)
+                        }}
+                        onDragEnd={() => {
+                          setDraggingId(null)
+                          setDragOver(null)
+                        }}
                         style={{
-                          position: 'absolute', left: 4, right: 4, top: top + 2, height,
-                          textAlign: 'left', border: `1px solid ${ch.color}55`,
-                          background: faded ? '#f3f4f6' : `${ch.color}18`,
-                          borderRadius: 12, padding: '8px 10px', cursor: 'pointer',
-                          overflow: 'hidden', opacity: faded ? 0.55 : 1,
+                          position: 'absolute', left: 3, right: 3, top: top + 2, height,
+                          textAlign: 'left', border: `1.5px solid ${isDragging ? th.accent : `${ch.color}66`}`,
+                          background: faded ? '#f3f4f6' : `${ch.color}1a`,
+                          borderRadius: 12, padding: '6px 8px',
+                          overflow: 'hidden', opacity: isDragging ? 0.45 : faded ? 0.7 : 1,
+                          zIndex: isDragging ? 6 : 2,
+                          cursor: canAct ? 'grab' : 'default',
+                          display: 'flex', flexDirection: 'column', gap: 4,
+                          boxShadow: isDragging ? th.shadowMd : 'none',
                         }}
                       >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
-                          <strong style={{ fontSize: 12, color: th.text, lineHeight: 1.2 }}>{a.client_name}</strong>
-                          <span title={ch.label} style={{ width: 8, height: 8, borderRadius: '50%', background: ch.color, flexShrink: 0, marginTop: 3 }} />
-                        </div>
-                        <div style={{ fontSize: 11, color: th.textMuted, marginTop: 2 }}>
-                          {formatTime(start)}–{formatTime(end)}
-                          {a.service_name ? ` · ${a.service_name}` : ''}
-                        </div>
-                        <div style={{ fontSize: 10, color: st.color, marginTop: 2 }}>{st.label} · {ch.label}</div>
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => openEdit(a)}
+                          style={{
+                            background: 'none', border: 'none', padding: 0, margin: 0,
+                            textAlign: 'left', cursor: 'pointer', color: 'inherit', flex: 1, minHeight: 0,
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
+                            <strong style={{ fontSize: 12, color: th.text, lineHeight: 1.2 }}>{a.client_name}</strong>
+                            <span title={ch.label} style={{ width: 8, height: 8, borderRadius: '50%', background: ch.color, flexShrink: 0, marginTop: 3 }} />
+                          </div>
+                          <div style={{ fontSize: 10.5, color: th.textMuted, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {formatTime(start)}–{formatTime(end)}
+                            {a.service_name ? ` · ${a.service_name}` : ''}
+                            {a.amount ? ` · ${Number(a.amount).toFixed(0)}€` : ''}
+                          </div>
+                          <div style={{ fontSize: 10, color: st.color, marginTop: 1, fontWeight: 650 }}>{st.label}</div>
+                        </button>
+
+                        {canAct && (
+                          <div
+                            style={{
+                              display: 'flex', gap: 3, flexWrap: 'wrap',
+                              marginTop: 'auto',
+                            }}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          >
+                            {a.status !== 'completed' && (
+                              <ActionChip
+                                title="Completada"
+                                label={showLabels ? 'Completada' : '✓'}
+                                color="#0f766e"
+                                disabled={saving || moving}
+                                onClick={() => setApptStatus(a, 'completed')}
+                              />
+                            )}
+                            {a.status !== 'no_show' && (
+                              <ActionChip
+                                title="No ha asistido"
+                                label={showLabels ? 'No vino' : '∅'}
+                                color="#b45309"
+                                disabled={saving || moving}
+                                onClick={() => setApptStatus(a, 'no_show')}
+                              />
+                            )}
+                            <ActionChip
+                              title="Cancelar"
+                              label={showLabels ? 'Cancelar' : '✕'}
+                              color="#dc2626"
+                              disabled={saving || moving}
+                              onClick={() => setApptStatus(a, 'cancelled')}
+                            />
+                          </div>
+                        )}
+                      </div>
                     )
                   })}
                 </div>
@@ -472,8 +682,8 @@ export default function AdminCalendarPage() {
         )}
       </div>
 
-      <p style={{ marginTop: 12, fontSize: 12, color: th.textMuted }}>
-        Pulsa un hueco vacío para crear una cita. Colores = canal del lead (verde WhatsApp, azul teléfono…).
+      <p style={{ marginTop: 10, fontSize: 12, color: th.textMuted }}>
+        Pulsa un hueco para crear · Arrastra una cita para moverla · La línea roja marca la hora actual
       </p>
 
       {hoursOpen && (
@@ -498,10 +708,34 @@ export default function AdminCalendarPage() {
       {modal && (
         <Modal title={modal.id ? 'Editar reserva' : 'Nueva reserva'} onClose={() => setModal(null)} wide>
           {error && (
-            <div style={{ marginBottom: 12, padding: 10, background: '#fef2f2', color: '#991b1b', borderRadius: 4, fontSize: 13 }}>{error}</div>
+            <div style={{ marginBottom: 12, padding: 10, background: '#fef2f2', color: '#991b1b', borderRadius: 8, fontSize: 13 }}>{error}</div>
           )}
 
-          <div style={{ marginBottom: 18 }}>
+          {modal.id && (
+            <div style={{
+              display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16,
+              padding: 12, background: th.subtleBg, borderRadius: th.radius, border: `1px solid ${th.border}`,
+            }}
+            >
+              <span style={{ width: '100%', fontSize: 11, fontWeight: 700, color: th.textMuted, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 2 }}>
+                Acciones rápidas
+              </span>
+              <button type="button" disabled={saving} onClick={() => setApptStatus(modal, 'completed')} style={{ ...btnGhost, color: '#0f766e', borderColor: '#99f6e4' }}>
+                ✓ Completada
+              </button>
+              <button type="button" disabled={saving} onClick={() => setApptStatus(modal, 'no_show')} style={{ ...btnGhost, color: '#b45309', borderColor: '#fcd34d' }}>
+                ∅ No ha asistido
+              </button>
+              <button type="button" disabled={saving} onClick={() => setApptStatus(modal, 'confirmed')} style={btnGhost}>
+                Confirmar
+              </button>
+              <button type="button" disabled={saving} onClick={() => setApptStatus(modal, 'cancelled')} style={{ ...btnGhost, color: '#dc2626', borderColor: '#fecaca' }}>
+                Cancelar cita
+              </button>
+            </div>
+          )}
+
+          <div style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <span style={{ fontSize: 12, color: th.textMuted }}>Clienta *</span>
               <div style={{ display: 'flex', gap: 6 }}>
@@ -527,12 +761,12 @@ export default function AdminCalendarPage() {
 
             {modal.clientMode === 'existing' && modal.client_id ? (
               <div style={{
-                padding: 14, background: th.subtleBg, borderRadius: 8, border: `1px solid ${th.border}`,
+                padding: 12, background: th.subtleBg, borderRadius: th.radius, border: `1px solid ${th.border}`,
                 display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start',
               }}
               >
                 <div>
-                  <strong style={{ fontSize: 15 }}>{modal.client_name}</strong>
+                  <strong style={{ fontSize: 14 }}>{modal.client_name}</strong>
                   <div style={{ fontSize: 12, color: th.textMuted, marginTop: 4 }}>
                     {modal.client_phone || 'Sin teléfono'}
                     {modal.client_email ? ` · ${modal.client_email}` : ''}
@@ -553,9 +787,6 @@ export default function AdminCalendarPage() {
                     <input type="email" value={modal.client_email} onChange={(e) => setModal({ ...modal, client_email: e.target.value })} style={inputStyle} />
                   </Field>
                 </div>
-                <p style={{ margin: '0 0 8px', fontSize: 12, color: th.textMuted }}>
-                  Se guardará en Clientas al crear la cita.
-                </p>
               </>
             ) : (
               <div style={{ position: 'relative' }}>
@@ -572,7 +803,7 @@ export default function AdminCalendarPage() {
                 {clientResults.length > 0 && (
                   <ul style={{
                     listStyle: 'none', margin: '8px 0 0', padding: 0, border: `1px solid ${th.border}`,
-                    borderRadius: 6, maxHeight: 200, overflow: 'auto',
+                    borderRadius: th.radius, maxHeight: 200, overflow: 'auto',
                   }}
                   >
                     {clientResults.map((c) => (
@@ -589,7 +820,6 @@ export default function AdminCalendarPage() {
                           <div style={{ fontSize: 12, color: th.textMuted }}>
                             {c.phone || 'Sin teléfono'}
                             {c.stats?.visitCount != null ? ` · ${c.stats.visitCount} visitas` : ''}
-                            {c.stats?.totalSpent != null ? ` · ${Number(c.stats.totalSpent).toFixed(0)}€` : ''}
                           </div>
                         </button>
                       </li>
@@ -618,17 +848,7 @@ export default function AdminCalendarPage() {
           <Field label="Tratamiento / servicio">
             <select
               value={modal.service_slug}
-              onChange={(e) => {
-                const slug = e.target.value
-                const svc = services.find((s) => s.slug === slug)
-                const priceGuess = svc?.price ? String(svc.price).replace(/[^\d.,]/g, '').replace(',', '.') : ''
-                setModal({
-                  ...modal,
-                  service_slug: slug,
-                  service_name: svc?.name || '',
-                  amount: modal.amount || (priceGuess && !Number.isNaN(Number(priceGuess)) ? priceGuess : modal.amount),
-                })
-              }}
+              onChange={(e) => applyService(e.target.value)}
               style={inputStyle}
             >
               <option value="">— Elegir tratamiento —</option>
@@ -644,9 +864,12 @@ export default function AdminCalendarPage() {
                 placeholder="O escribe el servicio a mano"
               />
             )}
+            <p style={{ margin: '6px 0 0', fontSize: 11.5, color: th.textMuted }}>
+              Al elegir un tratamiento se rellenan precio y duración automáticamente.
+            </p>
           </Field>
 
-          <Field label="Importe (€) — para el historial de gasto">
+          <Field label="Importe (€)">
             <input
               type="number"
               min="0"
@@ -678,7 +901,7 @@ export default function AdminCalendarPage() {
             </Field>
             <Field label="Hora fin">
               <select value={modal.endTime} onChange={(e) => setModal({ ...modal, endTime: e.target.value })} style={inputStyle}>
-                {slots.concat([`${String(CLINIC.closeHour).padStart(2, '0')}:${String(CLINIC.closeMinute).padStart(2, '0')}`]).map((t) => (
+                {slots.concat([closeTime]).map((t) => (
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
@@ -691,26 +914,26 @@ export default function AdminCalendarPage() {
                 {APPT_STATUSES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
               </select>
             </Field>
-            <Field label="Canal / origen del lead">
+            <Field label="Canal / origen">
               <select value={modal.channel} onChange={(e) => setModal({ ...modal, channel: e.target.value })} style={inputStyle}>
                 {LEAD_CHANNELS.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
               </select>
             </Field>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
             {LEAD_CHANNELS.map((c) => (
               <button
                 key={c.id}
                 type="button"
                 onClick={() => setModal({ ...modal, channel: c.id })}
                 style={{
-                  padding: '6px 12px', borderRadius: 999, border: `1.5px solid ${modal.channel === c.id ? c.color : th.border}`,
-                  background: modal.channel === c.id ? `${c.color}22` : th.pageBg,
-                  color: th.text, fontSize: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '5px 10px', borderRadius: 999, border: `1.5px solid ${modal.channel === c.id ? c.color : th.border}`,
+                  background: modal.channel === c.id ? `${c.color}22` : '#fff',
+                  color: th.text, fontSize: 11.5, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5,
                 }}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.color }} />
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: c.color }} />
                 {c.label}
               </button>
             ))}
@@ -720,20 +943,43 @@ export default function AdminCalendarPage() {
             <textarea rows={3} value={modal.notes} onChange={(e) => setModal({ ...modal, notes: e.target.value })} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Observaciones internas…" />
           </Field>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
             <button type="button" disabled={saving} onClick={saveModal} style={btnPrimary}>
               {saving ? 'Guardando…' : 'Guardar'}
             </button>
             <button type="button" onClick={() => setModal(null)} style={btnGhost}>Cerrar</button>
-            {modal.id && (
-              <button type="button" disabled={saving} onClick={cancelAppt} style={{ ...btnGhost, color: '#dc2626', borderColor: '#fecaca', marginLeft: 'auto' }}>
-                Cancelar cita
-              </button>
-            )}
           </div>
         </Modal>
       )}
     </div>
+  )
+}
+
+function ActionChip({ label, title, color, onClick, disabled }) {
+  return (
+    <button
+      type="button"
+      title={title}
+      disabled={disabled}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick()
+      }}
+      style={{
+        padding: '2px 7px',
+        fontSize: 10,
+        fontWeight: 700,
+        borderRadius: 999,
+        border: `1px solid ${color}55`,
+        background: '#fff',
+        color,
+        cursor: disabled ? 'wait' : 'pointer',
+        lineHeight: 1.3,
+        opacity: disabled ? 0.6 : 1,
+      }}
+    >
+      {label}
+    </button>
   )
 }
 
@@ -752,12 +998,12 @@ function Modal({ title, onClose, children, wide }) {
         onClick={(e) => e.stopPropagation()}
         style={{
           background: '#fff', borderRadius: th.radiusXl, width: '100%', maxWidth: wide ? 560 : 420,
-          maxHeight: '90vh', overflow: 'auto', padding: 28, boxShadow: th.shadowLg,
+          maxHeight: '90vh', overflow: 'auto', padding: 24, boxShadow: th.shadowLg,
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <h3 style={{ margin: 0, fontFamily: th.fontDisplay, fontWeight: 500, fontSize: '1.35rem' }}>{title}</h3>
-          <button type="button" onClick={onClose} style={{ ...btnGhost, padding: '6px 10px' }}>✕</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ margin: 0, fontFamily: th.fontDisplay, fontWeight: 500, fontSize: '1.25rem' }}>{title}</h3>
+          <button type="button" onClick={onClose} style={{ ...btnGhost, padding: '4px 10px' }}>✕</button>
         </div>
         {children}
       </div>
@@ -767,21 +1013,21 @@ function Modal({ title, onClose, children, wide }) {
 
 function Field({ label, children }) {
   return (
-    <label style={{ display: 'block', marginBottom: 14 }}>
-      <span style={{ display: 'block', fontSize: 12, color: th.textMuted, marginBottom: 6 }}>{label}</span>
+    <label style={{ display: 'block', marginBottom: 12 }}>
+      <span style={{ display: 'block', fontSize: 12, color: th.textMuted, marginBottom: 5, fontWeight: 600 }}>{label}</span>
       {children}
     </label>
   )
 }
 
-const inputStyle = { ...uiInput, borderRadius: th.radiusSm }
+const inputStyle = { ...uiInput, borderRadius: th.radiusSm, padding: '10px 12px' }
 const btnPrimary = uiBtnPrimary
 const btnGhost = uiBtnGhost
 const btnIcon = {
-  ...btnGhost, width: 40, height: 40, padding: 0, fontSize: 18, lineHeight: 1,
+  ...btnGhost, width: 32, height: 32, padding: 0, fontSize: 16, lineHeight: 1,
   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
 }
 const chipBtn = {
-  padding: '6px 12px', border: `1px solid ${th.borderStrong}`, borderRadius: th.radiusPill,
+  padding: '4px 10px', border: `1px solid ${th.borderStrong}`, borderRadius: th.radiusPill,
   cursor: 'pointer', fontSize: 11, background: '#fff', fontWeight: 600,
 }

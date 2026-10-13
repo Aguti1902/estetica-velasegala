@@ -519,13 +519,13 @@ function AddPhotoButton({ label, uploading, onPick }) {
 }
 
 const btnPrimary = {
-  padding: '12px 22px', background: `linear-gradient(135deg, ${t.text} 0%, #3f3a36 100%)`, border: 'none', color: '#fff',
-  cursor: 'pointer', fontSize: '13px', fontWeight: 650, borderRadius: t.radiusPill,
-  boxShadow: '0 8px 20px rgba(28,25,23,0.18)',
+  padding: '7px 14px', background: `linear-gradient(135deg, ${t.text} 0%, #3f3a36 100%)`, border: 'none', color: '#fff',
+  cursor: 'pointer', fontSize: '12.5px', fontWeight: 650, borderRadius: t.radiusPill,
+  boxShadow: '0 2px 8px rgba(28,25,23,0.12)',
 }
 const btnSecondary = {
-  padding: '10px 18px', background: '#fff', border: `1.5px solid ${t.borderStrong}`, color: t.text,
-  cursor: 'pointer', fontSize: '13px', borderRadius: t.radiusPill, fontWeight: 550,
+  padding: '6px 12px', background: '#fff', border: `1px solid ${t.borderStrong}`, color: t.text,
+  cursor: 'pointer', fontSize: '12.5px', borderRadius: t.radiusPill, fontWeight: 550,
 }
 const btnSmall = {
   padding: '8px 12px', background: t.subtleBg, border: `1px solid ${t.border}`, color: t.text,
