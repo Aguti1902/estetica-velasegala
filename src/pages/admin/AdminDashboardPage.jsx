@@ -10,7 +10,7 @@ import {
 } from '../../admin/adminTheme'
 import DateRangeFilter from '../../admin/DateRangeFilter'
 import { getPresetRange, rangeToInputs, startOfDay, endOfDay } from '../../admin/dateRange'
-import { channelMeta, formatTime, toDateKey } from '../../admin/clinicHours'
+import { channelMeta, formatTime, isOpenDay, mondayOf, toDateKey } from '../../admin/clinicHours'
 
 function euro(n) {
   return `${Number(n || 0).toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}€`
@@ -48,10 +48,13 @@ export default function AdminDashboardPage() {
     setLoading(true)
     try {
       // margen para próximas citas fuera del periodo
-      const fetchFrom = new Date(range.from)
-      fetchFrom.setDate(fetchFrom.getDate() - 7)
-      const fetchTo = new Date(range.to)
-      fetchTo.setDate(fetchTo.getDate() + 21)
+      const weekStart = mondayOf(new Date())
+      const weekEnd = new Date(weekStart)
+      weekEnd.setDate(weekEnd.getDate() + 6)
+      const fetchFrom = new Date(Math.min(range.from.getTime(), weekStart.getTime()))
+      fetchFrom.setDate(fetchFrom.getDate() - 1)
+      const fetchTo = new Date(Math.max(range.to.getTime(), weekEnd.getTime()))
+      fetchTo.setDate(fetchTo.getDate() + 14)
 
       const [aRes, cRes, mRes, gRes] = await Promise.all([
         adminFetch(
@@ -107,26 +110,22 @@ export default function AdminDashboardPage() {
       .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
       .slice(0, 6)
 
-    const barDays = []
-    const cursor = new Date(range.from)
-    const end = new Date(range.to)
-    // limitar barras a 31 días para no saturar
-    let guard = 0
-    while (cursor <= end && guard < 31) {
-      const key = toDateKey(cursor)
-      const count = active.filter((a) => toDateKey(new Date(a.starts_at)) === key).length
-      barDays.push({
+    const weekStart = mondayOf(now)
+    const weekBars = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart)
+      d.setDate(weekStart.getDate() + i)
+      const key = toDateKey(d)
+      const dayAppts = appts.filter((a) => a.status !== 'cancelled' && toDateKey(new Date(a.starts_at)) === key)
+      return {
         key,
-        day: cursor.getDate(),
-        dow: cursor.getDay(),
-        label: cursor.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', ''),
-        count,
+        day: d.getDate(),
+        label: d.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', ''),
+        count: dayAppts.length,
+        closed: !isOpenDay(d),
         isToday: key === todayKey,
-      })
-      cursor.setDate(cursor.getDate() + 1)
-      guard += 1
-    }
-    const maxBar = Math.max(1, ...barDays.map((b) => b.count))
+      }
+    })
+    const maxBar = Math.max(1, ...weekBars.map((b) => b.count))
 
     const channels = {}
     for (const a of countable) {
@@ -170,7 +169,7 @@ export default function AdminDashboardPage() {
       giftUnused,
       giftTotal: cards.length,
       upcoming,
-      barDays,
+      weekBars,
       maxBar,
       channelList,
       topTreatments,
@@ -182,20 +181,22 @@ export default function AdminDashboardPage() {
 
   const greeting = useMemo(() => {
     const h = new Date().getHours()
-    if (h < 12) return 'Buenos días'
-    if (h < 19) return 'Buenas tardes'
+    if (h >= 13) return 'Buenas tardes'
+    if (h >= 8) return 'Buenos días'
     return 'Buenas noches'
   }, [])
 
   return (
     <div style={{ width: '100%' }}>
       <style>{`
-        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
-        .admin-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-        .admin-hero { }
-        @media (max-width: 860px) {
-          .admin-hero { grid-template-columns: 1fr !important; }
-          .admin-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.7fr); gap: 14px; margin-bottom: 14px; }
+        .admin-stat-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+        @media (max-width: 1100px) {
+          .admin-stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 900px) {
+          .admin-dash-split { grid-template-columns: 1fr; }
+          .admin-stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         .admin-kpi-card { transition: transform 0.16s ease, box-shadow 0.16s ease; }
         .admin-kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(28,25,23,0.08); }
@@ -205,50 +206,29 @@ export default function AdminDashboardPage() {
           .admin-dash-split { grid-template-columns: 1fr; }
         }
       `}</style>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'minmax(220px, 280px) minmax(0, 1fr)',
-        gap: 14,
-        marginBottom: 14,
-      }}
-      className="admin-hero"
-      >
-        <div style={{
-          borderRadius: t.radiusXl,
-          padding: '22px 22px 18px',
-          background: 'linear-gradient(160deg, #1c1917 0%, #3f342c 100%)',
-          color: '#fff',
-          boxShadow: t.shadowMd,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 168,
-        }}
-        >
-          <p style={{ margin: 0, fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#e7d3bc', fontWeight: 700 }}>
-            {greeting}
-          </p>
-          <h2 style={{ ...uiPageTitle, color: '#fff', marginTop: 8 }}>Natalia</h2>
-          <p style={{ margin: '8px 0 16px', color: 'rgba(255,255,255,0.72)', fontSize: 13.5, textTransform: 'capitalize' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12, alignItems: 'center', marginBottom: 14 }}>
+        <div>
+          <h2 style={{ ...uiPageTitle, fontSize: '1.7rem' }}>{greeting}, Natalia</h2>
+          <p style={{ margin: '4px 0 0', color: t.textMuted, fontSize: 13.5, textTransform: 'capitalize' }}>
             {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
           </p>
-          <div style={{ marginTop: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <Link to="/admin/calendario" style={{ ...uiBtnPrimary, background: '#fff', color: t.text, boxShadow: 'none', textDecoration: 'none' }}>
-              + Nueva cita
-            </Link>
-            <button type="button" onClick={load} style={{ ...uiBtnGhost, background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.25)' }}>
-              {loading ? '…' : 'Actualizar'}
-            </button>
-          </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>
-          <Kpi label="Hoy" value={loading ? '—' : stats.todayCount} hint="citas en agenda" tone="accent" to="/admin/calendario" />
-          <Kpi label="Periodo" value={loading ? '—' : stats.periodCount} hint={stats.rangeLabel} tone="info" to="/admin/calendario" />
-          <Kpi label="Ingresos" value={loading ? '—' : euro(stats.periodRevenue)} hint={`${stats.periodAppts} citas`} tone="success" to="/admin/informes" />
-          <Kpi label="No-shows" value={loading ? '—' : stats.noShows} hint="en el periodo" tone="warning" to="/admin/seguimiento" />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Link to="/admin/calendario" style={{ ...uiBtnPrimary, textDecoration: 'none' }}>+ Nueva cita</Link>
+          <button type="button" onClick={load} style={uiBtnGhost}>{loading ? '…' : 'Actualizar'}</button>
         </div>
       </div>
 
-      <div style={{ marginBottom: 16 }}>
+      <div className="admin-stat-row">
+        <StatChip label="Hoy" value={loading ? '—' : stats.todayCount} hint="en agenda" to="/admin/calendario" />
+        <StatChip label="Periodo" value={loading ? '—' : stats.periodCount} hint={stats.rangeLabel} to="/admin/calendario" />
+        <StatChip label="Ingresos" value={loading ? '—' : euro(stats.periodRevenue)} hint={`${stats.periodAppts} citas`} to="/admin/informes" />
+        <StatChip label="No-shows" value={loading ? '—' : stats.noShows} hint="en el periodo" to="/admin/seguimiento" />
+        <StatChip label="Clientas" value={loading ? '—' : stats.clientsCount} hint="en la base" to="/admin/clientas" />
+        <StatChip label="Mensajes" value={loading ? '—' : stats.unread} hint="sin leer" to="/admin/contacto" />
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
         <DateRangeFilter
           preset={preset}
           from={fromInput}
@@ -259,26 +239,17 @@ export default function AdminDashboardPage() {
         />
       </div>
 
-      <div className="admin-kpi-grid">
-        <Kpi label="Clientas" value={loading ? '—' : stats.clientsCount} hint="en la base" tone="warm" to="/admin/clientas" />
-        <Kpi label="Mensajes" value={loading ? '—' : stats.unread} hint="sin leer" tone="warning" to="/admin/contacto" />
-        <Kpi label="Tarjetas" value={loading ? '—' : euro(stats.giftRevenue)} hint={`${stats.giftUnused} sin canjear`} tone="gift" to="/admin/tarjetas" />
-        <Kpi label="Horario" value="Natalia" hint="descansos y apertura" tone="accent" to="/admin/horario" />
-      </div>
-
       <div className="admin-dash-split">
         {/* Activity chart */}
         <section style={uiCard({ padding: 24, minWidth: 0, overflow: 'hidden' })}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 18 }}>
             <div>
-              <h3 style={sectionTitle}>Actividad del periodo</h3>
-              <p style={sectionSub}>
-                {stats.barDays.length > 10 ? 'Calendario de citas' : 'Citas por día'} · {stats.rangeLabel}
-              </p>
+              <h3 style={sectionTitle}>Esta semana</h3>
+              <p style={sectionSub}>Citas de lunes a domingo</p>
             </div>
             <Link to="/admin/calendario" style={linkQuiet}>Ver agenda →</Link>
           </div>
-          <ActivityChart days={stats.barDays} max={stats.maxBar} />
+          <WeekChart days={stats.weekBars} max={stats.maxBar} />
         </section>
 
         {/* Channels */}
@@ -564,6 +535,112 @@ function Kpi({ label, value, hint, tone, to }) {
         <p style={{ margin: 0, fontSize: 12, color, fontWeight: 650 }}>{hint}</p>
       </div>
     </Comp>
+  )
+}
+
+function StatChip({ label, value, hint, to }) {
+  return (
+    <Link to={to} style={{ textDecoration: 'none', color: 'inherit', minWidth: 0 }}>
+      <div className="admin-kpi-card" style={uiCard({
+        padding: '10px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        minHeight: 0,
+      })}
+      >
+        <strong style={{
+          fontFamily: t.fontDisplay,
+          fontSize: '1.35rem',
+          fontWeight: 600,
+          letterSpacing: '-0.03em',
+          lineHeight: 1,
+          minWidth: 28,
+        }}
+        >
+          {value}
+        </strong>
+        <span style={{ minWidth: 0 }}>
+          <span style={{ display: 'block', fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: t.textMuted }}>{label}</span>
+          <span style={{ display: 'block', fontSize: 12, color: t.text, marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{hint}</span>
+        </span>
+      </div>
+    </Link>
+  )
+}
+
+function WeekChart({ days, max }) {
+  const list = days || []
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+      gap: 8,
+      alignItems: 'end',
+    }}
+    >
+      {list.map((d) => {
+        const h = d.count ? Math.max(28, (d.count / max) * 132) : 8
+        return (
+          <div key={d.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, minWidth: 0 }}>
+            <span style={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: d.count ? t.text : 'transparent',
+            }}
+            >
+              {d.count || '0'}
+            </span>
+            <div style={{
+              width: '100%',
+              height: 148,
+              borderRadius: 18,
+              background: d.isToday ? 'rgba(201,168,130,0.18)' : t.subtleBg,
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              padding: 6,
+            }}
+            >
+              <div style={{
+                width: '70%',
+                maxWidth: 36,
+                height: h,
+                borderRadius: 999,
+                background: d.isToday
+                  ? `linear-gradient(180deg, #f3e6d4 0%, ${t.accentDark} 100%)`
+                  : d.closed
+                    ? '#e7e2db'
+                    : 'linear-gradient(180deg, #d9cfc4 0%, #b7aea4 100%)',
+                boxShadow: d.isToday ? '0 10px 18px rgba(138,109,75,0.28)' : 'none',
+              }}
+              />
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                fontSize: 11,
+                fontWeight: 700,
+                textTransform: 'capitalize',
+                color: d.isToday ? t.accentDark : t.textMuted,
+              }}
+              >
+                {d.label}
+              </div>
+              <div style={{
+                marginTop: 2,
+                fontFamily: t.fontDisplay,
+                fontSize: 16,
+                fontWeight: d.isToday ? 650 : 500,
+                color: d.isToday ? t.text : t.textMuted,
+              }}
+              >
+                {d.day}
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
   )
 }
 

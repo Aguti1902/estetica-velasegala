@@ -34,7 +34,8 @@ export default function AdminShell() {
     <div
       className="admin-layout-root"
       style={{
-        minHeight: '100vh',
+        height: '100vh',
+        overflow: 'hidden',
         background: t.pageBgGlow,
         color: t.text,
         display: 'flex',
@@ -51,15 +52,17 @@ export default function AdminShell() {
           to { opacity: 1; transform: translateY(0); }
         }
         .admin-main-panel { animation: adminFadeUp 0.35s ease both; }
+        .admin-layout-nav { overflow: auto; min-height: 0; }
         @media (max-width: 860px) {
-          .admin-layout-root { flex-direction: column !important; }
+          .admin-layout-root { flex-direction: column !important; height: auto !important; overflow: visible !important; }
           .admin-layout-aside {
-            width: 100% !important; min-height: auto !important;
+            width: 100% !important; height: auto !important; min-height: auto !important;
             position: static !important; border-right: none !important;
             border-bottom: 1px solid ${t.border} !important;
-            border-radius: 0 0 ${t.radiusXl}px ${t.radiusXl}px !important;
+            overflow: visible !important;
           }
-          .admin-layout-nav { flex-direction: row !important; flex-wrap: wrap !important; }
+          .admin-main-panel { height: auto !important; overflow: visible !important; }
+          .admin-layout-nav { flex-direction: row !important; flex-wrap: wrap !important; overflow: visible !important; }
           .admin-layout-nav a { flex: 1 1 140px; }
         }
       `}</style>
@@ -75,10 +78,8 @@ export default function AdminShell() {
           display: 'flex',
           flexDirection: 'column',
           padding: '22px 16px',
-          position: 'sticky',
-          top: 0,
-          alignSelf: 'flex-start',
-          minHeight: '100vh',
+          height: '100vh',
+          overflow: 'hidden',
           boxShadow: '4px 0 32px rgba(28,25,23,0.03)',
         }}
       >
@@ -190,10 +191,11 @@ export default function AdminShell() {
         key={location.pathname}
         style={{
           flex: 1,
+          height: '100vh',
           padding: 'clamp(16px, 2.2vw, 28px)',
           minWidth: 0,
-          overflow: 'auto',
-          width: '100%',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
         <Outlet context={{ pwd }} />
