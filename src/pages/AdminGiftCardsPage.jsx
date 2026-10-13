@@ -141,17 +141,18 @@ export default function AdminGiftCardsPage() {
       )}
 
       {embedded && (
-        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', marginBottom: '16px', color: th.text }}>
+        <h2 style={{ fontFamily: th.fontDisplay, fontWeight: 500, fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', marginBottom: 16, color: th.text, letterSpacing: '-0.02em' }}>
           Tarjetas regalo
         </h2>
       )}
 
       <div style={{
-        marginBottom: '24px', padding: '14px 18px', background: th.subtleBg, border: `1px solid ${th.border}`,
-        borderRadius: '6px', fontSize: '13px', color: th.textMuted, lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
-        margin: embedded ? '0 0 24px' : '0 auto 24px', paddingLeft: embedded ? '18px' : undefined,
-        paddingRight: embedded ? '18px' : undefined,
+        marginBottom: 24, padding: '16px 20px', background: th.subtleBg, border: `1px solid ${th.border}`,
+        borderRadius: th.radiusLg, fontSize: 13, color: th.textMuted, lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
+        margin: embedded ? '0 0 24px' : '0 auto 24px', paddingLeft: embedded ? 20 : undefined,
+        paddingRight: embedded ? 20 : undefined,
         width: embedded ? 'auto' : 'calc(100% - clamp(32px, 8vw, 64px))',
+        boxShadow: th.shadow,
       }}>
         <strong style={{ color: th.text }}>Conectado con Stripe.</strong>{' '}
         Cuando un cliente paga en la web, Stripe avisa automáticamente y aquí aparece la tarjeta con su código.
@@ -169,9 +170,9 @@ export default function AdminGiftCardsPage() {
           { label: 'Disponibles', value: total - used, sub: 'sin canjear' },
           { label: 'Ingresos totales', value: `${revenue}€`, sub: 'facturado' },
         ].map(s => (
-          <div key={s.label} style={{ background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: '8px', padding: '24px' }}>
-            <p style={{ color: th.textMuted, fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>{s.label}</p>
-            <p style={{ fontFamily: 'Georgia, serif', fontSize: '2rem', fontWeight: 700, color: th.text, marginBottom: '4px' }}>{s.value}</p>
+          <div key={s.label} style={{ background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg, padding: 24, boxShadow: th.shadow }}>
+            <p style={{ color: th.textMuted, fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8, fontWeight: 700 }}>{s.label}</p>
+            <p style={{ fontFamily: th.fontDisplay, fontSize: '2rem', fontWeight: 600, color: th.text, marginBottom: 4, letterSpacing: '-0.03em' }}>{s.value}</p>
             <p style={{ color: th.textMuted, fontSize: '12px' }}>{s.sub}</p>
           </div>
         ))}
@@ -186,23 +187,22 @@ export default function AdminGiftCardsPage() {
           onKeyDown={e => e.key === 'Enter' && fetchCards()}
           style={{
             flex: 1, minWidth: '240px', padding: '10px 16px',
-            background: th.inputBg, border: `1px solid ${th.border}`,
-            borderRadius: '4px', color: th.text, fontSize: '14px',
-            outline: 'none', fontFamily: 'monospace',
+            background: th.inputBg, border: `1.5px solid ${th.borderStrong}`,
+            borderRadius: th.radiusPill, color: th.text, fontSize: 14,
+            outline: 'none', fontFamily: th.font,
           }}
         />
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: 8 }}>
           {[['all', 'Todas'], ['unused', 'Disponibles'], ['used', 'Canjeadas']].map(([val, label]) => (
             <button
               key={val}
               onClick={() => setFilter(val)}
               style={{
-                padding: '10px 16px', borderRadius: '4px', fontSize: '12px',
-                background: filter === val ? th.text : th.pageBg,
+                padding: '10px 16px', borderRadius: th.radiusPill, fontSize: 12.5,
+                background: filter === val ? th.text : '#fff',
                 color: filter === val ? '#fff' : th.textMuted,
-                border: `1px solid ${th.border}`,
-                cursor: 'pointer', fontWeight: filter === val ? 600 : 400,
-                letterSpacing: '1px',
+                border: `1px solid ${th.borderStrong}`,
+                cursor: 'pointer', fontWeight: filter === val ? 650 : 500,
               }}
             >
               {label}
@@ -212,8 +212,8 @@ export default function AdminGiftCardsPage() {
         <button
           onClick={() => fetchCards()}
           style={{
-            padding: '10px 20px', background: th.pageBg, border: `1px solid ${th.border}`,
-            borderRadius: '4px', color: th.text, cursor: 'pointer', fontSize: '12px',
+            padding: '10px 20px', background: '#fff', border: `1px solid ${th.borderStrong}`,
+            borderRadius: th.radiusPill, color: th.text, cursor: 'pointer', fontSize: 12.5, fontWeight: 600,
           }}
         >
           ↻ Actualizar
@@ -262,8 +262,9 @@ export default function AdminGiftCardsPage() {
                 style={{
                   gap: '16px', padding: '16px 20px',
                   background: th.cardBg, border: `1px solid ${card.is_used ? th.border : th.accent}`,
-                  borderRadius: '6px', alignItems: 'center',
+                  borderRadius: th.radiusLg, alignItems: 'center',
                   opacity: card.is_used ? 0.65 : 1,
+                  boxShadow: th.shadow,
                 }}
               >
                 <div>
@@ -280,8 +281,8 @@ export default function AdminGiftCardsPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ color: th.textMuted, fontSize: '11px', display: 'none' }} className="admin-mobile-label">Importe:</span>
                   <span style={{
-                    fontFamily: 'Georgia, serif', fontSize: '1.25rem',
-                    color: card.is_used ? th.textMuted : th.text, fontWeight: 700,
+                    fontFamily: th.fontDisplay, fontSize: '1.25rem',
+                    color: card.is_used ? th.textMuted : th.text, fontWeight: 600,
                   }}>
                     {card.amount}€
                   </span>
@@ -289,10 +290,10 @@ export default function AdminGiftCardsPage() {
 
                 <div>
                   <span style={{
-                    display: 'inline-block', padding: '4px 10px', borderRadius: '20px', fontSize: '11px',
-                    letterSpacing: '1px', fontWeight: 600,
-                    background: card.is_used ? th.subtleBg : 'rgba(201,168,130,0.2)',
-                    color: card.is_used ? th.textMuted : th.text,
+                    display: 'inline-block', padding: '5px 12px', borderRadius: th.radiusPill, fontSize: '11px',
+                    letterSpacing: '0.06em', fontWeight: 650,
+                    background: card.is_used ? th.subtleBg : th.accentSoft,
+                    color: card.is_used ? th.textMuted : th.accentDark,
                     border: `1px solid ${card.is_used ? th.border : th.accent}`,
                   }}>
                     {card.is_used ? 'CANJEADA' : 'ACTIVA'}
@@ -321,12 +322,12 @@ export default function AdminGiftCardsPage() {
                     onClick={() => toggleUsed(card)}
                     disabled={updating === card.code}
                     style={{
-                      padding: '8px 14px', borderRadius: '4px', fontSize: '11px',
+                      padding: '9px 16px', borderRadius: th.radiusPill, fontSize: '11px',
                       background: card.is_used ? th.subtleBg : th.text,
                       color: card.is_used ? th.textMuted : '#fff',
                       border: `1px solid ${th.border}`,
                       cursor: updating === card.code ? 'wait' : 'pointer',
-                      letterSpacing: '1px', fontWeight: 600,
+                      letterSpacing: '0.04em', fontWeight: 650,
                     }}
                   >
                     {updating === card.code ? '...' : card.is_used ? '↩ Reactivar' : '✓ Marcar usada'}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { adminFetch } from '../../admin/useAdminAuth'
-import { adminTheme as t } from '../../admin/adminTheme'
+import { adminTheme as t, uiPageTitle, uiCard, uiBtnGhost } from '../../admin/adminTheme'
 
 const STATUS_LABEL = { new: 'Nuevo', read: 'Leído', archived: 'Archivado' }
 
@@ -40,17 +40,19 @@ export default function AdminContactPage() {
   const unread = items.filter((m) => m.status === 'new').length
 
   const filterBtn = (active) => ({
-    padding: '8px 14px', fontSize: '12px', cursor: 'pointer', borderRadius: '4px',
-    background: active ? t.text : t.pageBg,
+    padding: '9px 16px', fontSize: 12.5, cursor: 'pointer', borderRadius: t.radiusPill,
+    background: active ? t.text : '#fff',
     color: active ? '#fff' : t.textMuted,
-    border: `1px solid ${t.border}`,
+    border: `1px solid ${t.borderStrong}`,
+    fontWeight: active ? 650 : 500,
+    fontFamily: t.font,
   })
 
   return (
     <div>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', marginBottom: '24px' }}>
         <div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: 0, color: t.text }}>
+          <h2 style={uiPageTitle}>
             Contacto
           </h2>
           <p style={{ color: t.textMuted, marginTop: '8px' }}>
@@ -72,7 +74,7 @@ export default function AdminContactPage() {
       {loading ? (
         <p style={{ color: t.textMuted }}>Cargando…</p>
       ) : items.length === 0 ? (
-        <p style={{ color: t.textMuted, padding: '32px', border: `1px solid ${t.border}`, textAlign: 'center', borderRadius: '6px' }}>
+        <p style={{ color: t.textMuted, padding: 32, textAlign: 'center', ...uiCard({}) }}>
           No hay mensajes{filter !== 'all' ? ' con este filtro' : ''}.
         </p>
       ) : (
@@ -88,9 +90,10 @@ export default function AdminContactPage() {
                   }}
                   style={{
                     width: '100%', textAlign: 'left', padding: '14px 16px', cursor: 'pointer',
-                    background: selected?.id === m.id ? t.subtleBg : t.pageBg,
+                    background: selected?.id === m.id ? t.subtleBg : '#fff',
                     border: `1px solid ${m.status === 'new' ? t.accent : t.border}`,
-                    color: t.text, borderRadius: '4px',
+                    color: t.text, borderRadius: t.radius,
+                    boxShadow: t.shadow,
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
@@ -106,12 +109,12 @@ export default function AdminContactPage() {
             ))}
           </ul>
 
-          <div style={{ background: t.cardBg, border: `1px solid ${t.border}`, padding: '24px', minHeight: '320px', borderRadius: '6px' }}>
+          <div style={{ ...uiCard({ padding: 24, minHeight: 320 }) }}>
             {!selected ? (
               <p style={{ color: t.textMuted, textAlign: 'center', marginTop: '80px' }}>Selecciona un mensaje</p>
             ) : (
               <>
-                <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia, serif', fontWeight: 400, color: t.text }}>{selected.name}</h3>
+                <h3 style={{ margin: '0 0 4px', fontFamily: t.fontDisplay, fontWeight: 500, color: t.text }}>{selected.name}</h3>
                 <p style={{ margin: 0, fontSize: '0.875rem' }}>
                   <a href={`mailto:${selected.email}`} style={{ color: t.text, fontWeight: 600 }}>{selected.email}</a>
                   {selected.phone && <span style={{ color: t.textMuted }}>{` · ${selected.phone}`}</span>}
@@ -129,7 +132,7 @@ export default function AdminContactPage() {
                 {selected.message && (
                   <div style={{
                     marginTop: '16px', padding: '16px', background: t.subtleBg, lineHeight: 1.6,
-                    whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: t.text, borderRadius: '4px',
+                    whiteSpace: 'pre-wrap', fontSize: '0.9rem', color: t.text, borderRadius: t.radius,
                   }}
                   >
                     {selected.message}
@@ -155,7 +158,4 @@ export default function AdminContactPage() {
   )
 }
 
-const actionBtn = {
-  padding: '8px 14px', background: t.pageBg, border: `1px solid ${t.borderStrong}`, color: t.text,
-  cursor: 'pointer', fontSize: '12px', borderRadius: '4px',
-}
+const actionBtn = { ...uiBtnGhost, fontSize: 12.5 }

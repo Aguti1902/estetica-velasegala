@@ -145,8 +145,9 @@ export default function AdminServicesPage() {
   }
 
   const inputStyle = {
-    width: '100%', padding: '12px 14px', background: t.inputBg, border: `1px solid ${t.border}`,
-    color: t.text, fontSize: '15px', boxSizing: 'border-box', borderRadius: '4px',
+    width: '100%', padding: '12px 14px', background: t.inputBg, border: `1.5px solid ${t.borderStrong}`,
+    color: t.text, fontSize: '15px', boxSizing: 'border-box', borderRadius: t.radiusSm,
+    fontFamily: t.font,
   }
 
   const hasOverride = Boolean(overrides[`${slug}:${locale}`])
@@ -157,15 +158,16 @@ export default function AdminServicesPage() {
     <div>
       {toast && (
         <div style={{
-          position: 'fixed', top: '16px', right: '16px', background: t.pageBg, border: `1px solid ${t.text}`,
-          padding: '12px 20px', zIndex: 100, fontSize: '14px', maxWidth: '320px',
+          position: 'fixed', top: 16, right: 16, background: '#fff', border: `1px solid ${t.border}`,
+          padding: '14px 20px', zIndex: 100, fontSize: 14, maxWidth: 320,
+          borderRadius: t.radiusPill, boxShadow: t.shadowMd,
         }}
         >
           {toast}
         </div>
       )}
 
-      <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: '0 0 8px', color: t.text }}>
+      <h2 style={{ fontFamily: t.fontDisplay, fontWeight: 500, fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '0 0 8px', color: t.text, letterSpacing: '-0.02em' }}>
         Tratamientos
       </h2>
       <p style={{ color: t.textMuted, marginBottom: '24px', lineHeight: 1.5 }}>
@@ -173,7 +175,7 @@ export default function AdminServicesPage() {
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(220px, 260px) 1fr', gap: '20px', alignItems: 'start' }}>
-        <aside style={{ background: t.subtleBg, border: `1px solid ${t.border}`, borderRadius: '6px', padding: '16px', maxHeight: 'calc(100vh - 160px)', overflow: 'auto' }}>
+        <aside style={{ background: t.cardBg, border: `1px solid ${t.border}`, borderRadius: t.radiusLg, padding: 18, maxHeight: 'calc(100vh - 160px)', overflow: 'auto', boxShadow: t.shadow }}>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -457,7 +459,7 @@ export default function AdminServicesPage() {
 function Section({ title, children }) {
   return (
     <section style={{ marginBottom: '36px', paddingBottom: '28px', borderBottom: `1px solid ${t.border}` }}>
-      <h3 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.2rem', margin: '0 0 16px', color: t.text }}>
+      <h3 style={{ fontFamily: t.fontDisplay, fontWeight: 500, fontSize: '1.2rem', margin: '0 0 16px', color: t.text }}>
         {title}
       </h3>
       {children}
@@ -506,7 +508,7 @@ function AddPhotoButton({ label, uploading, onPick }) {
     <label
       style={{
         width: 140, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        border: `2px dashed ${t.borderStrong}`, borderRadius: '4px', color: t.text, fontSize: '13px',
+        border: `2px dashed ${t.borderStrong}`, borderRadius: t.radius, color: t.text, fontSize: '13px',
         cursor: uploading ? 'wait' : 'pointer', textAlign: 'center', padding: '8px',
       }}
     >
@@ -517,16 +519,17 @@ function AddPhotoButton({ label, uploading, onPick }) {
 }
 
 const btnPrimary = {
-  padding: '12px 22px', background: t.text, border: 'none', color: '#fff',
-  cursor: 'pointer', fontSize: '13px', fontWeight: 600, borderRadius: '4px',
+  padding: '12px 22px', background: `linear-gradient(135deg, ${t.text} 0%, #3f3a36 100%)`, border: 'none', color: '#fff',
+  cursor: 'pointer', fontSize: '13px', fontWeight: 650, borderRadius: t.radiusPill,
+  boxShadow: '0 8px 20px rgba(28,25,23,0.18)',
 }
 const btnSecondary = {
-  padding: '10px 18px', background: t.pageBg, border: `1px solid ${t.borderStrong}`, color: t.text,
-  cursor: 'pointer', fontSize: '13px', borderRadius: '4px',
+  padding: '10px 18px', background: '#fff', border: `1.5px solid ${t.borderStrong}`, color: t.text,
+  cursor: 'pointer', fontSize: '13px', borderRadius: t.radiusPill, fontWeight: 550,
 }
 const btnSmall = {
   padding: '8px 12px', background: t.subtleBg, border: `1px solid ${t.border}`, color: t.text,
-  fontSize: '12px', borderRadius: '4px', display: 'inline-block',
+  fontSize: '12px', borderRadius: t.radiusPill, display: 'inline-block',
 }
 const btnTextDanger = {
   padding: '6px 10px', background: 'transparent', border: 'none', color: t.danger,

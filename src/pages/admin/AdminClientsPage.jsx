@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { adminFetch } from '../../admin/useAdminAuth'
-import { adminTheme as th } from '../../admin/adminTheme'
+import {
+  adminTheme as th,
+  uiBtnPrimary as btnPrimary,
+  uiBtnGhost as btnGhost,
+  uiInput as inputStyle,
+  uiPageTitle,
+  uiCard,
+} from '../../admin/adminTheme'
 import { channelMeta, formatTime } from '../../admin/clinicHours'
 
 export default function AdminClientsPage() {
@@ -84,7 +91,8 @@ export default function AdminClientsPage() {
       {toast && (
         <div style={{
           position: 'fixed', top: 16, right: 16, zIndex: 100, background: '#fff',
-          border: `1px solid ${th.text}`, padding: '12px 18px', borderRadius: 6, fontSize: 14,
+          border: `1px solid ${th.border}`, padding: '14px 20px', borderRadius: th.radiusPill, fontSize: 14,
+          boxShadow: th.shadowMd,
         }}
         >
           {toast}
@@ -93,7 +101,7 @@ export default function AdminClientsPage() {
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16, marginBottom: 20 }}>
         <div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: 0 }}>Clientas</h2>
+          <h2 style={uiPageTitle}>Clientas</h2>
           <p style={{ color: th.textMuted, margin: '8px 0 0', fontSize: 14 }}>
             Historial, gasto y frecuencia de visitas
           </p>
@@ -108,7 +116,7 @@ export default function AdminClientsPage() {
       </div>
 
       {error && (
-        <div style={{ marginBottom: 16, padding: 12, background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', borderRadius: 6, fontSize: 13 }}>
+        <div style={{ marginBottom: 16, padding: 14, background: th.dangerSoft, border: `1px solid #fecaca`, color: th.danger, borderRadius: th.radius, fontSize: 13 }}>
           {error}
         </div>
       )}
@@ -125,7 +133,7 @@ export default function AdminClientsPage() {
           {loading ? (
             <p style={{ color: th.textMuted }}>Cargando…</p>
           ) : clients.length === 0 ? (
-            <p style={{ color: th.textMuted, padding: 32, border: `1px solid ${th.border}`, textAlign: 'center', borderRadius: 8 }}>
+            <p style={{ color: th.textMuted, padding: 32, ...uiCard({ textAlign: 'center' }) }}>
               No hay clientas todavía. Crea una o añade una cita en Agenda.
             </p>
           ) : (
@@ -136,8 +144,9 @@ export default function AdminClientsPage() {
                   type="button"
                   onClick={() => openDetail(c)}
                   style={{
-                    textAlign: 'left', padding: 18, background: selected?.id === c.id ? th.subtleBg : '#fff',
-                    border: `1px solid ${selected?.id === c.id ? th.text : th.border}`, borderRadius: 8, cursor: 'pointer',
+                    textAlign: 'left', padding: 20, background: selected?.id === c.id ? th.subtleBg : '#fff',
+                    border: `1px solid ${selected?.id === c.id ? th.accent : th.border}`, borderRadius: th.radiusLg,
+                    cursor: 'pointer', boxShadow: selected?.id === c.id ? th.shadowMd : th.shadow,
                   }}
                 >
                   <strong style={{ fontSize: 15, display: 'block', marginBottom: 6 }}>{c.name}</strong>
@@ -157,15 +166,15 @@ export default function AdminClientsPage() {
         </div>
 
         {selected && detail && (
-          <aside style={{ background: '#fff', border: `1px solid ${th.border}`, borderRadius: 8, padding: 24, alignSelf: 'start', position: 'sticky', top: 16 }}>
+          <aside style={{ ...uiCard({ padding: 24 }), alignSelf: 'start', position: 'sticky', top: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.4rem' }}>{detail.name}</h3>
+              <h3 style={{ margin: 0, fontFamily: th.fontDisplay, fontWeight: 500, fontSize: '1.4rem' }}>{detail.name}</h3>
               <button type="button" onClick={() => { setSelected(null); setDetail(null) }} style={btnGhost}>✕</button>
             </div>
             <p style={{ margin: '0 0 4px', fontSize: 14 }}>{detail.phone || 'Sin teléfono'}</p>
             <p style={{ margin: '0 0 16px', fontSize: 13, color: th.textMuted }}>{detail.email || 'Sin email'}</p>
             {detail.notes && (
-              <p style={{ fontSize: 13, background: th.subtleBg, padding: 12, borderRadius: 6, marginBottom: 16 }}>{detail.notes}</p>
+              <p style={{ fontSize: 13, background: th.subtleBg, padding: 14, borderRadius: th.radius, marginBottom: 16 }}>{detail.notes}</p>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
@@ -260,9 +269,9 @@ export default function AdminClientsPage() {
           <div
             role="dialog"
             onClick={(e) => e.stopPropagation()}
-            style={{ background: '#fff', borderRadius: 10, width: '100%', maxWidth: 440, padding: 24 }}
+            style={{ background: '#fff', borderRadius: th.radiusXl, width: '100%', maxWidth: 440, padding: 28, boxShadow: th.shadowLg }}
           >
-            <h3 style={{ margin: '0 0 20px', fontFamily: 'Georgia, serif', fontWeight: 400 }}>
+            <h3 style={{ margin: '0 0 20px', fontFamily: th.fontDisplay, fontWeight: 500 }}>
               {modal.id ? 'Editar clienta' : 'Nueva clienta'}
             </h3>
             <label style={fieldLabel}>
@@ -294,9 +303,9 @@ export default function AdminClientsPage() {
 
 function Stat({ label, value }) {
   return (
-    <div style={{ background: th.subtleBg, borderRadius: 6, padding: 12 }}>
-      <div style={{ fontSize: 11, color: th.textMuted, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</div>
-      <div style={{ fontSize: 16, fontWeight: 600, marginTop: 4 }}>{value}</div>
+    <div style={{ background: th.subtleBg, borderRadius: th.radius, padding: 14, border: `1px solid ${th.border}` }}>
+      <div style={{ fontSize: 11, color: th.textMuted, textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 650 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 700, marginTop: 4 }}>{value}</div>
     </div>
   )
 }
@@ -304,9 +313,9 @@ function Stat({ label, value }) {
 function Badge({ children, accent, soft }) {
   return (
     <span style={{
-      padding: '3px 8px', borderRadius: 999, fontSize: 11,
-      background: accent ? '#0d0d0d' : soft ? '#f3f4f6' : '#eef2ff',
-      color: accent ? '#fff' : soft ? '#6b7280' : '#3730a3',
+      padding: '4px 10px', borderRadius: th.radiusPill, fontSize: 11, fontWeight: 650,
+      background: accent ? th.text : soft ? th.subtleBg : th.accentSoft,
+      color: accent ? '#fff' : soft ? th.textMuted : th.accentDark,
     }}
     >
       {children}
@@ -314,16 +323,4 @@ function Badge({ children, accent, soft }) {
   )
 }
 
-const inputStyle = {
-  width: '100%', padding: '10px 12px', border: `1px solid ${th.border}`, borderRadius: 6,
-  fontSize: 14, boxSizing: 'border-box',
-}
-const fieldLabel = { display: 'block', marginBottom: 12, fontSize: 12, color: th.textMuted }
-const btnPrimary = {
-  padding: '11px 18px', background: th.text, color: '#fff', border: 'none', borderRadius: 6,
-  cursor: 'pointer', fontSize: 13, fontWeight: 600,
-}
-const btnGhost = {
-  padding: '10px 14px', background: '#fff', border: `1px solid ${th.border}`, borderRadius: 6,
-  cursor: 'pointer', fontSize: 13, color: th.text,
-}
+const fieldLabel = { display: 'block', marginBottom: 12, fontSize: 12, color: th.textMuted, fontWeight: 600 }

@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { adminFetch } from '../../admin/useAdminAuth'
-import { adminTheme as th } from '../../admin/adminTheme'
+import {
+  adminTheme as th,
+  uiBtnPrimary,
+  uiBtnGhost,
+  uiInput,
+  uiPageTitle,
+} from '../../admin/adminTheme'
 import { useServices } from '../../context/ServicesContext'
 import {
   APPT_STATUSES,
@@ -288,7 +294,8 @@ export default function AdminCalendarPage() {
       {toast && (
         <div style={{
           position: 'fixed', top: 16, right: 16, zIndex: 200, background: th.pageBg,
-          border: `1px solid ${th.text}`, padding: '12px 18px', fontSize: 14, borderRadius: 6,
+          border: `1px solid ${th.border}`, padding: '14px 20px', fontSize: 14, borderRadius: th.radiusPill,
+          boxShadow: th.shadowMd,
         }}
         >
           {toast}
@@ -297,7 +304,7 @@ export default function AdminCalendarPage() {
 
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 16, marginBottom: 20 }}>
         <div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.75rem', margin: 0, color: th.text }}>
+          <h2 style={uiPageTitle}>
             Calendario de reservas
           </h2>
           <p style={{ color: th.textMuted, margin: '8px 0 0', fontSize: 14 }}>
@@ -313,7 +320,7 @@ export default function AdminCalendarPage() {
       </div>
 
       {error && !modal && (
-        <div style={{ marginBottom: 16, padding: 12, background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', borderRadius: 6, fontSize: 13 }}>
+        <div style={{ marginBottom: 16, padding: 14, background: th.dangerSoft, border: '1px solid #fecaca', color: th.danger, borderRadius: th.radius, fontSize: 13 }}>
           {error}
         </div>
       )}
@@ -321,7 +328,8 @@ export default function AdminCalendarPage() {
       {/* Controles */}
       <div style={{
         display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', marginBottom: 16,
-        padding: '12px 14px', background: th.subtleBg, border: `1px solid ${th.border}`, borderRadius: 8,
+        padding: '14px 16px', background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg,
+        boxShadow: th.shadow,
       }}
       >
         <button type="button" onClick={goToday} style={btnGhost}>Hoy</button>
@@ -351,7 +359,7 @@ export default function AdminCalendarPage() {
       </div>
 
       {/* Grid */}
-      <div style={{ border: `1px solid ${th.border}`, borderRadius: 8, overflow: 'hidden', background: th.pageBg }}>
+      <div style={{ border: `1px solid ${th.border}`, borderRadius: th.radiusLg, overflow: 'hidden', background: th.cardBg, boxShadow: th.shadow }}>
         <div style={{
           display: 'grid',
           gridTemplateColumns: `64px repeat(${range.days.length}, 1fr)`,
@@ -371,7 +379,7 @@ export default function AdminCalendarPage() {
               <div style={{ textTransform: 'uppercase', letterSpacing: '0.08em', color: th.textMuted, fontSize: 10 }}>
                 {d.toLocaleDateString('es-ES', { weekday: 'short' })}
               </div>
-              <div style={{ fontSize: 18, fontFamily: 'Georgia, serif', marginTop: 2 }}>{d.getDate()}</div>
+              <div style={{ fontSize: 18, fontFamily: th.fontDisplay, marginTop: 2 }}>{d.getDate()}</div>
               <div style={{
                 marginTop: 6, display: 'inline-block', padding: '3px 10px', borderRadius: 999,
                 background: '#e8dff5', color: '#5b21b6', fontSize: 10, letterSpacing: '0.06em',
@@ -441,7 +449,7 @@ export default function AdminCalendarPage() {
                           position: 'absolute', left: 4, right: 4, top: top + 2, height,
                           textAlign: 'left', border: `1px solid ${ch.color}55`,
                           background: faded ? '#f3f4f6' : `${ch.color}18`,
-                          borderRadius: 6, padding: '6px 8px', cursor: 'pointer',
+                          borderRadius: 12, padding: '8px 10px', cursor: 'pointer',
                           overflow: 'hidden', opacity: faded ? 0.55 : 1,
                         }}
                       >
@@ -743,12 +751,12 @@ function Modal({ title, onClose, children, wide }) {
         role="dialog"
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#fff', borderRadius: 10, width: '100%', maxWidth: wide ? 560 : 420,
-          maxHeight: '90vh', overflow: 'auto', padding: 24, boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          background: '#fff', borderRadius: th.radiusXl, width: '100%', maxWidth: wide ? 560 : 420,
+          maxHeight: '90vh', overflow: 'auto', padding: 28, boxShadow: th.shadowLg,
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <h3 style={{ margin: 0, fontFamily: 'Georgia, serif', fontWeight: 400, fontSize: '1.35rem' }}>{title}</h3>
+          <h3 style={{ margin: 0, fontFamily: th.fontDisplay, fontWeight: 500, fontSize: '1.35rem' }}>{title}</h3>
           <button type="button" onClick={onClose} style={{ ...btnGhost, padding: '6px 10px' }}>✕</button>
         </div>
         {children}
@@ -766,23 +774,14 @@ function Field({ label, children }) {
   )
 }
 
-const inputStyle = {
-  width: '100%', padding: '10px 12px', border: `1px solid ${th.border}`, borderRadius: 6,
-  fontSize: 14, boxSizing: 'border-box', background: '#fff', color: th.text,
-}
-
-const btnPrimary = {
-  padding: '11px 18px', background: th.text, color: '#fff', border: 'none', borderRadius: 6,
-  cursor: 'pointer', fontSize: 13, fontWeight: 600,
-}
-const btnGhost = {
-  padding: '10px 14px', background: '#fff', border: `1px solid ${th.border}`, borderRadius: 6,
-  cursor: 'pointer', fontSize: 13, color: th.text,
-}
+const inputStyle = { ...uiInput, borderRadius: th.radiusSm }
+const btnPrimary = uiBtnPrimary
+const btnGhost = uiBtnGhost
 const btnIcon = {
-  ...btnGhost, width: 36, padding: '8px 0', fontSize: 18, lineHeight: 1,
+  ...btnGhost, width: 40, height: 40, padding: 0, fontSize: 18, lineHeight: 1,
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
 }
 const chipBtn = {
-  padding: '5px 10px', border: `1px solid ${th.border}`, borderRadius: 999,
-  cursor: 'pointer', fontSize: 11, background: '#fff',
+  padding: '6px 12px', border: `1px solid ${th.borderStrong}`, borderRadius: th.radiusPill,
+  cursor: 'pointer', fontSize: 11, background: '#fff', fontWeight: 600,
 }
