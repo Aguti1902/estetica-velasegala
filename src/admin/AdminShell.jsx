@@ -7,6 +7,10 @@ const NAV = [
   { to: '/admin', label: 'Dashboard', end: true, icon: IconHome },
   { to: '/admin/calendario', label: 'Agenda', icon: IconCalendar },
   { to: '/admin/clientas', label: 'Clientas', icon: IconUsers },
+  { to: '/admin/seguimiento', label: 'Seguimiento', icon: IconBell },
+  { to: '/admin/informes', label: 'Informes', icon: IconChart },
+  { to: '/admin/tareas', label: 'Tareas', icon: IconCheck },
+  { to: '/admin/inventario', label: 'Inventario', icon: IconBox },
   { to: '/admin/tratamientos', label: 'Tratamientos', icon: IconSpark },
   { to: '/admin/organizacion', label: 'Organización', icon: IconLayers },
   { to: '/admin/contacto', label: 'Contacto', icon: IconMail },
@@ -187,9 +191,10 @@ export default function AdminShell() {
         key={location.pathname}
         style={{
           flex: 1,
-          padding: 'clamp(20px, 3.5vw, 36px)',
+          padding: 'clamp(16px, 2.2vw, 28px)',
           minWidth: 0,
           overflow: 'auto',
+          width: '100%',
         }}
       >
         <Outlet context={{ pwd }} />
@@ -244,6 +249,34 @@ function IconGift({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <rect x="3" y="9" width="18" height="12" rx="2" /><path d="M12 9v12M3 13h18M7.5 9c0-2 1.5-3.5 3-3.5S12 7.5 12 9M12 9c0-1.5.8-3.5 2.5-3.5S17.5 7 17.5 9" />
+    </svg>
+  )
+}
+function IconChart({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M4 19V5M10 19V9M16 19v-6M22 19H2" />
+    </svg>
+  )
+}
+function IconBell({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M6 9a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9" /><path d="M10 21h4" />
+    </svg>
+  )
+}
+function IconCheck({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="4" y="4" width="16" height="16" rx="3" /><path d="m8 12 2.5 2.5L16 9" />
+    </svg>
+  )
+}
+function IconBox({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 8.5 12 3l9 5.5V19l-9 5-9-5V8.5Z" /><path d="M12 13v11M3 8.5l9 4.5 9-4.5" />
     </svg>
   )
 }

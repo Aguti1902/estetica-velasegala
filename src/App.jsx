@@ -27,6 +27,10 @@ const AdminOrganizacionPage = lazy(() => import('./pages/admin/AdminOrganizacion
 const AdminCalendarPage = lazy(() => import('./pages/admin/AdminCalendarPage'))
 const AdminClientsPage = lazy(() => import('./pages/admin/AdminClientsPage'))
 const AdminContactPage = lazy(() => import('./pages/admin/AdminContactPage'))
+const AdminReportsPage = lazy(() => import('./pages/admin/AdminReportsPage'))
+const AdminFollowUpPage = lazy(() => import('./pages/admin/AdminFollowUpPage'))
+const AdminTasksPage = lazy(() => import('./pages/admin/AdminTasksPage'))
+const AdminInventoryPage = lazy(() => import('./pages/admin/AdminInventoryPage'))
 const AdminGiftCardsPage = lazy(() => import('./pages/AdminGiftCardsPage'))
 
 function PageLoader() {
@@ -84,6 +88,10 @@ export default function App() {
               <Route index element={<AdminDashboardPage />} />
               <Route path="calendario" element={<AdminCalendarPage />} />
               <Route path="clientas" element={<AdminClientsPage />} />
+              <Route path="seguimiento" element={<AdminFollowUpPage />} />
+              <Route path="informes" element={<AdminReportsPage />} />
+              <Route path="tareas" element={<AdminTasksPage />} />
+              <Route path="inventario" element={<AdminInventoryPage />} />
               <Route path="tratamientos" element={<AdminServicesPage />} />
               <Route path="organizacion" element={<AdminOrganizacionPage />} />
               <Route path="contacto" element={<AdminContactPage />} />

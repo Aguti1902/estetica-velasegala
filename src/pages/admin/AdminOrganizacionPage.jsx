@@ -68,12 +68,12 @@ export default function AdminOrganizacionPage() {
       <h2 style={{ ...uiPageTitle, marginBottom: 8 }}>
         Organización del catálogo
       </h2>
-      <p style={{ color: th.textMuted, marginBottom: 28, maxWidth: 640, lineHeight: 1.55 }}>
+      <p style={{ color: th.textMuted, marginBottom: 28, lineHeight: 1.55, maxWidth: 'none' }}>
         Aquí puedes cambiar los títulos de las dos secciones faciales (Tratamientos base y Tratamientos específicos).
         Para mover un tratamiento de un grupo a otro, ábrelo en <strong>Tratamientos</strong> y elige el grupo.
       </p>
 
-      <div style={uiCard({ padding: 28, maxWidth: 720 })}>
+      <div style={uiCard({ padding: 28, width: '100%' })}>
         <h3 style={{ fontFamily: th.fontDisplay, fontWeight: 500, marginTop: 0, fontSize: '1.25rem' }}>
           Faciales — {DEFAULT_CATEGORIES.facial.es}
         </h3>

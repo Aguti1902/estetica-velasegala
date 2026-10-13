@@ -20,6 +20,7 @@ import {
   daySlots,
   formatTime,
   isOpenDay,
+  parseDateKey,
   parseServiceDurationMinutes,
   parseServicePrice,
   statusMeta,
@@ -71,6 +72,8 @@ export default function AdminCalendarPage() {
   const [appts, setAppts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showCancelled, setShowCancelled] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [channelFilter, setChannelFilter] = useState('all')
   const [modal, setModal] = useState(null)
   const [hoursOpen, setHoursOpen] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -112,7 +115,7 @@ export default function AdminCalendarPage() {
       const q = new URLSearchParams({
         from: range.from.toISOString(),
         to: new Date(range.to.getTime() + 1).toISOString(),
-        include_cancelled: showCancelled ? 'true' : 'false',
+        include_cancelled: (showCancelled || statusFilter === 'cancelled' || statusFilter === 'all') ? 'true' : 'false',
       })
       const res = await adminFetch(`/api/admin/appointments?${q}`, pwd)
       if (res.ok) {
@@ -125,7 +128,7 @@ export default function AdminCalendarPage() {
     } finally {
       setLoading(false)
     }
-  }, [pwd, range.from, range.to, showCancelled])
+  }, [pwd, range.from, range.to, showCancelled, statusFilter])
 
   useEffect(() => { load() }, [load])
 
@@ -424,7 +427,7 @@ export default function AdminCalendarPage() {
       )}
 
       <div style={{
-        display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12,
+        display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 10,
         padding: '10px 12px', background: th.cardBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg,
         boxShadow: th.shadow,
       }}
@@ -432,7 +435,20 @@ export default function AdminCalendarPage() {
         <button type="button" onClick={goToday} style={btnGhost}>Hoy</button>
         <button type="button" onClick={() => shift(-1)} style={btnIcon}>‹</button>
         <button type="button" onClick={() => shift(1)} style={btnIcon}>›</button>
-        <strong style={{ fontSize: 14, textTransform: 'capitalize', minWidth: 180 }}>{titleDate}</strong>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted }}>
+          Ir a
+          <input
+            type="date"
+            value={toDateKey(anchor)}
+            onChange={(e) => {
+              if (!e.target.value) return
+              const d = parseDateKey(e.target.value)
+              setAnchor(d)
+            }}
+            style={{ ...inputStyle, width: 'auto', padding: '6px 10px', fontSize: 12.5 }}
+          />
+        </label>
+        <strong style={{ fontSize: 14, textTransform: 'capitalize', minWidth: 160 }}>{titleDate}</strong>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
           {[['day', 'Día'], ['week', 'Semana']].map(([v, label]) => (
             <button
@@ -448,11 +464,47 @@ export default function AdminCalendarPage() {
               {label}
             </button>
           ))}
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted, cursor: 'pointer', marginLeft: 6 }}>
-            <input type="checkbox" checked={showCancelled} onChange={(e) => setShowCancelled(e.target.checked)} />
-            Canceladas{cancelledCount ? ` (${cancelledCount})` : ''}
-          </label>
         </div>
+      </div>
+
+      <div style={{
+        display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12,
+        padding: '10px 12px', background: th.subtleBg, border: `1px solid ${th.border}`, borderRadius: th.radiusLg,
+      }}
+      >
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: th.textMuted }}>
+          Filtros
+        </span>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted }}>
+          Estado
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            style={{ ...inputStyle, width: 'auto', padding: '6px 10px', fontSize: 12.5 }}
+          >
+            <option value="all">Todos</option>
+            {APPT_STATUSES.map((s) => (
+              <option key={s.id} value={s.id}>{s.label}</option>
+            ))}
+          </select>
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted }}>
+          Canal
+          <select
+            value={channelFilter}
+            onChange={(e) => setChannelFilter(e.target.value)}
+            style={{ ...inputStyle, width: 'auto', padding: '6px 10px', fontSize: 12.5 }}
+          >
+            <option value="all">Todos</option>
+            {LEAD_CHANNELS.map((c) => (
+              <option key={c.id} value={c.id}>{c.label}</option>
+            ))}
+          </select>
+        </label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: th.textMuted, cursor: 'pointer', marginLeft: 'auto' }}>
+          <input type="checkbox" checked={showCancelled} onChange={(e) => setShowCancelled(e.target.checked)} />
+          Incluir canceladas{cancelledCount ? ` (${cancelledCount})` : ''}
+        </label>
       </div>
 
       <div style={{ border: `1px solid ${th.border}`, borderRadius: th.radiusLg, overflow: 'hidden', background: th.cardBg, boxShadow: th.shadow }}>
@@ -508,7 +560,13 @@ export default function AdminCalendarPage() {
 
             {range.days.map((day) => {
               const key = toDateKey(day)
-              const dayAppts = appts.filter((a) => toDateKey(new Date(a.starts_at)) === key)
+              const dayAppts = appts.filter((a) => {
+                if (toDateKey(new Date(a.starts_at)) !== key) return false
+                if (!showCancelled && a.status === 'cancelled' && statusFilter !== 'cancelled') return false
+                if (statusFilter !== 'all' && a.status !== statusFilter) return false
+                if (channelFilter !== 'all' && a.channel !== channelFilter) return false
+                return true
+              })
               const isToday = key === todayKey
               return (
                 <div

@@ -148,10 +148,8 @@ export default function AdminGiftCardsPage() {
 
       <div style={{
         marginBottom: 24, padding: '16px 20px', background: th.subtleBg, border: `1px solid ${th.border}`,
-        borderRadius: th.radiusLg, fontSize: 13, color: th.textMuted, lineHeight: 1.55, maxWidth: embedded ? 'none' : '1200px',
-        margin: embedded ? '0 0 24px' : '0 auto 24px', paddingLeft: embedded ? 20 : undefined,
-        paddingRight: embedded ? 20 : undefined,
-        width: embedded ? 'auto' : 'calc(100% - clamp(32px, 8vw, 64px))',
+        borderRadius: th.radiusLg, fontSize: 13, color: th.textMuted, lineHeight: 1.55, maxWidth: 'none',
+        margin: '0 0 24px', width: '100%',
         boxShadow: th.shadow,
       }}>
         <strong style={{ color: th.text }}>Conectado con Stripe.</strong>{' '}
@@ -163,7 +161,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ padding: embedded ? '0 0 24px' : 'clamp(16px, 3vw, 32px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto' }}>
+      <div style={{ padding: embedded ? '0 0 24px' : 'clamp(16px, 3vw, 32px) 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', width: '100%' }}>
         {[
           { label: 'Total vendidas', value: total, sub: 'tarjetas' },
           { label: 'Canjeadas', value: used, sub: `${total ? Math.round(used / total * 100) : 0}% del total` },
@@ -179,7 +177,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Controles */}
-      <div style={{ padding: embedded ? '0 0 24px' : '0 clamp(16px, 4vw, 32px) 24px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ padding: '0 0 24px', width: '100%', display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -221,7 +219,7 @@ export default function AdminGiftCardsPage() {
       </div>
 
       {/* Tabla / Cards */}
-      <div style={{ padding: embedded ? '0 0 24px' : '0 clamp(16px, 4vw, 32px) 48px', maxWidth: embedded ? 'none' : '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '0 0 24px', width: '100%' }}>
         <style>{`
           .admin-table-header { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }
           .admin-table-row { display: grid; grid-template-columns: 1fr 140px 120px 180px 120px 120px; }

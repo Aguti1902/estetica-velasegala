@@ -8,44 +8,54 @@ import {
   uiBtnPrimary,
   uiBtnGhost,
 } from '../../admin/adminTheme'
-import { channelMeta, formatTime, toDateKey, weekDaysMonFri, isOpenDay } from '../../admin/clinicHours'
+import DateRangeFilter from '../../admin/DateRangeFilter'
+import { getPresetRange, rangeToInputs, startOfDay, endOfDay } from '../../admin/dateRange'
+import { channelMeta, formatTime, toDateKey } from '../../admin/clinicHours'
 
-function startOfDay(d) {
-  const x = new Date(d)
-  x.setHours(0, 0, 0, 0)
-  return x
-}
-function endOfDay(d) {
-  const x = new Date(d)
-  x.setHours(23, 59, 59, 999)
-  return x
-}
 function euro(n) {
   return `${Number(n || 0).toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}€`
 }
 
 export default function AdminDashboardPage() {
   const { pwd } = useOutletContext()
+  const initial = getPresetRange('month')
+  const initialInputs = rangeToInputs(initial.from, initial.to)
+  const [preset, setPreset] = useState('month')
+  const [fromInput, setFromInput] = useState(initialInputs.from)
+  const [toInput, setToInput] = useState(initialInputs.to)
   const [loading, setLoading] = useState(true)
   const [appts, setAppts] = useState([])
   const [clients, setClients] = useState([])
   const [messages, setMessages] = useState([])
   const [cards, setCards] = useState([])
 
+  const range = useMemo(
+    () => getPresetRange(preset, fromInput, toInput),
+    [preset, fromInput, toInput],
+  )
+
+  const applyPreset = (id) => {
+    setPreset(id)
+    if (id !== 'custom') {
+      const r = getPresetRange(id)
+      const inp = rangeToInputs(r.from, r.to)
+      setFromInput(inp.from)
+      setToInput(inp.to)
+    }
+  }
+
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const now = new Date()
-      const from = new Date(now)
-      from.setDate(from.getDate() - 45)
-      from.setHours(0, 0, 0, 0)
-      const to = new Date(now)
-      to.setDate(to.getDate() + 21)
-      to.setHours(23, 59, 59, 999)
+      // margen para próximas citas fuera del periodo
+      const fetchFrom = new Date(range.from)
+      fetchFrom.setDate(fetchFrom.getDate() - 7)
+      const fetchTo = new Date(range.to)
+      fetchTo.setDate(fetchTo.getDate() + 21)
 
       const [aRes, cRes, mRes, gRes] = await Promise.all([
         adminFetch(
-          `/api/admin/appointments?from=${encodeURIComponent(from.toISOString())}&to=${encodeURIComponent(to.toISOString())}&include_cancelled=true`,
+          `/api/admin/appointments?from=${encodeURIComponent(startOfDay(fetchFrom).toISOString())}&to=${encodeURIComponent(endOfDay(fetchTo).toISOString())}&include_cancelled=true`,
           pwd,
         ),
         adminFetch('/api/admin/clients?limit=300', pwd),
@@ -72,50 +82,47 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [pwd])
+  }, [pwd, range.from, range.to])
 
   useEffect(() => { load() }, [load])
 
   const stats = useMemo(() => {
     const now = new Date()
     const todayKey = toDateKey(now)
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-    const week = weekDaysMonFri(now)
-    const weekFrom = startOfDay(week[0])
-    const weekTo = endOfDay(week[4])
-
-    const active = appts.filter((a) => a.status !== 'cancelled')
-    const countable = appts.filter((a) => a.status === 'confirmed' || a.status === 'completed')
-
-    const today = active.filter((a) => toDateKey(new Date(a.starts_at)) === todayKey)
-    const thisWeek = active.filter((a) => {
+    const inPeriod = appts.filter((a) => {
       const d = new Date(a.starts_at)
-      return d >= weekFrom && d <= weekTo
+      return d >= range.from && d <= range.to
     })
-    const monthAppts = countable.filter((a) => new Date(a.starts_at) >= monthStart && new Date(a.starts_at) <= now)
-    const monthRevenue = monthAppts.reduce((s, a) => s + (Number(a.amount) || 0), 0)
+    const active = inPeriod.filter((a) => a.status !== 'cancelled')
+    const countable = inPeriod.filter((a) => a.status === 'confirmed' || a.status === 'completed')
+    const revenue = countable.reduce((s, a) => s + (Number(a.amount) || 0), 0)
+    const noShows = inPeriod.filter((a) => a.status === 'no_show').length
 
-    const upcoming = active
-      .filter((a) => new Date(a.starts_at) >= now)
+    const today = appts
+      .filter((a) => a.status !== 'cancelled' && toDateKey(new Date(a.starts_at)) === todayKey)
+      .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
+
+    const upcoming = appts
+      .filter((a) => a.status !== 'cancelled' && new Date(a.starts_at) >= now)
       .sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at))
       .slice(0, 6)
 
-    // Últimos 7 días laborables: barras
     const barDays = []
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(now)
-      d.setDate(d.getDate() - i)
-      if (!isOpenDay(d) && i > 0) {
-        // incluir fines de semana con 0 para contexto visual
-      }
-      const key = toDateKey(d)
+    const cursor = new Date(range.from)
+    const end = new Date(range.to)
+    // limitar barras a 31 días para no saturar
+    let guard = 0
+    while (cursor <= end && guard < 31) {
+      const key = toDateKey(cursor)
       const count = active.filter((a) => toDateKey(new Date(a.starts_at)) === key).length
       barDays.push({
         key,
-        label: d.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', ''),
+        label: cursor.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
         count,
         isToday: key === todayKey,
       })
+      cursor.setDate(cursor.getDate() + 1)
+      guard += 1
     }
     const maxBar = Math.max(1, ...barDays.map((b) => b.count))
 
@@ -150,10 +157,11 @@ export default function AdminDashboardPage() {
       .slice(0, 5)
 
     return {
+      periodCount: active.length,
+      periodRevenue: revenue,
+      periodAppts: countable.length,
+      noShows,
       todayCount: today.length,
-      weekCount: thisWeek.length,
-      monthRevenue,
-      monthAppts: monthAppts.length,
       clientsCount: clients.length,
       unread,
       giftRevenue,
@@ -165,9 +173,10 @@ export default function AdminDashboardPage() {
       channelList,
       topTreatments,
       clientSpend,
-      todayList: today.sort((a, b) => new Date(a.starts_at) - new Date(b.starts_at)),
+      todayList: today,
+      rangeLabel: range.label,
     }
-  }, [appts, clients, messages, cards])
+  }, [appts, clients, messages, cards, range])
 
   const greeting = useMemo(() => {
     const h = new Date().getHours()
@@ -177,7 +186,7 @@ export default function AdminDashboardPage() {
   }, [])
 
   return (
-    <div style={{ maxWidth: 1180 }}>
+    <div style={{ width: '100%' }}>
       <style>{`
         .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); gap: 16px; margin-bottom: 16px; }
         @media (max-width: 900px) {
@@ -189,7 +198,7 @@ export default function AdminDashboardPage() {
         flexWrap: 'wrap',
         justifyContent: 'space-between',
         gap: 16,
-        marginBottom: 28,
+        marginBottom: 16,
         alignItems: 'flex-end',
       }}
       >
@@ -206,11 +215,11 @@ export default function AdminDashboardPage() {
             Dashboard
           </p>
           <h2 style={uiPageTitle}>{greeting}, Natalia</h2>
-          <p style={{ color: t.textMuted, margin: '8px 0 0', fontSize: 14.5, maxWidth: 480 }}>
-            Resumen de la clínica · {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+          <p style={{ color: t.textMuted, margin: '8px 0 0', fontSize: 14.5 }}>
+            Resumen · {stats.rangeLabel} · {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <Link to="/admin/calendario" style={{ ...uiBtnPrimary, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
             + Nueva cita
           </Link>
@@ -220,12 +229,23 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
+      <div style={{ marginBottom: 16 }}>
+        <DateRangeFilter
+          preset={preset}
+          from={fromInput}
+          to={toInput}
+          onPreset={applyPreset}
+          onFrom={setFromInput}
+          onTo={setToInput}
+        />
+      </div>
+
       {/* KPI row */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-        gap: 14,
-        marginBottom: 20,
+        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gap: 12,
+        marginBottom: 16,
       }}
       >
         <Kpi
@@ -236,18 +256,25 @@ export default function AdminDashboardPage() {
           to="/admin/calendario"
         />
         <Kpi
-          label="Esta semana"
-          value={loading ? '—' : stats.weekCount}
-          hint="Lunes a viernes"
+          label="Citas periodo"
+          value={loading ? '—' : stats.periodCount}
+          hint={stats.rangeLabel}
           tone="info"
           to="/admin/calendario"
         />
         <Kpi
-          label="Ingresos mes"
-          value={loading ? '—' : euro(stats.monthRevenue)}
-          hint={`${stats.monthAppts} citas facturadas`}
+          label="Ingresos periodo"
+          value={loading ? '—' : euro(stats.periodRevenue)}
+          hint={`${stats.periodAppts} citas facturadas`}
           tone="success"
-          to="/admin/clientas"
+          to="/admin/informes"
+        />
+        <Kpi
+          label="No-shows"
+          value={loading ? '—' : stats.noShows}
+          hint="En el periodo"
+          tone="warning"
+          to="/admin/seguimiento"
         />
         <Kpi
           label="Clientas"
@@ -277,8 +304,8 @@ export default function AdminDashboardPage() {
         <section style={uiCard({ padding: 24 })}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 20 }}>
             <div>
-              <h3 style={sectionTitle}>Actividad · 7 días</h3>
-              <p style={sectionSub}>Citas por día (incluye fines de semana)</p>
+              <h3 style={sectionTitle}>Actividad del periodo</h3>
+              <p style={sectionSub}>Citas por día · {stats.rangeLabel}</p>
             </div>
             <Link to="/admin/calendario" style={linkQuiet}>Ver agenda →</Link>
           </div>
@@ -530,6 +557,10 @@ export default function AdminDashboardPage() {
       >
         {[
           { to: '/admin/calendario', title: 'Agenda', desc: 'Reservas y horarios' },
+          { to: '/admin/informes', title: 'Informes', desc: 'Ingresos y métricas' },
+          { to: '/admin/seguimiento', title: 'Seguimiento', desc: 'Reactivar clientas' },
+          { to: '/admin/tareas', title: 'Tareas', desc: 'To-do de la clínica' },
+          { to: '/admin/inventario', title: 'Inventario', desc: 'Stock y alertas' },
           { to: '/admin/clientas', title: 'Clientas', desc: 'Fichas y frecuencia' },
           { to: '/admin/tratamientos', title: 'Tratamientos', desc: 'Precios y textos' },
           { to: '/admin/contacto', title: 'Bandeja', desc: 'Mensajes web' },
