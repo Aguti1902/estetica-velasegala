@@ -190,8 +190,13 @@ export default function AdminDashboardPage() {
   return (
     <div style={{ width: '100%' }}>
       <style>{`
-        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.9fr); gap: 16px; margin-bottom: 16px; }
-        .admin-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .admin-dash-split { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
+        .admin-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+        .admin-hero { }
+        @media (max-width: 860px) {
+          .admin-hero { grid-template-columns: 1fr !important; }
+          .admin-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
         .admin-kpi-card { transition: transform 0.16s ease, box-shadow 0.16s ease; }
         .admin-kpi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(28,25,23,0.08); }
         .admin-heat-cell { transition: transform 0.12s ease; }
@@ -201,38 +206,45 @@ export default function AdminDashboardPage() {
         }
       `}</style>
       <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        gap: 16,
-        marginBottom: 16,
-        alignItems: 'flex-end',
+        display: 'grid',
+        gridTemplateColumns: 'minmax(220px, 280px) minmax(0, 1fr)',
+        gap: 14,
+        marginBottom: 14,
       }}
+      className="admin-hero"
       >
-        <div>
-          <p style={{
-            margin: '0 0 6px',
-            fontSize: 12,
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: t.accentDark,
-          }}
-          >
-            Dashboard
+        <div style={{
+          borderRadius: t.radiusXl,
+          padding: '22px 22px 18px',
+          background: 'linear-gradient(160deg, #1c1917 0%, #3f342c 100%)',
+          color: '#fff',
+          boxShadow: t.shadowMd,
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 168,
+        }}
+        >
+          <p style={{ margin: 0, fontSize: 12, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#e7d3bc', fontWeight: 700 }}>
+            {greeting}
           </p>
-          <h2 style={uiPageTitle}>{greeting}, Natalia</h2>
-          <p style={{ color: t.textMuted, margin: '8px 0 0', fontSize: 14.5 }}>
-            Resumen · {stats.rangeLabel} · {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+          <h2 style={{ ...uiPageTitle, color: '#fff', marginTop: 8 }}>Natalia</h2>
+          <p style={{ margin: '8px 0 16px', color: 'rgba(255,255,255,0.72)', fontSize: 13.5, textTransform: 'capitalize' }}>
+            {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
           </p>
+          <div style={{ marginTop: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Link to="/admin/calendario" style={{ ...uiBtnPrimary, background: '#fff', color: t.text, boxShadow: 'none', textDecoration: 'none' }}>
+              + Nueva cita
+            </Link>
+            <button type="button" onClick={load} style={{ ...uiBtnGhost, background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.25)' }}>
+              {loading ? '…' : 'Actualizar'}
+            </button>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <Link to="/admin/calendario" style={{ ...uiBtnPrimary, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
-            + Nueva cita
-          </Link>
-          <button type="button" onClick={load} style={uiBtnGhost}>
-            {loading ? 'Actualizando…' : 'Actualizar'}
-          </button>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>
+          <Kpi label="Hoy" value={loading ? '—' : stats.todayCount} hint="citas en agenda" tone="accent" to="/admin/calendario" />
+          <Kpi label="Periodo" value={loading ? '—' : stats.periodCount} hint={stats.rangeLabel} tone="info" to="/admin/calendario" />
+          <Kpi label="Ingresos" value={loading ? '—' : euro(stats.periodRevenue)} hint={`${stats.periodAppts} citas`} tone="success" to="/admin/informes" />
+          <Kpi label="No-shows" value={loading ? '—' : stats.noShows} hint="en el periodo" tone="warning" to="/admin/seguimiento" />
         </div>
       </div>
 
@@ -247,57 +259,11 @@ export default function AdminDashboardPage() {
         />
       </div>
 
-      {/* KPI row */}
       <div className="admin-kpi-grid">
-        <Kpi
-          label="Citas hoy"
-          value={loading ? '—' : stats.todayCount}
-          hint="En agenda"
-          tone="accent"
-          to="/admin/calendario"
-        />
-        <Kpi
-          label="Citas periodo"
-          value={loading ? '—' : stats.periodCount}
-          hint={stats.rangeLabel}
-          tone="info"
-          to="/admin/calendario"
-        />
-        <Kpi
-          label="Ingresos periodo"
-          value={loading ? '—' : euro(stats.periodRevenue)}
-          hint={`${stats.periodAppts} citas facturadas`}
-          tone="success"
-          to="/admin/informes"
-        />
-        <Kpi
-          label="No-shows"
-          value={loading ? '—' : stats.noShows}
-          hint="En el periodo"
-          tone="warning"
-          to="/admin/seguimiento"
-        />
-        <Kpi
-          label="Clientas"
-          value={loading ? '—' : stats.clientsCount}
-          hint="En la base de datos"
-          tone="warm"
-          to="/admin/clientas"
-        />
-        <Kpi
-          label="Mensajes nuevos"
-          value={loading ? '—' : stats.unread}
-          hint="Formulario web"
-          tone="warning"
-          to="/admin/contacto"
-        />
-        <Kpi
-          label="Tarjetas regalo"
-          value={loading ? '—' : euro(stats.giftRevenue)}
-          hint={`${stats.giftUnused} sin canjear / ${stats.giftTotal}`}
-          tone="gift"
-          to="/admin/tarjetas"
-        />
+        <Kpi label="Clientas" value={loading ? '—' : stats.clientsCount} hint="en la base" tone="warm" to="/admin/clientas" />
+        <Kpi label="Mensajes" value={loading ? '—' : stats.unread} hint="sin leer" tone="warning" to="/admin/contacto" />
+        <Kpi label="Tarjetas" value={loading ? '—' : euro(stats.giftRevenue)} hint={`${stats.giftUnused} sin canjear`} tone="gift" to="/admin/tarjetas" />
+        <Kpi label="Horario" value="Natalia" hint="descansos y apertura" tone="accent" to="/admin/horario" />
       </div>
 
       <div className="admin-dash-split">
@@ -525,15 +491,12 @@ export default function AdminDashboardPage() {
       }}
       >
         {[
-          { to: '/admin/calendario', title: 'Agenda', desc: 'Reservas y horarios' },
+          { to: '/admin/calendario', title: 'Agenda', desc: 'Reservas del día' },
+          { to: '/admin/horario', title: 'Horario', desc: 'Apertura y descansos' },
           { to: '/admin/informes', title: 'Informes', desc: 'Ingresos y métricas' },
           { to: '/admin/seguimiento', title: 'Seguimiento', desc: 'Reactivar clientas' },
-          { to: '/admin/tareas', title: 'Tareas', desc: 'To-do de la clínica' },
-          { to: '/admin/inventario', title: 'Inventario', desc: 'Stock y alertas' },
           { to: '/admin/clientas', title: 'Clientas', desc: 'Fichas y frecuencia' },
           { to: '/admin/tratamientos', title: 'Tratamientos', desc: 'Precios y textos' },
-          { to: '/admin/contacto', title: 'Bandeja', desc: 'Mensajes web' },
-          { to: '/admin/tarjetas', title: 'Gift cards', desc: 'Ventas Stripe' },
         ].map((item) => (
           <Link
             key={item.to}
@@ -556,41 +519,30 @@ export default function AdminDashboardPage() {
 
 function Kpi({ label, value, hint, tone, to }) {
   const tones = {
-    accent: { bg: t.accentSoft, fg: t.accentDark },
-    info: { bg: t.infoSoft, fg: t.info },
-    success: { bg: t.successSoft, fg: t.success },
-    warm: { bg: 'rgba(180,120,90,0.12)', fg: '#9a6b4a' },
-    warning: { bg: t.warningSoft, fg: t.warning },
-    gift: { bg: 'rgba(100,116,139,0.12)', fg: '#475569' },
+    accent: t.accentDark,
+    info: t.info,
+    success: t.success,
+    warm: '#9a6b4a',
+    warning: t.warning,
+    gift: '#475569',
   }
-  const c = tones[tone] || tones.accent
+  const color = tones[tone] || t.accentDark
   const Comp = to ? Link : 'div'
-  const linkProps = to ? { to, style: { textDecoration: 'none', color: 'inherit' } } : {}
+  const linkProps = to ? { to, style: { textDecoration: 'none', color: 'inherit', minWidth: 0 } } : {}
   return (
     <Comp {...linkProps}>
       <div className="admin-kpi-card" style={uiCard({
-        padding: '16px 16px 14px',
+        padding: '14px 14px 12px',
         height: '100%',
-        position: 'relative',
-        overflow: 'hidden',
         minWidth: 0,
+        borderTop: `3px solid ${color}`,
       })}
       >
-        <div style={{
-          position: 'absolute',
-          top: -20,
-          right: -16,
-          width: 72,
-          height: 72,
-          borderRadius: '50%',
-          background: c.bg,
-        }}
-        />
         <p style={{
           margin: 0,
-          fontSize: 11.5,
+          fontSize: 11,
           fontWeight: 700,
-          letterSpacing: '0.06em',
+          letterSpacing: '0.08em',
           textTransform: 'uppercase',
           color: t.textMuted,
         }}
@@ -598,9 +550,9 @@ function Kpi({ label, value, hint, tone, to }) {
           {label}
         </p>
         <p style={{
-          margin: '10px 0 4px',
+          margin: '8px 0 2px',
           fontFamily: t.fontDisplay,
-          fontSize: '1.85rem',
+          fontSize: '1.55rem',
           fontWeight: 600,
           letterSpacing: '-0.03em',
           color: t.text,
@@ -609,7 +561,7 @@ function Kpi({ label, value, hint, tone, to }) {
         >
           {value}
         </p>
-        <p style={{ margin: 0, fontSize: 12, color: c.fg, fontWeight: 600 }}>{hint}</p>
+        <p style={{ margin: 0, fontSize: 12, color, fontWeight: 650 }}>{hint}</p>
       </div>
     </Comp>
   )

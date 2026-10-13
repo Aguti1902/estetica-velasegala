@@ -12,20 +12,25 @@ import { useServices } from '../../context/ServicesContext'
 import {
   APPT_STATUSES,
   CLINIC,
-  HOURS_LABEL,
   LEAD_CHANNELS,
   addMinutes,
   channelMeta,
   combineDateAndTime,
-  daySlots,
   formatTime,
-  isOpenDay,
+  breaksForDate,
+  defaultSchedule,
+  gridBounds,
+  isScheduledOpen,
+  normalizeSchedule,
   parseDateKey,
   parseServiceDurationMinutes,
   parseServicePrice,
+  scheduleSummary,
+  slotsBetween,
   statusMeta,
+  timeToMinutes,
   toDateKey,
-  weekDaysMonFri,
+  weekDaysForSchedule,
 } from '../../admin/clinicHours'
 
 const SLOT_H = 48 // px por franja de 30 min
@@ -53,9 +58,8 @@ function emptyForm(defaults = {}) {
   }
 }
 
-function minutesFromOpen(date) {
-  const openMin = CLINIC.openHour * 60 + CLINIC.openMinute
-  return date.getHours() * 60 + date.getMinutes() - openMin
+function minutesFromOpen(date, gridStart) {
+  return date.getHours() * 60 + date.getMinutes() - gridStart
 }
 
 export default function AdminCalendarPage() {
@@ -64,11 +68,8 @@ export default function AdminCalendarPage() {
   const services = servicesData.es || []
 
   const [view, setView] = useState('day')
-  const [anchor, setAnchor] = useState(() => {
-    const d = new Date()
-    if (!isOpenDay(d)) return weekDaysMonFri(d)[0]
-    return d
-  })
+  const [schedule, setSchedule] = useState(() => defaultSchedule())
+  const [anchor, setAnchor] = useState(() => new Date())
   const [appts, setAppts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showCancelled, setShowCancelled] = useState(false)
@@ -99,15 +100,15 @@ export default function AdminCalendarPage() {
 
   const range = useMemo(() => {
     if (view === 'week') {
-      const days = weekDaysMonFri(anchor)
+      const days = weekDaysForSchedule(anchor, schedule)
       const from = new Date(days[0]); from.setHours(0, 0, 0, 0)
-      const to = new Date(days[4]); to.setHours(23, 59, 59, 999)
+      const to = new Date(days[days.length - 1]); to.setHours(23, 59, 59, 999)
       return { from, to, days }
     }
     const from = new Date(anchor); from.setHours(0, 0, 0, 0)
     const to = new Date(anchor); to.setHours(23, 59, 59, 999)
     return { from, to, days: [from] }
-  }, [view, anchor])
+  }, [view, anchor, schedule])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -133,6 +134,14 @@ export default function AdminCalendarPage() {
   useEffect(() => { load() }, [load])
 
   useEffect(() => {
+    let cancelled = false
+    adminFetch('/api/admin/schedule', pwd).then(async (res) => {
+      if (!cancelled && res.ok) setSchedule(normalizeSchedule(await res.json()))
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [pwd])
+
+  useEffect(() => {
     if (!modal || modal.clientMode === 'existing') return
     if (!clientQuery.trim() || clientQuery.trim().length < 2) {
       setClientResults([])
@@ -154,21 +163,15 @@ export default function AdminCalendarPage() {
     return () => { cancelled = true; clearTimeout(t) }
   }, [clientQuery, modal, pwd])
 
-  const slots = useMemo(() => daySlots(), [])
-  const closeTime = `${String(CLINIC.closeHour).padStart(2, '0')}:${String(CLINIC.closeMinute).padStart(2, '0')}`
+  const bounds = useMemo(() => gridBounds(schedule), [schedule])
+  const slots = useMemo(() => slotsBetween(bounds.start, bounds.end, bounds.slot), [bounds])
+  const closeTime = `${String(Math.floor(bounds.end / 60)).padStart(2, '0')}:${String(bounds.end % 60).padStart(2, '0')}`
 
-  const goToday = () => {
-    const d = new Date()
-    setAnchor(isOpenDay(d) ? d : weekDaysMonFri(d)[0])
-  }
+  const goToday = () => setAnchor(new Date())
 
   const shift = (dir) => {
     const d = new Date(anchor)
-    if (view === 'week') d.setDate(d.getDate() + dir * 7)
-    else {
-      d.setDate(d.getDate() + dir)
-      while (!isOpenDay(d)) d.setDate(d.getDate() + dir)
-    }
+    d.setDate(d.getDate() + (view === 'week' ? dir * 7 : dir))
     setAnchor(d)
   }
 
@@ -241,7 +244,7 @@ export default function AdminCalendarPage() {
       const start = combineDateAndTime(m.dateKey, m.startTime)
       const end = addMinutes(start, mins)
       const endStr = formatTime(end)
-      const closeMin = CLINIC.closeHour * 60 + CLINIC.closeMinute
+      const closeMin = bounds.end
       const endMin = end.getHours() * 60 + end.getMinutes()
       return {
         ...m,
@@ -330,7 +333,7 @@ export default function AdminCalendarPage() {
   const moveAppointment = async (appt, dateKey, startTime) => {
     const start = combineDateAndTime(dateKey, startTime)
     const duration = Math.max(
-      CLINIC.slotMinutes,
+      bounds.slot,
       (new Date(appt.ends_at) - new Date(appt.starts_at)) / 60000,
     )
     let end = addMinutes(start, duration)
@@ -373,18 +376,18 @@ export default function AdminCalendarPage() {
 
   const titleDate = view === 'week'
     ? (() => {
-      const days = weekDaysMonFri(anchor)
-      const a = days[0]; const b = days[4]
+      const days = range.days
+      const a = days[0]; const b = days[days.length - 1]
       return `${a.getDate()}–${b.getDate()} ${b.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}`
     })()
     : anchor.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   const cancelledCount = appts.filter((a) => a.status === 'cancelled').length
   const todayKey = toDateKey(now)
-  const openMin = CLINIC.openHour * 60 + CLINIC.openMinute
-  const closeMin = CLINIC.closeHour * 60 + CLINIC.closeMinute
+  const openMin = bounds.start
+  const closeMin = bounds.end
   const nowMin = now.getHours() * 60 + now.getMinutes()
-  const nowTop = ((nowMin - openMin) / CLINIC.slotMinutes) * SLOT_H
+  const nowTop = ((nowMin - openMin) / bounds.slot) * SLOT_H
   const showNowLine = nowMin >= openMin && nowMin <= closeMin
 
   return (
@@ -404,15 +407,15 @@ export default function AdminCalendarPage() {
         <div>
           <h2 style={uiPageTitle}>Calendario de reservas</h2>
           <p style={{ color: th.textMuted, margin: '6px 0 0', fontSize: 13.5 }}>
-            {CLINIC.employee} · L–V {CLINIC.openHour}:00–{CLINIC.closeHour}:{String(CLINIC.closeMinute).padStart(2, '0')}
+            {schedule.employee} · horario configurable
             {' · '}Arrastra citas para moverlas
           </p>
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button type="button" onClick={() => setHoursOpen(true)} style={btnGhost}>Horarios</button>
+          <button type="button" onClick={() => setHoursOpen(true)} style={btnGhost}>Horario</button>
           <button
             type="button"
-            onClick={() => openNew(toDateKey(isOpenDay(anchor) ? anchor : weekDaysMonFri(anchor)[0]), '10:00')}
+            onClick={() => openNew(toDateKey(anchor), slots[0] || '10:00')}
             style={btnPrimary}
           >
             + Nueva reserva
@@ -534,7 +537,7 @@ export default function AdminCalendarPage() {
                 background: th.accentSoft, color: th.accentDark, fontSize: 9, letterSpacing: '0.06em', fontWeight: 700,
               }}
               >
-                {CLINIC.employee.toUpperCase()}
+                {(schedule.employee || 'Natalia').toUpperCase()}
               </div>
             </div>
           ))}
@@ -568,6 +571,10 @@ export default function AdminCalendarPage() {
                 return true
               })
               const isToday = key === todayKey
+              const dayCfg = schedule.days[day.getDay()] || { open: false, start: '09:00', end: '20:30' }
+              const dayBreaks = breaksForDate(schedule, day)
+              const dayStart = timeToMinutes(dayCfg.start)
+              const dayEnd = timeToMinutes(dayCfg.end)
               return (
                 <div
                   key={key}
@@ -579,12 +586,15 @@ export default function AdminCalendarPage() {
                 >
                   {slots.map((t) => {
                     const isOver = dragOver?.dateKey === key && dragOver?.time === t
+                    const slotMin = timeToMinutes(t)
+                    const blocked = !dayCfg.open || slotMin < dayStart || slotMin >= dayEnd
+                      || dayBreaks.some((b) => slotMin >= timeToMinutes(b.start) && slotMin < timeToMinutes(b.end))
                     return (
                       <button
                         key={t}
                         type="button"
-                        onClick={() => { if (!draggingId) openNew(key, t) }}
-                        title={`Nueva cita ${t}`}
+                        onClick={() => { if (!draggingId && !blocked) openNew(key, t) }}
+                        title={blocked ? 'Fuera de horario o descanso' : `Nueva cita ${t}`}
                         onDragOver={(e) => {
                           if (!draggingId) return
                           e.preventDefault()
@@ -605,10 +615,31 @@ export default function AdminCalendarPage() {
                         style={{
                           display: 'block', width: '100%', height: SLOT_H, border: 'none',
                           borderBottom: `1px solid ${th.border}`,
-                          background: isOver ? th.accentSoft : 'transparent',
-                          cursor: 'pointer', padding: 0,
+                          background: blocked ? 'repeating-linear-gradient(135deg, #f6f3ef, #f6f3ef 6px, #efeae4 6px, #efeae4 12px)' : isOver ? th.accentSoft : 'transparent',
+                          cursor: blocked ? 'not-allowed' : 'pointer', padding: 0,
                         }}
                       />
+                    )
+                  })}
+
+                  {dayCfg.open && dayBreaks.map((b) => {
+                    const top = ((timeToMinutes(b.start) - openMin) / bounds.slot) * SLOT_H
+                    const height = Math.max(((timeToMinutes(b.end) - timeToMinutes(b.start)) / bounds.slot) * SLOT_H - 2, 20)
+                    return (
+                      <div
+                        key={b.id}
+                        style={{
+                          position: 'absolute', left: 4, right: 4, top: top + 1, height,
+                          borderRadius: 10,
+                          background: 'rgba(120,113,108,0.14)',
+                          border: '1px dashed #a8a29e',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: 11, fontWeight: 700, color: '#57534e',
+                          pointerEvents: 'none', zIndex: 3,
+                        }}
+                      >
+                        {b.label}
+                      </div>
                     )
                   })}
 
@@ -641,8 +672,8 @@ export default function AdminCalendarPage() {
                   {dayAppts.map((a) => {
                     const start = new Date(a.starts_at)
                     const end = new Date(a.ends_at)
-                    const top = (minutesFromOpen(start) / CLINIC.slotMinutes) * SLOT_H
-                    const height = Math.max(((end - start) / 60000 / CLINIC.slotMinutes) * SLOT_H - 4, 36)
+                    const top = (minutesFromOpen(start, openMin) / bounds.slot) * SLOT_H
+                    const height = Math.max(((end - start) / 60000 / bounds.slot) * SLOT_H - 4, 36)
                     const ch = channelMeta(a.channel)
                     const st = statusMeta(a.status)
                     const faded = a.status === 'cancelled' || a.status === 'completed' || a.status === 'no_show'
@@ -745,21 +776,27 @@ export default function AdminCalendarPage() {
       </p>
 
       {hoursOpen && (
-        <Modal title="Horarios del centro" onClose={() => setHoursOpen(false)}>
-          <p style={{ color: th.textMuted, fontSize: 14, marginTop: 0 }}>{HOURS_LABEL.es}</p>
-          <p style={{ fontSize: 13, marginBottom: 16 }}>Profesional: <strong>{CLINIC.employee}</strong></p>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {HOURS_LABEL.detail.map((row) => (
-              <li key={row.day} style={{
-                display: 'flex', justifyContent: 'space-between', padding: '10px 0',
+        <Modal title="Horario de Natalia" onClose={() => setHoursOpen(false)}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 16px' }}>
+            {scheduleSummary(schedule).map((row) => (
+              <li key={row.id} style={{
+                display: 'flex', justifyContent: 'space-between', gap: 12, padding: '10px 0',
                 borderBottom: `1px solid ${th.border}`, fontSize: 14,
               }}
               >
-                <span>{row.day}</span>
-                <strong>{row.hours}</strong>
+                <span>{row.label}</span>
+                <span style={{ textAlign: 'right' }}>
+                  <strong>{row.hours}</strong>
+                  {row.breaks.length > 0 && (
+                    <div style={{ fontSize: 12, color: th.textMuted, fontWeight: 500 }}>{row.breaks.join(' · ')}</div>
+                  )}
+                </span>
               </li>
             ))}
           </ul>
+          <a href="/admin/horario" style={{ ...btnPrimary, textDecoration: 'none', display: 'inline-block' }}>
+            Editar horario y descansos
+          </a>
         </Modal>
       )}
 
@@ -940,7 +977,7 @@ export default function AdminCalendarPage() {
           </Field>
 
           <Field label="Empleada">
-            <input value={CLINIC.employee} disabled style={{ ...inputStyle, background: th.subtleBg }} />
+            <input value={schedule.employee || CLINIC.employee} disabled style={{ ...inputStyle, background: th.subtleBg }} />
           </Field>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 12 }}>

@@ -9,8 +9,7 @@ const NAV = [
   { to: '/admin/clientas', label: 'Clientas', icon: IconUsers },
   { to: '/admin/seguimiento', label: 'Seguimiento', icon: IconBell },
   { to: '/admin/informes', label: 'Informes', icon: IconChart },
-  { to: '/admin/tareas', label: 'Tareas', icon: IconCheck },
-  { to: '/admin/inventario', label: 'Inventario', icon: IconBox },
+  { to: '/admin/horario', label: 'Horario', icon: IconClock },
   { to: '/admin/tratamientos', label: 'Tratamientos', icon: IconSpark },
   { to: '/admin/organizacion', label: 'Organización', icon: IconLayers },
   { to: '/admin/contacto', label: 'Contacto', icon: IconMail },
@@ -266,17 +265,10 @@ function IconBell({ size = 16 }) {
     </svg>
   )
 }
-function IconCheck({ size = 16 }) {
+function IconClock({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="4" y="4" width="16" height="16" rx="3" /><path d="m8 12 2.5 2.5L16 9" />
-    </svg>
-  )
-}
-function IconBox({ size = 16 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3 8.5 12 3l9 5.5V19l-9 5-9-5V8.5Z" /><path d="M12 13v11M3 8.5l9 4.5 9-4.5" />
+      <circle cx="12" cy="12" r="8" /><path d="M12 8v5l3 2" />
     </svg>
   )
 }

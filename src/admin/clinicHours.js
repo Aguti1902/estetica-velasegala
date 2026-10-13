@@ -117,6 +117,129 @@ export function weekDaysMonFri(anchor) {
   })
 }
 
+export const WEEKDAYS = [
+  { id: 1, short: 'Lun', label: 'Lunes' },
+  { id: 2, short: 'Mar', label: 'Martes' },
+  { id: 3, short: 'Mié', label: 'Miércoles' },
+  { id: 4, short: 'Jue', label: 'Jueves' },
+  { id: 5, short: 'Vie', label: 'Viernes' },
+  { id: 6, short: 'Sáb', label: 'Sábado' },
+  { id: 0, short: 'Dom', label: 'Domingo' },
+]
+
+export function defaultSchedule() {
+  const day = (open) => ({ open, start: '09:00', end: open ? '20:30' : '14:00' })
+  return {
+    employee: CLINIC.employee,
+    slotMinutes: CLINIC.slotMinutes,
+    days: {
+      1: day(true),
+      2: day(true),
+      3: day(true),
+      4: day(true),
+      5: day(true),
+      6: day(false),
+      0: day(false),
+    },
+    breaks: [
+      { id: 'comida', label: 'Comida', days: [1, 2, 3, 4, 5], start: '14:00', end: '15:00' },
+    ],
+  }
+}
+
+export function timeToMinutes(hhmm) {
+  const [h, m] = String(hhmm || '00:00').split(':').map(Number)
+  return (h || 0) * 60 + (m || 0)
+}
+
+export function minutesToTime(total) {
+  const m = Math.max(0, total)
+  return `${pad2(Math.floor(m / 60))}:${pad2(m % 60)}`
+}
+
+export function normalizeSchedule(raw) {
+  const base = defaultSchedule()
+  if (!raw || typeof raw !== 'object') return base
+  const days = { ...base.days }
+  for (const key of Object.keys(base.days)) {
+    const incoming = raw.days?.[key] || raw.days?.[Number(key)]
+    if (incoming) {
+      days[key] = {
+        open: Boolean(incoming.open),
+        start: incoming.start || days[key].start,
+        end: incoming.end || days[key].end,
+      }
+    }
+  }
+  const breaks = Array.isArray(raw.breaks)
+    ? raw.breaks
+      .filter((b) => b && b.start && b.end)
+      .map((b, i) => ({
+        id: b.id || `break-${i}`,
+        label: String(b.label || 'Descanso').trim() || 'Descanso',
+        days: Array.isArray(b.days) ? b.days.map(Number) : [1, 2, 3, 4, 5],
+        start: b.start,
+        end: b.end,
+      }))
+    : base.breaks
+  return {
+    employee: raw.employee || base.employee,
+    slotMinutes: Number(raw.slotMinutes) || base.slotMinutes,
+    days,
+    breaks,
+  }
+}
+
+export function isScheduledOpen(schedule, date) {
+  return Boolean(normalizeSchedule(schedule).days[date.getDay()]?.open)
+}
+
+export function gridBounds(schedule) {
+  const s = normalizeSchedule(schedule)
+  const open = Object.values(s.days).filter((d) => d.open)
+  const start = open.length ? Math.min(...open.map((d) => timeToMinutes(d.start))) : 9 * 60
+  const end = open.length ? Math.max(...open.map((d) => timeToMinutes(d.end))) : 20 * 60 + 30
+  return { start, end, slot: s.slotMinutes || 30 }
+}
+
+export function slotsBetween(startMin, endMin, step = 30) {
+  const slots = []
+  for (let m = startMin; m < endMin; m += step) slots.push(minutesToTime(m))
+  return slots
+}
+
+export function breaksForDate(schedule, date) {
+  const s = normalizeSchedule(schedule)
+  const dow = date.getDay()
+  return s.breaks.filter((b) => b.days.includes(dow))
+}
+
+export function weekDaysForSchedule(anchor, schedule) {
+  const s = normalizeSchedule(schedule)
+  const mon = mondayOf(anchor)
+  const days = []
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mon)
+    d.setDate(mon.getDate() + i)
+    if (s.days[d.getDay()]?.open) days.push(d)
+  }
+  return days.length ? days : weekDaysMonFri(anchor)
+}
+
+export function scheduleSummary(schedule) {
+  const s = normalizeSchedule(schedule)
+  return WEEKDAYS.map((w) => {
+    const d = s.days[w.id]
+    const breaks = s.breaks.filter((b) => b.days.includes(w.id))
+    return {
+      ...w,
+      open: d.open,
+      hours: d.open ? `${d.start} – ${d.end}` : 'Cerrado',
+      breaks: breaks.map((b) => `${b.label} ${b.start}–${b.end}`),
+    }
+  })
+}
+
 export const HOURS_LABEL = {
   es: 'Lunes a viernes: 9:00 – 20:30 · Sábados y domingos: cerrado',
   detail: [
