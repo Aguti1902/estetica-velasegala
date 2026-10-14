@@ -1,9 +1,9 @@
 import { supabaseConfigured, supabaseHeaders, supabaseRest } from './_lib/supabase.js';
 
 // Formulario de contacto → envía email a la clínica vía Resend
-// Destino (quién recibe): vela@velasegala.com
-// Remitente técnico: NO usa vela@ (Resend exige un "from" verificado distinto)
-const CLINIC_EMAIL = process.env.CONTACT_EMAIL || 'vela@velasegala.com';
+// Destino (quién recibe): estetica.segala@velasegala.com
+// Remitente técnico: Resend exige un "from" verificado
+const CLINIC_EMAIL = process.env.CONTACT_EMAIL || 'estetica.segala@velasegala.com';
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Formulario Web <onboarding@resend.dev>';
 
 function escapeHtml(str = '') {

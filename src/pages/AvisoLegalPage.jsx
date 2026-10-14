@@ -15,8 +15,8 @@ Denominación social: Estetica Segala
 Nombre comercial: Estetica Segala
 Domicilio social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Teléfono: 938 67 58 22
-WhatsApp: 621 30 72 35
-Correo electrónico: vela@velasegala.com
+WhatsApp: +34 611 02 03 18
+Correo electrónico: estetica.segala@velasegala.com
 Actividad: Centro de estética y medicina estética`,
       },
       {
@@ -95,8 +95,8 @@ Denominació social: Estetica Segala
 Nom comercial: Estetica Segala
 Domicili social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Telèfon: 938 67 58 22
-WhatsApp: 621 30 72 35
-Correu electrònic: vela@velasegala.com
+WhatsApp: +34 611 02 03 18
+Correu electrònic: estetica.segala@velasegala.com
 Activitat: Centre d'estètica i medicina estètica`,
       },
       {

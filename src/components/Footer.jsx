@@ -80,8 +80,11 @@ export default function Footer() {
               <li style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>C/ Mare de Déu de Sales, 67C<br />08840 Viladecans</li>
               <li><a href={`tel:${t.topbar.phone.replace(/\s/g, '')}`} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>{t.topbar.phone}</a></li>
-              <li><a href={`mailto:${t.topbar.email}`} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
+              <li><a href={`mailto:${t.topbar.email}`} style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s', overflowWrap: 'anywhere' }}
                 onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>{t.topbar.email}</a></li>
+              <li><a href={`https://wa.me/34${t.topbar.whatsapp}`} target="_blank" rel="noreferrer" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#fff'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>WhatsApp +34 {t.contact.clinics[0].phone2}</a></li>
+              <li style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5, whiteSpace: 'pre-line' }}>{t.contact.info.schedule}</li>
             </ul>
           </div>
         </div>

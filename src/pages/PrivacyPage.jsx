@@ -14,8 +14,8 @@ const content = {
 Denominación social: Estetica Segala
 Domicilio social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Teléfono: 938 67 58 22
-WhatsApp: 621 30 72 35
-Correo electrónico: vela@velasegala.com`,
+WhatsApp: +34 611 02 03 18
+Correo electrónico: estetica.segala@velasegala.com`,
       },
       {
         title: '2. Datos personales que tratamos',
@@ -62,7 +62,7 @@ No realizamos transferencias internacionales de datos a países fuera del Espaci
 - Oposición: oponerse al tratamiento de sus datos por razones relacionadas con su situación particular.
 - Retirada del consentimiento: en cualquier momento, sin que ello afecte a la licitud del tratamiento realizado antes de la retirada.
 
-Para ejercer estos derechos, puede dirigirse a: vela@velasegala.com, indicando el derecho que desea ejercer y adjuntando copia de su documento de identidad.
+Para ejercer estos derechos, puede dirigirse a: estetica.segala@velasegala.com, indicando el derecho que desea ejercer y adjuntando copia de su documento de identidad.
 
 Si considera que el tratamiento de sus datos no se ajusta a la normativa vigente, puede presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD): www.aepd.es.`,
       },
@@ -72,7 +72,7 @@ Si considera que el tratamiento de sus datos no se ajusta a la normativa vigente
       },
       {
         title: '8. Menores de edad',
-        body: `Nuestros servicios no están dirigidos a menores de 14 años. No recogemos conscientemente datos personales de menores. Si tiene conocimiento de que un menor nos ha facilitado sus datos sin el consentimiento de sus tutores legales, le rogamos que nos lo comunique a vela@velasegala.com para proceder a su eliminación.`,
+        body: `Nuestros servicios no están dirigidos a menores de 14 años. No recogemos conscientemente datos personales de menores. Si tiene conocimiento de que un menor nos ha facilitado sus datos sin el consentimiento de sus tutores legales, le rogamos que nos lo comunique a estetica.segala@velasegala.com para proceder a su eliminación.`,
       },
       {
         title: '9. Modificaciones de la política de privacidad',
@@ -94,8 +94,8 @@ Le recomendamos que consulte periódicamente esta página para estar informado d
 Denominació social: Estetica Segala
 Domicili social: Plaça 1 d'Octubre, 6, 08470 Sant Celoni (Barcelona)
 Telèfon: 938 67 58 22
-WhatsApp: 621 30 72 35
-Correu electrònic: vela@velasegala.com`,
+WhatsApp: +34 611 02 03 18
+Correu electrònic: estetica.segala@velasegala.com`,
       },
       {
         title: '2. Dades personals que tractem',
@@ -142,7 +142,7 @@ No realitzem transferències internacionals de dades a països fora de l'Espai E
 - Oposició: oposar-se al tractament de les seves dades per raons relacionades amb la seva situació particular.
 - Retirada del consentiment: en qualsevol moment, sense que això afecti la licitud del tractament realitzat abans de la retirada.
 
-Per exercir aquests drets, pot adreçar-se a: vela@velasegala.com, indicant el dret que desitja exercir i adjuntant còpia del seu document d'identitat.
+Per exercir aquests drets, pot adreçar-se a: estetica.segala@velasegala.com, indicant el dret que desitja exercir i adjuntant còpia del seu document d'identitat.
 
 Si considera que el tractament de les seves dades no s'ajusta a la normativa vigent, pot presentar una reclamació davant l'Agència Espanyola de Protecció de Dades (AEPD): www.aepd.es.`,
       },
@@ -152,7 +152,7 @@ Si considera que el tractament de les seves dades no s'ajusta a la normativa vig
       },
       {
         title: "8. Menors d'edat",
-        body: `Els nostres serveis no estan adreçats a menors de 14 anys. No recollim conscientment dades personals de menors. Si teniu coneixement que un menor ens ha facilitat les seves dades sense el consentiment dels seus tutors legals, us preguem que ens ho comuniqueu a vela@velasegala.com per procedir a la seva eliminació.`,
+        body: `Els nostres serveis no estan adreçats a menors de 14 anys. No recollim conscientment dades personals de menors. Si teniu coneixement que un menor ens ha facilitat les seves dades sense el consentiment dels seus tutors legals, us preguem que ens ho comuniqueu a estetica.segala@velasegala.com per procedir a la seva eliminació.`,
       },
       {
         title: '9. Modificacions de la política de privacitat',

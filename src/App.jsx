@@ -6,6 +6,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import Chatbot from './components/Chatbot'
+import WhatsAppButton from './components/WhatsAppButton'
 import CookieBanner from './components/CookieBanner'
 
 // Pages — lazy loaded for code splitting
@@ -56,6 +57,7 @@ function Layout() {
       </main>
       <Footer />
       <Chatbot />
+      <WhatsAppButton />
       <CookieBanner />
     </>
   )

@@ -86,8 +86,8 @@ const getResponse = (input, knowledge, lang, services) => {
   if (knowledge.scheduleKeywords.some(k => text.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')))) {
     return {
       text: es
-        ? '🕐 Nuestro horario es:\n• Lunes a jueves: 9:00 – 20:00\n• Viernes: 9:00 – 15:00'
-        : '🕐 El nostre horari és:\n• Dilluns a dijous: 9:00 – 20:00\n• Divendres: 9:00 – 15:00',
+        ? '🕐 Nuestro horario es:\n• De lunes a jueves de 9h a 20h\n• Viernes de 9h a 15h'
+        : '🕐 El nostre horari és:\n• De dilluns a dijous de 9h a 20h\n• Divendres de 9h a 15h',
     }
   }
 
@@ -197,7 +197,7 @@ export default function Chatbot() {
   }))
 
   return (
-    <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 41 }}>
+    <div style={{ position: 'fixed', bottom: 'calc(2rem + 68px)', right: '2rem', zIndex: 41 }}>
 
       {/* Chat window */}
       <AnimatePresence>
