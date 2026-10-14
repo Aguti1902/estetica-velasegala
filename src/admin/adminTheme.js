@@ -86,6 +86,8 @@ export const uiBtnPrimary = {
   fontFamily: adminTheme.font,
   boxShadow: '0 2px 8px rgba(28,25,23,0.12)',
   lineHeight: 1.2,
+  appearance: 'none',
+  WebkitAppearance: 'none',
 }
 
 export const uiBtnGhost = {
@@ -99,6 +101,8 @@ export const uiBtnGhost = {
   fontFamily: adminTheme.font,
   fontWeight: 550,
   lineHeight: 1.2,
+  appearance: 'none',
+  WebkitAppearance: 'none',
 }
 
 export const uiPageTitle = {

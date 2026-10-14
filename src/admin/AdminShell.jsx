@@ -45,6 +45,7 @@ export default function AdminShell() {
       <link rel="stylesheet" href={FONT_IMPORT} />
       <style>{`
         .admin-layout-root, .admin-layout-root * { box-sizing: border-box; }
+        .admin-layout-root button { appearance: none; -webkit-appearance: none; }
         .admin-nav-link:hover { background: rgba(255,255,255,0.85) !important; color: ${t.text} !important; }
         .admin-nav-link-active:hover { background: linear-gradient(135deg, ${t.accentSoft}, rgba(255,255,255,0.95)) !important; }
         @keyframes adminFadeUp {
